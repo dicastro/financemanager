@@ -1,0 +1,28 @@
+logging:
+  level:
+    root: WARN
+    com.diegocastroviadero.financemanager: DEBUG
+
+bankscrapper:
+  persistence:
+    dbFiles:
+      basePath: wksp/shared/dbfiles
+
+  scrapping:
+    seleniumHub:
+      url: http://localhost:4444/wd/hub
+    tesseract:
+      commandPath: /usr/bin/tesseract
+      basePath: wksp/bankscrapper/tesseract
+      dataPath: ${bankscrapper.scrapping.tesseract.basePath}/tessdata
+      configPath: ${bankscrapper.scrapping.tesseract.basePath}/tessconfig/config
+      lang: eng
+      pageSegmentationMode: 10
+      ocrEngineMode: 1
+      dpi: 70
+    banks:
+      kb:
+        keyboardCache:
+          basePath: wksp/bankscrapper/banks/kb/keyboards
+          cache: ${bankscrapper.scrapping.banks.kb.keyboardCache.basePath}/cache
+          tmp: ${bankscrapper.scrapping.banks.kb.keyboardCache.basePath}/tmp

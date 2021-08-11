@@ -1,0 +1,77 @@
+# TODO
+
+- Pushear a algún repositorio (github o bitbucket)
+  - revisar contraseñas en el código de bankscrapper
+  - revisar contraseñas
+
+- Configurar hassio para acceder a financemanager
+  - crear un subdominio financemanager.popishome.com
+
+# Backlog
+
+- General
+  - Meter una cache para todo lo que se lea del disco, tarda un montón en leer los ficheros
+  - La barra de cargando es muy sutil... debería ser una cortinilla en toda la página
+
+- Ejecutar la imagen con otro usuario que no sea root
+  - Hay que tener en cuenta los permisos de los ficheros que se creen
+  - En el NAS habría que crear otro usuario y que el contenedor se ejecutase con ese mismo usuario
+
+- Añadir menu Config
+  - Que se pueda establecer el modo 'demo'
+
+- Revisar el graceful stop de docker
+  - Creo que la aplicación se acaba muriendo con un kill, no para correctamente
+
+- Position
+  - añadir en el history un filtro por fechas
+    - con una fecha desde que como mínimo podría ser la fecha del balance inicial de la cuenta (valor por defecto)
+    - y con una fecha hasta que como máximo podría ser el último mes para el que haya movimientos (valor por defecto)
+    - habrá varios botones con las opciones más comunes (año en curso, año pasado, últimos 2 años, últimos 3 años, últimos 4 años, últimos 5 años)
+
+- Añadir sección para estudiar la hipoteca
+  - se introduce el capital pendiente
+  - se introduce el tipo de interés (fijo descontando bonificaciones)
+  - calcula las cuotas y la parte amortizada cada mes y la parte de intereses
+  - calcula lo que queda pendiente de pago de intereses
+  - calcula el ahorro comparando con otro tipo de interés
+  - calcula el ahorro amortizando anticipadamente
+
+- Añadir sección para estudiar el consumo eléctrico
+  - se podrán cargar los ficheros csv de consumo por horas
+  - se podrán definir los horarios y tarifas
+  - se podrá hacer una comparativa con otras tarifas
+
+- Movements
+  - En el filtro de mes/cuenta
+    - Al cambiar de cuenta se queda seleccionado el mes. Podría pasar que para la nueva cuenta que se selecciona no hay datos para ese mes
+      - Se tiene que actualizar la lista de meses con los meses disponibles para esa cuenta
+
+- Position
+  - Si se ha visualizado un gráfico de una cuenta, al ocultar/mostrar el menú lateral, el gráfico no se adapta al tamaño correcto
+
+# HOWTO
+
+sudo docker run --rm --name tesseract -v ~/repos/financemanager:/financemanager -it azul/zulu-openjdk-alpine:11.0.7-jre sh
+
+apk add tesseract-ocr
+
+tesseract /financemanager/images/keyboardScreenshot__0.png /tmp/output --tessdata-dir /financemanager/tessdata -l eng --psm 10 --oem 1 /financemanager/tessconfig/config && cat /tmp/output.txt && rm /tmp/output.txt
+
+java -Dkbscrapper.tesseract.dataPath=/financemanager/tessdata -Dkbscrapper.tesseract.configPath=/financemanager/tessconfig/config -Dkbscrapper.keyboardCache.basePath=/financemanager/keyboards/kb -Dkbscrapper.images.basePath=/financemanager/images -jar /financemanager/kbscrapper/target/kbscrapper-0.0.1-SNAPSHOT.jar keyboard01.png
+
+# Links
+
+- [Spring Boot application events explained](https://reflectoring.io/spring-boot-application-events-explained/)
+- [String events](https://www.baeldung.com/spring-events)
+- [Text To ASCII](https://patorjk.com/software/taag/#p=display&f=Big&t=Finance%20Manager%20App)
+
+# NOTES
+
+### Vaadin - Custom Components used
+
+- [MultiSelectComboBox](https://vaadin.com/directory/component/multiselect-combo-box)
+  - There is no component supported by Vaadin
+  - In [this](https://github.com/vaadin/web-components/issues/1388) issue it has been proposed, and someone has implemented the above version
+  - This component has been several years in the Vaadin roadmap, but it has been always deprioritized
+- [ApexCharts](https://vaadin.com/directory/component/apexchartsjs)

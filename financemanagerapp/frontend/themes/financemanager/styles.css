@@ -1,0 +1,19 @@
+@import url('./views/main-view.css');
+@import url('./views/expense-estimation-view.css');
+@import url('./views/movements-view.css');
+@import url('./views/planned-budgets-view.css');
+@import url('./views/planned-expenses-view.css');
+@import url('./views/position-view.css');
+@import url('./views/accounts-view.css');
+@import url('lumo-css-framework/all-classes.css');
+html {
+    --lumo-font-size: 1rem;
+    --lumo-font-size-xxxl: 1.75rem;
+    --lumo-font-size-xxl: 1.375rem;
+    --lumo-font-size-xl: 1.125rem;
+    --lumo-font-size-l: 1rem;
+    --lumo-font-size-m: 0.875rem;
+    --lumo-font-size-s: 0.8125rem;
+    --lumo-font-size-xs: 0.75rem;
+    --lumo-font-size-xxs: 0.6875rem;
+}

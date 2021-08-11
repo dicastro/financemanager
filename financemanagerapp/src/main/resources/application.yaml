@@ -1,0 +1,23 @@
+logging:
+  level:
+    root: WARN
+    org.atmosphere: WARN
+    com.diegocastroviadero: DEBUG
+
+server:
+  port: ${PORT:8080}
+
+vaadin:
+  compabibilitymode: false
+
+financemanagerapp:
+  password-cache-expiration:
+    quantity: 30
+    unit: SECONDS
+  demo-mode: false
+  import:
+    base-path: wksp/import
+    delete-after-import: false
+  persistence:
+    dbfiles:
+      base-path: wksp/shared/dbfiles

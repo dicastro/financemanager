@@ -1,0 +1,15 @@
+
+bankscrapper:
+  persistence:
+    dbfiles:
+      basePath: /financemanager/dbfiles
+
+  scrapping:
+    seleniumHub:
+      url: http://selenium-hub:4444/wd/hub
+    tesseract:
+      basePath: /financemanager/bankscrapper/tesseract
+    banks:
+      kb:
+        keyboardCache:
+          basePath: /financemanager/bankscrapper/banks/kb/keyboards

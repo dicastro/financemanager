@@ -1,0 +1,16 @@
+logging:
+  level:
+    root: WARN
+    org.atmosphere: WARN
+    com.diegocastroviadero: INFO
+
+financemanagerapp:
+  password-cache-expiration:
+    quantity: 10
+    unit: MINUTES
+  import:
+    base-path: /financemanager/import
+    deleteA-after-import: true
+  persistence:
+    dbfiles:
+      base-path: /financemanager/dbfiles

@@ -1,0 +1,22 @@
+.accounts-view {
+    display: block;
+}
+
+.accounts-view .content {
+    display: flex;
+}
+
+.accounts-view .accounts-grid {
+    flex: 2;
+}
+
+.accounts-view .account-form {
+    flex: 1;
+    padding: var(--lumo-space-m);
+}
+
+@media all and (max-width: 1100px) {
+    .accounts-view.editing .accounts-grid {
+        display: none;
+    }
+}

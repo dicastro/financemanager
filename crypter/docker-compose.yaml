@@ -1,0 +1,25 @@
+version: "3.1"
+services:
+  crypter:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      args:
+        BUNDLE_NAME: crypter
+        BUNDLE_VERSION: 1.0.0-SNAPSHOT
+    image: qopuir/crypter:1.0.0-SNAPSHOT
+    ports:
+      - 5005:5005
+      - 8080:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+      - /c/work/repos/financemanager/wksp/shared/credentials:/financemanager/credentials
+      - /c/work/repos/financemanager/wksp/shared/dbfiles:/financemanager/wksp
+    networks:
+      - crypter
+    entrypoint: [ "/financemanager/entrypoint_debug.sh" ]
+    command: [ "--work-dir", "/financemanager/wksp", "--encryption-password", "/financemanager/credentials/encryption_password" ]
+
+networks:
+  crypter:

@@ -1,0 +1,22 @@
+.planned-expenses-view {
+    display: block;
+}
+
+.planned-expenses-view .content {
+    display: flex;
+}
+
+.planned-expenses-view .planned-expenses-grid {
+    flex: 2;
+}
+
+.planned-expenses-view .planned-expense-form {
+    flex: 1;
+    padding: var(--lumo-space-m);
+}
+
+@media all and (max-width: 1100px) {
+    .planned-expenses-view.editing .planned-expenses-grid {
+        display: none;
+    }
+}

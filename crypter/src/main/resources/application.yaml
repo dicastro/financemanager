@@ -1,0 +1,7 @@
+logging:
+  level:
+    root: WARN
+    com.diegocastroviadero.financemanager.cryptoutils: WARN
+    com.diegocastroviadero.financemanager: DEBUG
+
+crypter:
