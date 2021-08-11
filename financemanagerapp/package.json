@@ -46,9 +46,10 @@
     "@webcomponents/webcomponentsjs": "^2.2.10",
     "apexcharts": "3.25.0",
     "construct-style-sheets-polyfill": "2.4.16",
+    "line-awesome": "1.3.0",
     "lit-element": "2.5.1",
     "lit-html": "1.4.1",
-    "lumo-css-framework": "^3.0.11",
+    "lumo-css-framework": "^4.0.10",
     "onecolor": "3.1.0"
   },
   "devDependencies": {
@@ -120,8 +121,10 @@
       "@webcomponents/webcomponentsjs": "^2.2.10",
       "apexcharts": "3.25.0",
       "construct-style-sheets-polyfill": "2.4.16",
+      "line-awesome": "1.3.0",
       "lit-element": "2.5.1",
       "lit-html": "1.4.1",
+      "lumo-css-framework": "^4.0.10",
       "multiselect-combo-box": "2.4.2",
       "onecolor": "3.1.0"
     },
@@ -144,6 +147,6 @@
       "webpack-dev-server": "3.11.0",
       "webpack-merge": "4.2.2"
     },
-    "hash": "f64adb1cb90d8861a58310d358da0c6013335f6244a2a97d02031d7624cc3a2b"
+    "hash": "18e6da349a33dbd3a299be10cb66b974a6e721ece77ec113189c9f4a6af34284"
   }
 }

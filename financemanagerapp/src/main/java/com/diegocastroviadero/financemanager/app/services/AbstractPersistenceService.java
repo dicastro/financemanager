@@ -1,6 +1,12 @@
 package com.diegocastroviadero.financemanager.app.services;
 
 import com.diegocastroviadero.financemanager.app.configuration.PersistenceProperties;
+import com.diegocastroviadero.financemanager.cryptoutils.CsvCryptoUtils;
+import com.diegocastroviadero.financemanager.cryptoutils.CsvUtils;
+import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
+import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvIOException;
+import com.diegocastroviadero.financemanager.cryptoutils.exception.RuntimeCsvCryptoIOException;
+import com.diegocastroviadero.financemanager.cryptoutils.exception.RuntimeCsvIOException;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -16,9 +22,11 @@ import java.util.stream.Stream;
 
 public abstract class AbstractPersistenceService {
     protected final PersistenceProperties properties;
+    protected final CacheService cacheService;
 
-    public AbstractPersistenceService(final PersistenceProperties properties) {
+    public AbstractPersistenceService(final PersistenceProperties properties, final CacheService cacheService) {
         this.properties = properties;
+        this.cacheService = cacheService;
     }
 
     protected File getFile(final String filename) {
@@ -47,5 +55,53 @@ public abstract class AbstractPersistenceService {
         }
 
         return yearMonths;
+    }
+
+    protected List<String[]> loadData(final File file) throws CsvIOException {
+        final String cacheKey = getCacheKey(file);
+
+        try {
+            return cacheService.putIfAbsent(cacheKey, () -> {
+                try {
+                    return CsvUtils.readFromCsvFile(file);
+                } catch (CsvIOException e) {
+                    throw e.toUncheckedException();
+                }
+            });
+        } catch (RuntimeCsvIOException e) {
+            throw e.toCheckedException();
+        }
+    }
+
+    protected List<String[]> loadData(final char[] password, final File file) throws CsvCryptoIOException {
+        final String cacheKey = getCacheKey(file);
+
+        try {
+            return cacheService.putIfAbsent(cacheKey, () -> {
+                try {
+                    return CsvCryptoUtils.decryptFromCsvFile(password, file);
+                } catch (CsvCryptoIOException e) {
+                    throw e.toUncheckedException();
+                }
+            });
+        } catch (RuntimeCsvCryptoIOException e) {
+            throw e.toCheckedException();
+        }
+    }
+
+    protected void persistData(final List<String[]> data, final File file) throws CsvIOException {
+        CsvUtils.persistToCsvFile(data, file);
+
+        cacheService.put(getCacheKey(file), data);
+    }
+
+    protected void persistData(final List<String[]> data, final char[] password, final File file) throws CsvCryptoIOException {
+        CsvCryptoUtils.encryptToCsvFile(data, password, file);
+
+        cacheService.put(getCacheKey(file), data);
+    }
+
+    protected String getCacheKey(final File file) {
+        return file.getName();
     }
 }

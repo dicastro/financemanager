@@ -5,9 +5,7 @@ logging:
     com.diegocastroviadero: INFO
 
 financemanagerapp:
-  password-cache-expiration:
-    quantity: 10
-    unit: MINUTES
+  password-cache-expiration-millis: 600000
   import:
     base-path: /financemanager/import
     deleteA-after-import: true

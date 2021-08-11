@@ -2,7 +2,6 @@ package com.diegocastroviadero.financemanager.app.services;
 
 import com.diegocastroviadero.financemanager.app.configuration.PersistenceProperties;
 import com.diegocastroviadero.financemanager.app.model.*;
-import com.diegocastroviadero.financemanager.cryptoutils.CsvCryptoUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +25,8 @@ public class AccountService extends AbstractPersistenceService {
     @Value("${financemanagerapp.demo-mode:true}")
     private Boolean demoMode;
 
-    public AccountService(final PersistenceProperties properties, final List<AccountPositionCalculator> accountPositionCalculators, final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators) {
-        super(properties);
+    public AccountService(final PersistenceProperties properties, final CacheService cacheService, final List<AccountPositionCalculator> accountPositionCalculators, final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators) {
+        super(properties, cacheService);
         this.accountPositionCalculators = accountPositionCalculators;
         this.accountPositionHistoryCalculators = accountPositionHistoryCalculators;
     }
@@ -62,7 +61,7 @@ public class AccountService extends AbstractPersistenceService {
         List<Account> accounts;
 
         if (file.exists()) {
-            final List<String[]> rawCsvData = CsvCryptoUtils.decryptFromCsvFile(password, file);
+            final List<String[]> rawCsvData = loadData(password, file);
 
             accounts = rawCsvData.stream()
                     .map(rawAccount -> Account.fromStringArray(rawAccount, demoMode))
@@ -100,7 +99,7 @@ public class AccountService extends AbstractPersistenceService {
                 .map(Account::toStringArray)
                 .collect(Collectors.toList());
 
-        CsvCryptoUtils.encryptToCsvFile(sortedRawAccounts, password, file);
+        persistData(sortedRawAccounts, password, file);
     }
 
     private String getFilename() {

@@ -10,4 +10,8 @@ public class CsvCryptoIOException extends IOException {
     public CsvCryptoIOException(final String message, final Throwable cause) {
         super(message, cause);
     }
+
+    public RuntimeCsvCryptoIOException toUncheckedException() {
+        return new RuntimeCsvCryptoIOException(this);
+    }
 }

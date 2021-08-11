@@ -2,7 +2,6 @@ package com.diegocastroviadero.financemanager.app.services;
 
 import com.diegocastroviadero.financemanager.app.configuration.PersistenceProperties;
 import com.diegocastroviadero.financemanager.app.model.Movement;
-import com.diegocastroviadero.financemanager.cryptoutils.CsvCryptoUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvSerializationUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,14 +22,11 @@ public class MovementService extends AbstractPersistenceService {
     private static final String ACCOUNT_MOVEMENTS_FILENAME_REGEX = "movements_[a-f0-9-]+_[0-9]{6}.ecsv";
     private static final Pattern YEARMONTH_EXTRACTOR_PATTERN = Pattern.compile("movements_[a-f0-9-]+_([0-9]{6}).ecsv");
 
-    private final MovementProcessorFactory movementProcessorFactory;
-
     @Value("${financemanagerapp.demo-mode:true}")
     private Boolean demoMode;
 
-    public MovementService(final PersistenceProperties persistenceProperties, final MovementProcessorFactory movementProcessorFactory) {
-        super(persistenceProperties);
-        this.movementProcessorFactory = movementProcessorFactory;
+    public MovementService(final PersistenceProperties persistenceProperties, final CacheService cacheService) {
+        super(persistenceProperties, cacheService);
     }
 
     public List<Movement> getMovementsByAccountAndMonth(final char[] password, final UUID accountId, final YearMonth yearMonth) throws CsvCryptoIOException {
@@ -39,7 +35,7 @@ public class MovementService extends AbstractPersistenceService {
         List<Movement> movements;
 
         if (file.exists()) {
-            final List<String[]> rawCsvData = CsvCryptoUtils.decryptFromCsvFile(password, file);
+            final List<String[]> rawCsvData = loadData(password, file);
 
             movements = rawCsvData.stream()
                     .map(rawMovement -> Movement.fromStringArray(rawMovement, demoMode))
@@ -118,7 +114,7 @@ public class MovementService extends AbstractPersistenceService {
         final long startIndex;
 
         if (previousMonthFile.exists()) {
-            final List<String[]> rawCsvData = CsvCryptoUtils.decryptFromCsvFile(password, previousMonthFile);
+            final List<String[]> rawCsvData = loadData(password, previousMonthFile);
 
             startIndex = rawCsvData.stream()
                     .map(row -> row[0])
@@ -154,6 +150,6 @@ public class MovementService extends AbstractPersistenceService {
                 .map(Movement::toStringArray)
                 .collect(Collectors.toList());
 
-        CsvCryptoUtils.encryptToCsvFile(rawMovements, password, file);
+        persistData(rawMovements, password, file);
     }
 }

@@ -1,9 +1,6 @@
 package com.diegocastroviadero.financemanager.app.services;
 
-import com.diegocastroviadero.financemanager.app.configuration.PasswordCacheExpirationProperties;
 import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import com.vaadin.flow.component.Component;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,20 +9,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-@Service
 @Slf4j
+@Service
 public class AuthService {
     private static final String PASSWORD_CACHE_ENTRY_KEY = "password";
 
     private final Map<Class<? extends Component>, AuthDialog> map = new HashMap<>();
-    private final Cache<String, char[]> passwordCache;
+    private final CacheService cacheService;
 
-    public AuthService(final PasswordCacheExpirationProperties properties) {
-        passwordCache = Caffeine.newBuilder()
-                .expireAfterWrite(properties.getQuantity(), properties.getUnit())
-                .maximumSize(1)
-                .removalListener((k, v, cause) -> log.debug("Key '{}' has been removed (cause: {})", k, cause))
-                .build();
+    public AuthService(final CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
     public AuthDialog configureAuth(final Component component) {
@@ -36,7 +29,7 @@ public class AuthService {
     }
 
     public void authenticate(final Component component, final Consumer<char[]> listener) {
-        char[] pass = passwordCache.getIfPresent(PASSWORD_CACHE_ENTRY_KEY);
+        char[] pass = cacheService.getIfPresent(PASSWORD_CACHE_ENTRY_KEY, char[].class);
 
         if (pass != null) {
             listener.accept(pass);
@@ -47,7 +40,7 @@ public class AuthService {
                 authDialog.setOnClosedListener(password -> {
                     final char[] p = password.toCharArray();
 
-                    passwordCache.put(PASSWORD_CACHE_ENTRY_KEY, p);
+                    cacheService.put(PASSWORD_CACHE_ENTRY_KEY, p);
                     listener.accept(p);
                 });
 
@@ -60,6 +53,6 @@ public class AuthService {
     }
 
     public void forgetPassword() {
-        passwordCache.invalidate(PASSWORD_CACHE_ENTRY_KEY);
+        cacheService.invalidate(PASSWORD_CACHE_ENTRY_KEY);
     }
 }

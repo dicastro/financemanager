@@ -2,8 +2,6 @@ package com.diegocastroviadero.financemanager.app.services;
 
 import com.diegocastroviadero.financemanager.app.configuration.PersistenceProperties;
 import com.diegocastroviadero.financemanager.app.model.InvestmentPosition;
-import com.diegocastroviadero.financemanager.app.model.Movement;
-import com.diegocastroviadero.financemanager.cryptoutils.CsvCryptoUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvSerializationUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
 import org.springframework.stereotype.Service;
@@ -24,8 +22,8 @@ public class InvestmentPositionService extends AbstractPersistenceService {
     private static final String ACCOUNT_INVESTMENT_POSITIONS_FILENAME_REGEX = "investments_[a-f0-9-]+_[0-9]{6}.ecsv";
     private static final Pattern YEARMONTH_EXTRACTOR_PATTERN = Pattern.compile("investments_[a-f0-9-]+_([0-9]{6}).ecsv");
 
-    public InvestmentPositionService(final PersistenceProperties persistenceProperties) {
-        super(persistenceProperties);
+    public InvestmentPositionService(final PersistenceProperties persistenceProperties, final CacheService cacheService) {
+        super(persistenceProperties, cacheService);
     }
 
     public List<InvestmentPosition> getInvestmentPositionsByAccountAndMonth(final char[] password, final UUID accountId, final YearMonth yearMonth) throws CsvCryptoIOException {
@@ -34,7 +32,7 @@ public class InvestmentPositionService extends AbstractPersistenceService {
         List<InvestmentPosition> investmentPositions;
 
         if (file.exists()) {
-            final List<String[]> rawCsvData = CsvCryptoUtils.decryptFromCsvFile(password, file);
+            final List<String[]> rawCsvData = loadData(password, file);
 
             investmentPositions = rawCsvData.stream()
                     .map(InvestmentPosition::fromStringArray)
@@ -79,7 +77,7 @@ public class InvestmentPositionService extends AbstractPersistenceService {
 
 
             if (file.exists()) {
-                final List<String[]> rawCsvData = CsvCryptoUtils.decryptFromCsvFile(password, file);
+                final List<String[]> rawCsvData = loadData(password, file);
 
                 lastInvestmentPosition = rawCsvData.stream()
                         .map(InvestmentPosition::fromStringArray)
@@ -133,7 +131,7 @@ public class InvestmentPositionService extends AbstractPersistenceService {
         final long startIndex;
 
         if (previousMonthFile.exists()) {
-            final List<String[]> rawCsvData = CsvCryptoUtils.decryptFromCsvFile(password, previousMonthFile);
+            final List<String[]> rawCsvData = loadData(password, previousMonthFile);
 
             startIndex = rawCsvData.stream()
                     .map(row -> row[0])
@@ -169,7 +167,7 @@ public class InvestmentPositionService extends AbstractPersistenceService {
                 .map(InvestmentPosition::toStringArray)
                 .collect(Collectors.toList());
 
-        CsvCryptoUtils.encryptToCsvFile(rawMovements, password, file);
+        persistData(rawMovements, password, file);
     }
 
     public Map<YearMonth, BigDecimal> getInvestmentPositionsBalanceByMonth(final BigDecimal initialBalance, final List<InvestmentPosition> investmentPositions) {

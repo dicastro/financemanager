@@ -1,8 +1,7 @@
 # TODO
 
-- Pushear a algún repositorio (github o bitbucket)
-  - revisar contraseñas en el código de bankscrapper
-  - revisar contraseñas
+- Añadir menu Config
+  - Que se pueda establecer el modo 'demo' (session storage)
 
 - Configurar hassio para acceder a financemanager
   - crear un subdominio financemanager.popishome.com
@@ -10,15 +9,11 @@
 # Backlog
 
 - General
-  - Meter una cache para todo lo que se lea del disco, tarda un montón en leer los ficheros
   - La barra de cargando es muy sutil... debería ser una cortinilla en toda la página
 
 - Ejecutar la imagen con otro usuario que no sea root
   - Hay que tener en cuenta los permisos de los ficheros que se creen
   - En el NAS habría que crear otro usuario y que el contenedor se ejecutase con ese mismo usuario
-
-- Añadir menu Config
-  - Que se pueda establecer el modo 'demo'
 
 - Revisar el graceful stop de docker
   - Creo que la aplicación se acaba muriendo con un kill, no para correctamente

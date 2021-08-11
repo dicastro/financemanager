@@ -3,7 +3,6 @@ package com.diegocastroviadero.financemanager.app.services;
 import com.diegocastroviadero.financemanager.app.configuration.PersistenceProperties;
 import com.diegocastroviadero.financemanager.app.model.PlannedExpense;
 import com.diegocastroviadero.financemanager.app.model.Scope;
-import com.diegocastroviadero.financemanager.cryptoutils.CsvUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvIOException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,8 +18,8 @@ import java.util.stream.Collectors;
 public class PlannedExpenseService extends AbstractPersistenceService {
     private static final String PLANNED_EXPENSES_FILENAME = "planned_expenses.csv";
 
-    public PlannedExpenseService(PersistenceProperties properties) {
-        super(properties);
+    public PlannedExpenseService(final PersistenceProperties properties, final CacheService cacheService) {
+        super(properties, cacheService);
     }
 
     public List<PlannedExpense> getAllPlannedExpenses() throws CsvIOException {
@@ -29,7 +28,7 @@ public class PlannedExpenseService extends AbstractPersistenceService {
         List<PlannedExpense> plannedExpenses;
 
         if (file.exists()) {
-            final List<String[]> rawCsvData = CsvUtils.readFromCsvFile(file);
+            final List<String[]> rawCsvData = loadData(file);
 
             plannedExpenses = rawCsvData.stream()
                     .map(PlannedExpense::fromStringArray)
@@ -110,7 +109,7 @@ public class PlannedExpenseService extends AbstractPersistenceService {
                 .map(PlannedExpense::toStringArray)
                 .collect(Collectors.toList());
 
-        CsvUtils.persistToCsvFile(sortedRawPlannedExpenses, file);
+        persistData(sortedRawPlannedExpenses, file);
     }
 
     private String getFilename() {
