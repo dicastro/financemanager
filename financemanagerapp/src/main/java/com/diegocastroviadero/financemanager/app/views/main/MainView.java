@@ -1,5 +1,6 @@
 package com.diegocastroviadero.financemanager.app.views.main;
 
+import com.diegocastroviadero.financemanager.app.services.UserConfigService;
 import com.diegocastroviadero.financemanager.app.views.expenseestimation.ExpenseEstimationView;
 import com.diegocastroviadero.financemanager.app.views.imports.ImportsView;
 import com.diegocastroviadero.financemanager.app.views.movements.MovementsView;
@@ -7,6 +8,7 @@ import com.diegocastroviadero.financemanager.app.views.plannedbudgets.PlannedBud
 import com.diegocastroviadero.financemanager.app.views.plannedexpenses.PlannedExpensesView;
 import com.diegocastroviadero.financemanager.app.views.position.PositionView;
 import com.diegocastroviadero.financemanager.app.views.accounts.AccountsView;
+import com.diegocastroviadero.financemanager.app.views.userconfig.UserConfigView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -17,15 +19,12 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.page.LoadingIndicatorConfiguration;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.theme.Theme;
 
 import java.util.Optional;
@@ -34,10 +33,14 @@ import java.util.Optional;
 @Theme(themeFolder = "financemanager")
 public class MainView extends AppLayout {
 
+    private final UserConfigService userConfigService;
+
     private final Tabs menu;
     private final H1 viewTitle;
 
-    public MainView() {
+    public MainView(final UserConfigService userConfigService) {
+        this.userConfigService = userConfigService;
+
         menu = createMenu();
         viewTitle = new H1();
 
@@ -72,13 +75,14 @@ public class MainView extends AppLayout {
 
     private Component[] createMenuItems() {
         return new Tab[]{
-                createTab("Accounts", AccountsView.class),
+                createTab("Expense Estimation", ExpenseEstimationView.class),
                 createTab("Planned Expenses", PlannedExpensesView.class),
                 createTab("Planned Budgets", PlannedBudgetsView.class),
-                createTab("Expense Estimation", ExpenseEstimationView.class),
                 createTab("Position", PositionView.class),
                 createTab("Movements", MovementsView.class),
-                createTab("Imports", ImportsView.class)
+                createTab("Accounts", AccountsView.class),
+                createTab("Imports", ImportsView.class),
+                createTab("Configuration", UserConfigView.class)
         };
     }
 
@@ -127,6 +131,6 @@ public class MainView extends AppLayout {
     private String getCurrentPageTitle() {
         final PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
 
-        return title == null ? "" : title.value();
+        return String.format("%s%s", userConfigService.isDemoMode() ? "[DEMO] " : "", title != null ? title.value() : "");
     }
 }

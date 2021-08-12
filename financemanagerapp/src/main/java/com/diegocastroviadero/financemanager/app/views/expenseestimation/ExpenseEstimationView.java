@@ -19,6 +19,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 
@@ -33,6 +34,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Route(value = "expenseestimation", layout = MainView.class)
+@RouteAlias(value = "", layout = MainView.class)
 @PageTitle("Expense Estimation | Finance Manager")
 public class ExpenseEstimationView extends VerticalLayout {
 

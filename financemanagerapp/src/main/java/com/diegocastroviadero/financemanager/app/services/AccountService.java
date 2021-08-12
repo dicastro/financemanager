@@ -4,7 +4,6 @@ import com.diegocastroviadero.financemanager.app.configuration.PersistenceProper
 import com.diegocastroviadero.financemanager.app.model.*;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -19,14 +18,14 @@ import java.util.stream.Collectors;
 public class AccountService extends AbstractPersistenceService {
     private static final String ACCOUNT_INVENTORY_FILENAME = "account_inventory.ecsv";
 
+    private final UserConfigService userConfigService;
     private final List<AccountPositionCalculator> accountPositionCalculators;
     private final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators;
 
-    @Value("${financemanagerapp.demo-mode:true}")
-    private Boolean demoMode;
 
-    public AccountService(final PersistenceProperties properties, final CacheService cacheService, final List<AccountPositionCalculator> accountPositionCalculators, final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators) {
+    public AccountService(final PersistenceProperties properties, final CacheService cacheService, final UserConfigService userConfigService, final List<AccountPositionCalculator> accountPositionCalculators, final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators) {
         super(properties, cacheService);
+        this.userConfigService = userConfigService;
         this.accountPositionCalculators = accountPositionCalculators;
         this.accountPositionHistoryCalculators = accountPositionHistoryCalculators;
     }
@@ -64,7 +63,7 @@ public class AccountService extends AbstractPersistenceService {
             final List<String[]> rawCsvData = loadData(password, file);
 
             accounts = rawCsvData.stream()
-                    .map(rawAccount -> Account.fromStringArray(rawAccount, demoMode))
+                    .map(rawAccount -> Account.fromStringArray(rawAccount, userConfigService.isDemoMode()))
                     .collect(Collectors.toList());
 
             accounts.forEach(account -> {

@@ -4,7 +4,6 @@ import com.diegocastroviadero.financemanager.app.configuration.PersistenceProper
 import com.diegocastroviadero.financemanager.app.model.Movement;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvSerializationUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -22,11 +21,11 @@ public class MovementService extends AbstractPersistenceService {
     private static final String ACCOUNT_MOVEMENTS_FILENAME_REGEX = "movements_[a-f0-9-]+_[0-9]{6}.ecsv";
     private static final Pattern YEARMONTH_EXTRACTOR_PATTERN = Pattern.compile("movements_[a-f0-9-]+_([0-9]{6}).ecsv");
 
-    @Value("${financemanagerapp.demo-mode:true}")
-    private Boolean demoMode;
+    private final UserConfigService userConfigService;
 
-    public MovementService(final PersistenceProperties persistenceProperties, final CacheService cacheService) {
+    public MovementService(final PersistenceProperties persistenceProperties, final CacheService cacheService, final UserConfigService userConfigService) {
         super(persistenceProperties, cacheService);
+        this.userConfigService = userConfigService;
     }
 
     public List<Movement> getMovementsByAccountAndMonth(final char[] password, final UUID accountId, final YearMonth yearMonth) throws CsvCryptoIOException {
@@ -38,7 +37,7 @@ public class MovementService extends AbstractPersistenceService {
             final List<String[]> rawCsvData = loadData(password, file);
 
             movements = rawCsvData.stream()
-                    .map(rawMovement -> Movement.fromStringArray(rawMovement, demoMode))
+                    .map(rawMovement -> Movement.fromStringArray(rawMovement, userConfigService.isDemoMode()))
                     .sorted(Comparator.comparing(Movement::getIndex))
                     .collect(Collectors.toList());
 

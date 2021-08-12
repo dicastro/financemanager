@@ -13,6 +13,8 @@ public class CacheService {
     private final Map<String, Object> cache = new HashMap<>();
 
     public void clearCache() {
+        log.debug("Clearing all entries from cache ...");
+
         synchronized (cache) {
             cache.clear();
         }
@@ -31,24 +33,32 @@ public class CacheService {
     }
 
     public <T> T putIfAbsent(final String key, final Supplier<T> function) {
-        if (cache.containsKey(key)) {
-            return (T) cache.get(key);
-        } else {
-            final T data = function.get();
+        T result;
 
-            cache.put(key, data);
+        synchronized (cache) {
+            if (cache.containsKey(key)) {
+                result = (T) cache.get(key);
+            } else {
+                result = function.get();
 
-            return data;
+                cache.put(key, result);
+            }
         }
+
+        return result;
     }
 
     public void put(final String key, final Object value) {
+        log.debug("Storing key '{}' in cache ...", key);
+
         synchronized (cache) {
             cache.put(key, value);
         }
     }
 
     public void invalidate(final String key) {
+        log.debug("Invalidating key '{}' from cache ...", key);
+
         synchronized (cache) {
             cache.remove(key);
         }

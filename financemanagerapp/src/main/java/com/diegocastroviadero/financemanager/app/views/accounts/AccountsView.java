@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Route(value = "accounts", layout = MainView.class)
-@RouteAlias(value = "", layout = MainView.class)
 @PageTitle("Accounts | Finance Manager")
 public class AccountsView extends HorizontalLayout {
 

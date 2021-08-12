@@ -1,7 +1,8 @@
 # TODO
 
-- Añadir menu Config
-  - Que se pueda establecer el modo 'demo' (session storage)
+- Revisar el graceful stop de docker
+  - Creo que la aplicación se acaba muriendo con un kill, no para correctamente
+  - https://www.baeldung.com/spring-boot-web-server-shutdown
 
 - Configurar hassio para acceder a financemanager
   - crear un subdominio financemanager.popishome.com
@@ -14,9 +15,6 @@
 - Ejecutar la imagen con otro usuario que no sea root
   - Hay que tener en cuenta los permisos de los ficheros que se creen
   - En el NAS habría que crear otro usuario y que el contenedor se ejecutase con ese mismo usuario
-
-- Revisar el graceful stop de docker
-  - Creo que la aplicación se acaba muriendo con un kill, no para correctamente
 
 - Position
   - añadir en el history un filtro por fechas

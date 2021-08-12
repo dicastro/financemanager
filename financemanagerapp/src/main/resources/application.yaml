@@ -6,13 +6,17 @@ logging:
 
 server:
   port: ${PORT:8080}
+  shutdown: graceful
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 5s
 
 vaadin:
   compabibilitymode: false
 
 financemanagerapp:
   password-cache-expiration-millis: 60000
-  demo-mode: false
   import:
     base-path: wksp/import
     delete-after-import: false
