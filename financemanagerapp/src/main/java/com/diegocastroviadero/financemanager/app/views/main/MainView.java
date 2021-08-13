@@ -8,7 +8,7 @@ import com.diegocastroviadero.financemanager.app.views.plannedbudgets.PlannedBud
 import com.diegocastroviadero.financemanager.app.views.plannedexpenses.PlannedExpensesView;
 import com.diegocastroviadero.financemanager.app.views.position.PositionView;
 import com.diegocastroviadero.financemanager.app.views.accounts.AccountsView;
-import com.diegocastroviadero.financemanager.app.views.userconfig.UserConfigView;
+import com.diegocastroviadero.financemanager.app.views.administration.Administration;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -82,7 +82,7 @@ public class MainView extends AppLayout {
                 createTab("Movements", MovementsView.class),
                 createTab("Accounts", AccountsView.class),
                 createTab("Imports", ImportsView.class),
-                createTab("Configuration", UserConfigView.class)
+                createTab("Administration", Administration.class)
         };
     }
 

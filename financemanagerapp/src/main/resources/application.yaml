@@ -16,7 +16,11 @@ vaadin:
   compabibilitymode: false
 
 financemanagerapp:
-  password-cache-expiration-millis: 60000
+  build:
+    version: @project.version@
+    timestamp: @maven.build.timestamp@
+  cache:
+    expiration-millis: 60000
   import:
     base-path: wksp/import
     delete-after-import: false

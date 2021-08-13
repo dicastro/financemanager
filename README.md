@@ -1,12 +1,5 @@
 # TODO
 
-- Reversionar a 1.1.0
-
-- Configuration
-  - Añadir botón para forzar el olvido de la cache
-  - Cambiar el nombre por 'Administration'
-  - Mostrar la versión
-
 - Accounts
   - En demo-mode ocultar los números de cuenta (cambiarlos por XXXX)
   - El detalle de la cuenta mostrarlo debajo de la tabla
@@ -39,6 +32,10 @@
 - PACKAGE AND DEPLOY 1.1.0
 
 # Backlog
+
+- Import
+  - Poder subir directamente un fichero (y seleccionar el banco y la cuenta)
+    - En vez de tener que dejarlos en una carpeta 'import'
 
 - General
   - La barra de cargando es muy sutil... debería ser una cortinilla en toda la página
