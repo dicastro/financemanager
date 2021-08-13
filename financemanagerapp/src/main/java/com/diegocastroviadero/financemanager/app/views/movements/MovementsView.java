@@ -63,9 +63,11 @@ public class MovementsView extends VerticalLayout {
         movementsGrid.addClassName("movements-grid");
 
         movementsGrid.removeColumnByKey("accountId");
+        movementsGrid.removeColumnByKey("account");
+        movementsGrid.removeColumnByKey("bank");
         movementsGrid.removeColumnByKey("quantity");
 
-        movementsGrid.setColumns("index", "bank", "account", "date", "concept");
+        movementsGrid.setColumns("index", "date", "concept");
 
         movementsGrid.addColumn(Movement::getQuantity).setHeader("Quantity").setTextAlign(ColumnTextAlign.END);
 

@@ -5,7 +5,6 @@
   - El detalle de la cuenta mostrarlo debajo de la tabla
 
 - Movements
-  - En la tabla quitar la columna 'Account'
   - La fecha visualizarla en formato dd/MM/yyyy
   - En el filtro de mes/cuenta
     - Al cambiar de cuenta se queda seleccionado el mes. Podría pasar que para la nueva cuenta que se selecciona no hay datos para ese mes
