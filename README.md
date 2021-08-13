@@ -1,11 +1,42 @@
 # TODO
 
-- Revisar el graceful stop de docker
-  - Creo que la aplicación se acaba muriendo con un kill, no para correctamente
-  - https://www.baeldung.com/spring-boot-web-server-shutdown
+- Reversionar a 1.1.0
 
-- Configurar hassio para acceder a financemanager
-  - crear un subdominio financemanager.popishome.com
+- Configuration
+  - Añadir botón para forzar el olvido de la cache
+  - Cambiar el nombre por 'Administration'
+  - Mostrar la versión
+
+- Accounts
+  - En demo-mode ocultar los números de cuenta (cambiarlos por XXXX)
+  - El detalle de la cuenta mostrarlo debajo de la tabla
+
+- Movements
+  - En la tabla quitar la columna 'Account'
+  - La fecha visualizarla en formato dd/MM/yyyy
+  - En el filtro de mes/cuenta
+    - Al cambiar de cuenta se queda seleccionado el mes. Podría pasar que para la nueva cuenta que se selecciona no hay datos para ese mes
+      - Se tiene que actualizar la lista de meses con los meses disponibles para esa cuenta
+
+- Position
+  - la fecha de balance mostrarla como dd/MM/yyyy
+  - para la cuenta de indexa no se está ofuscando las cantidades de inversión en demo-mode
+  - añadir en el history un filtro por fechas
+    - con una fecha desde que como mínimo podría ser la fecha del balance inicial de la cuenta (valor por defecto)
+    - y con una fecha hasta que como máximo podría ser el último mes para el que haya movimientos (valor por defecto)
+    - habrá varios botones con las opciones más comunes (año en curso, año pasado, últimos 2 años, últimos 3 años, últimos 4 años, últimos 5 años)
+
+- General
+  - En las tablas donde se muestre el banco... mostrar un logo
+  - En las tablas donde se muestre el scope de una cuenta (personal|shared) mostrar un icono
+  - En las tablas donde se muestre el purpose de una cuenta (expenses|credit|savings) mostrar un icono
+
+- Position
+  - Si se ha visualizado un gráfico de una cuenta, al ocultar/mostrar el menú lateral, el gráfico no se adapta al tamaño correcto
+
+- Icono para la aplicación
+
+- PACKAGE AND DEPLOY 1.1.0
 
 # Backlog
 
@@ -16,11 +47,10 @@
   - Hay que tener en cuenta los permisos de los ficheros que se creen
   - En el NAS habría que crear otro usuario y que el contenedor se ejecutase con ese mismo usuario
 
-- Position
-  - añadir en el history un filtro por fechas
-    - con una fecha desde que como mínimo podría ser la fecha del balance inicial de la cuenta (valor por defecto)
-    - y con una fecha hasta que como máximo podría ser el último mes para el que haya movimientos (valor por defecto)
-    - habrá varios botones con las opciones más comunes (año en curso, año pasado, últimos 2 años, últimos 3 años, últimos 4 años, últimos 5 años)
+- Añadir sección para estudiar el consumo eléctrico
+  - se podrán cargar los ficheros csv de consumo por horas
+  - se podrán definir los horarios y tarifas
+  - se podrá hacer una comparativa con otras tarifas
 
 - Añadir sección para estudiar la hipoteca
   - se introduce el capital pendiente
@@ -30,18 +60,15 @@
   - calcula el ahorro comparando con otro tipo de interés
   - calcula el ahorro amortizando anticipadamente
 
-- Añadir sección para estudiar el consumo eléctrico
-  - se podrán cargar los ficheros csv de consumo por horas
-  - se podrán definir los horarios y tarifas
-  - se podrá hacer una comparativa con otras tarifas
+- Crypter
+  - Que con cada comando lea la contraseña del disco (ahora mismo: para cambiar la contraseña de cifrado hace falta descifrar, SALIR, cambiar la contraseña en el fichero, volver a ejecutar crypter y finalmente cifrar de nuevo)
 
-- Movements
-  - En el filtro de mes/cuenta
-    - Al cambiar de cuenta se queda seleccionado el mes. Podría pasar que para la nueva cuenta que se selecciona no hay datos para ese mes
-      - Se tiene que actualizar la lista de meses con los meses disponibles para esa cuenta
+- Cryptoutils
+  - Al descifrar que se borre el fichero meta
 
-- Position
-  - Si se ha visualizado un gráfico de una cuenta, al ocultar/mostrar el menú lateral, el gráfico no se adapta al tamaño correcto
+# Ideas
+
+- Incluir en 'Administration' la gestión de las cuentas??
 
 # HOWTO
 
