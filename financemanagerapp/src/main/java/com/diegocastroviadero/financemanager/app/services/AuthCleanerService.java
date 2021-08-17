@@ -1,39 +1,41 @@
 package com.diegocastroviadero.financemanager.app.services;
 
 import com.diegocastroviadero.financemanager.app.configuration.CacheProperties;
+import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.WrappedSession;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class CacheCleanerService {
+public class AuthCleanerService {
     private final CacheProperties cacheProperties;
-    private final CacheService cacheService;
+    private final AuthService authService;
 
     private Long lastClean;
     private Long lastScheduledClean;
 
-    public CacheCleanerService(final CacheProperties cacheProperties, final CacheService cacheService) {
+    public AuthCleanerService(final CacheProperties cacheProperties, final AuthService authService) {
         this.cacheProperties = cacheProperties;
-        this.cacheService = cacheService;
+        this.authService = authService;
     }
 
-    @Scheduled(fixedRateString = "${financemanagerapp.cache.clean-interval}", initialDelayString = "${financemanagerapp.cache.clean-interval}")
-    public void cleanCacheScheduled() {
-        cleanCache(true);
+    public void cleanAuthScheduled(final VaadinSession session) {
+        cleanAuth(true, session);
     }
 
-    public void cleanCache() {
-        cleanCache(false);
+    public void cleanAuth() {
+        cleanAuth(false, VaadinSession.getCurrent());
     }
 
-    public void cleanCache(final boolean scheduled) {
-        log.debug("{}Cleaning cache ...", scheduled ? "(scheduled) " : "");
+    public void cleanAuth(final boolean scheduled, final VaadinSession vaadinSession) {
+        final WrappedSession session = vaadinSession.getSession();
 
-        cacheService.clearCache();
+        log.debug("{}Cleaning auth in session '{}' ...", scheduled ? "(scheduled) " : "", session.getId());
 
-        log.info("{}Cache was cleaned successfully", scheduled ? "(scheduled) " : "");
+        authService.forgetPassword(vaadinSession);
+
+        log.info("{}Auth in session '{}' was cleaned successfully", scheduled ? "(scheduled) " : "", session.getId());
 
         final long now = System.currentTimeMillis();
 
@@ -44,14 +46,14 @@ public class CacheCleanerService {
         }
     }
 
-    public String getCacheStatusLabel() {
+    public String getAuthStatusLabel() {
         final String firstPart;
         if (null == lastClean) {
-            firstPart = "Global cache was never cleaned";
+            firstPart = "Auth was never cleaned";
         } else {
             final long elapsedFromLastClean = System.currentTimeMillis() - lastClean;
 
-            firstPart = String.format("Global cache was cleaned %d millis ago", elapsedFromLastClean);
+            firstPart = String.format("Auth was cleaned %d millis ago", elapsedFromLastClean);
         }
 
         final String secondPart;

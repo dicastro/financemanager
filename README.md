@@ -1,11 +1,17 @@
 # TODO
 
+- Global
+  - Protegerlo todo con usuario y contraseña
+    - Para que cualquiera no pueda entrar y activar/desactivar el demo mode, crear/borrar planned budgets, crear/borrar planned expenses...
+
 - Accounts
   - En demo-mode ocultar los números de cuenta (cambiarlos por XXXX)
   - El detalle de la cuenta mostrarlo debajo de la tabla
 
 - Movements
   - La fecha visualizarla en formato dd/MM/yyyy
+  - Poner icono del banco en el combo de las cuentas
+    - https://vaadin.com/forum/thread/17443406/set-icon-and-text-inside-the-combobox-but-not-working
   - En el filtro de mes/cuenta
     - Al cambiar de cuenta se queda seleccionado el mes. Podría pasar que para la nueva cuenta que se selecciona no hay datos para ese mes
       - Se tiene que actualizar la lista de meses con los meses disponibles para esa cuenta

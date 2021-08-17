@@ -1,16 +1,21 @@
 package com.diegocastroviadero.financemanager.app.views.main;
 
+import com.diegocastroviadero.financemanager.app.configuration.CacheProperties;
+import com.diegocastroviadero.financemanager.app.services.AuthCleanerService;
+import com.diegocastroviadero.financemanager.app.services.AuthCleanerThread;
 import com.diegocastroviadero.financemanager.app.services.UserConfigService;
+import com.diegocastroviadero.financemanager.app.views.accounts.AccountsView;
+import com.diegocastroviadero.financemanager.app.views.administration.Administration;
 import com.diegocastroviadero.financemanager.app.views.expenseestimation.ExpenseEstimationView;
 import com.diegocastroviadero.financemanager.app.views.imports.ImportsView;
 import com.diegocastroviadero.financemanager.app.views.movements.MovementsView;
 import com.diegocastroviadero.financemanager.app.views.plannedbudgets.PlannedBudgetsView;
 import com.diegocastroviadero.financemanager.app.views.plannedexpenses.PlannedExpensesView;
 import com.diegocastroviadero.financemanager.app.views.position.PositionView;
-import com.diegocastroviadero.financemanager.app.views.accounts.AccountsView;
-import com.diegocastroviadero.financemanager.app.views.administration.Administration;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -25,21 +30,28 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.Theme;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
+@Slf4j
 @PWA(name = "FinanceManager", shortName = "FinanceManager", enableInstallPrompt = false)
 @Theme(themeFolder = "financemanager")
 public class MainView extends AppLayout {
 
+    private final CacheProperties cacheProperties;
     private final UserConfigService userConfigService;
+    private final AuthCleanerService authCleanerService;
 
     private final Tabs menu;
     private final H1 viewTitle;
 
-    public MainView(final UserConfigService userConfigService) {
+    public MainView(final CacheProperties cacheProperties, final UserConfigService userConfigService, final AuthCleanerService authCleanerService) {
+        this.cacheProperties = cacheProperties;
         this.userConfigService = userConfigService;
+        this.authCleanerService = authCleanerService;
 
         menu = createMenu();
         viewTitle = new H1();
@@ -110,6 +122,38 @@ public class MainView extends AppLayout {
         layout.add(logoLayout, menu);
 
         return layout;
+    }
+
+    @Override
+    protected void onAttach(final AttachEvent attachEvent) {
+        final VaadinSession session = attachEvent.getSession();
+
+        session.access(() -> {
+            if (null == session.getAttribute(AuthCleanerThread.class)) {
+                session.getSession()
+                        .setMaxInactiveInterval(-1);
+
+                final AuthCleanerThread authCleanerThread = new AuthCleanerThread(cacheProperties.getCleanInterval(), authCleanerService, session);
+                session.setAttribute(AuthCleanerThread.class, authCleanerThread);
+                authCleanerThread.start();
+
+                log.info("Clean of session '{}' scheduled each {} millis", session.getSession().getId(), cacheProperties.getCleanInterval());
+            }
+        });
+    }
+
+    @Override
+    protected void onDetach(final DetachEvent detachEvent) {
+        final VaadinSession session = detachEvent.getSession();
+
+        session.access(() -> {
+            final AuthCleanerThread authCleanerThread = session.getAttribute(AuthCleanerThread.class);
+
+            if (null != authCleanerThread) {
+                authCleanerThread.interrupt();
+                session.setAttribute(AuthCleanerThread.class, null);
+            }
+        });
     }
 
     @Override

@@ -14,5 +14,5 @@ import java.nio.file.Path;
 public class CacheProperties {
     public static final String CACHE_CONFIG_PREFIX = "financemanagerapp.cache";
 
-    private Long expirationMillis;
+    private Long cleanInterval;
 }

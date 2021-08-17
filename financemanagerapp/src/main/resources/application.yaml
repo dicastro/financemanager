@@ -20,6 +20,7 @@ financemanagerapp:
     version: @project.version@
     timestamp: @maven.build.timestamp@
   cache:
+    clean-interval: 60000
     expiration-millis: 60000
   import:
     base-path: wksp/import

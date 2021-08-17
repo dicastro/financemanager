@@ -2,6 +2,7 @@ package com.diegocastroviadero.financemanager.app.services;
 
 import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.server.VaadinSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +13,9 @@ import java.util.function.Consumer;
 @Slf4j
 @Service
 public class AuthService {
-    private static final String PASSWORD_CACHE_ENTRY_KEY = "password";
+    public static final String AUTHPASSWORD_ENTRY_KEY = "password";
 
     private final Map<Class<? extends Component>, AuthDialog> map = new HashMap<>();
-    private final CacheService cacheService;
-
-    public AuthService(final CacheService cacheService) {
-        this.cacheService = cacheService;
-    }
 
     public AuthDialog configureAuth(final Component component) {
         final AuthDialog authDialog = new AuthDialog();
@@ -29,7 +25,7 @@ public class AuthService {
     }
 
     public void authenticate(final Component component, final Consumer<char[]> listener) {
-        char[] pass = cacheService.getIfPresent(PASSWORD_CACHE_ENTRY_KEY, char[].class);
+        char[] pass = getAuthPassword();
 
         if (pass != null) {
             listener.accept(pass);
@@ -40,7 +36,7 @@ public class AuthService {
                 authDialog.setOnClosedListener(password -> {
                     final char[] p = password.toCharArray();
 
-                    cacheService.put(PASSWORD_CACHE_ENTRY_KEY, p);
+                    setAuthPassword(p);
                     listener.accept(p);
                 });
 
@@ -53,6 +49,18 @@ public class AuthService {
     }
 
     public void forgetPassword() {
-        cacheService.invalidate(PASSWORD_CACHE_ENTRY_KEY);
+        forgetPassword(VaadinSession.getCurrent());
+    }
+
+    public void forgetPassword(final VaadinSession session) {
+        session.setAttribute(AUTHPASSWORD_ENTRY_KEY, null);
+    }
+
+    private char[] getAuthPassword() {
+        return (char[]) VaadinSession.getCurrent().getAttribute(AUTHPASSWORD_ENTRY_KEY);
+    }
+
+    private void setAuthPassword(final char[] password) {
+        VaadinSession.getCurrent().setAttribute(AUTHPASSWORD_ENTRY_KEY, password);
     }
 }

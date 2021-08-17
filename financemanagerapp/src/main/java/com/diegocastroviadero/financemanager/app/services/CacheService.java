@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 @Slf4j
 @Service
 public class CacheService {
+
     private final Map<String, Object> cache = new HashMap<>();
 
     public void clearCache() {
@@ -18,18 +19,6 @@ public class CacheService {
         synchronized (cache) {
             cache.clear();
         }
-    }
-
-    public <T> T getIfPresent(final String key, final Class<T> clazz) {
-        T result = null;
-
-        synchronized (cache) {
-            if (cache.containsKey(key)) {
-                result = clazz.cast(cache.get(key));
-            }
-        }
-
-        return result;
     }
 
     public <T> T putIfAbsent(final String key, final Supplier<T> function) {
