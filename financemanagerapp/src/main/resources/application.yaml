@@ -25,6 +25,8 @@ financemanagerapp:
   import:
     base-path: wksp/import
     delete-after-import: false
+  security:
+    users: ${FINANCEMANAGER_USERS:user:{noop}1@USER|admin:{noop}1@USER,ADMIN}
   persistence:
     dbfiles:
       base-path: wksp/shared/dbfiles

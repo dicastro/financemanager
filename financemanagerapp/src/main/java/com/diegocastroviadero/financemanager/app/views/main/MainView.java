@@ -19,6 +19,7 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -71,6 +72,11 @@ public class MainView extends AppLayout {
         layout.add(new DrawerToggle());
         layout.add(viewTitle);
         layout.add(new Avatar());
+
+        final Anchor logout = new Anchor("logout", "Logout");
+        logout.setClassName("logout-link");
+
+        layout.add(logout);
 
         return layout;
     }

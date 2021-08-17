@@ -1,9 +1,7 @@
 package com.diegocastroviadero.financemanager.app.services;
 
 import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.server.VaadinSessionState;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -13,11 +11,13 @@ public class AuthCleanerThread extends Thread {
     private final Long cleanInterval;
     private final AuthCleanerService authCleanerService;
     private final VaadinSession session;
+    private final String sessionId;
 
     public AuthCleanerThread(final Long cleanInterval, final AuthCleanerService authCleanerService, final VaadinSession session) {
         this.cleanInterval = cleanInterval;
         this.authCleanerService = authCleanerService;
         this.session = session;
+        this.sessionId = session.getSession().getId();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class AuthCleanerThread extends Thread {
                 }
             }
         } catch (InterruptedException e) {
-            session.access(() -> log.error("Clean process of session '{}' has been interrupted!", session.getSession().getId()));
+            log.error("Clean process of session '{}' has been interrupted!", sessionId);
         }
     }
 }

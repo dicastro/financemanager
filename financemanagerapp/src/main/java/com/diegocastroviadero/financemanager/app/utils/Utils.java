@@ -10,8 +10,12 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-public class Utils {
+public final class Utils {
     private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
+
+    private Utils() {
+        // Util methods only
+    }
 
     public static ZonedDateTime now() {
         return ZonedDateTime.now(UTC_ZONE);

@@ -8,6 +8,10 @@
     margin-right: var(--lumo-space-m);
 }
 
+#header .logout-link {
+    margin-right: var(--lumo-space-m);
+}
+
 vaadin-app-layout[dir='rtl'] #header vaadin-avatar {
     margin-left: var(--lumo-space-m);
     margin-right: auto;
