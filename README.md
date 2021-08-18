@@ -1,11 +1,6 @@
 # TODO
 
-- Global
-  - Protegerlo todo con usuario y contraseña
-    - Para que cualquiera no pueda entrar y activar/desactivar el demo mode, crear/borrar planned budgets, crear/borrar planned expenses...
-
 - Accounts
-  - En demo-mode ocultar los números de cuenta (cambiarlos por XXXX)
   - El detalle de la cuenta mostrarlo debajo de la tabla
 
 - Movements
@@ -70,7 +65,7 @@
 
 # Ideas
 
-- Incluir en 'Administration' la gestión de las cuentas??
+- Mover la gestión de cuentas (Account) a la sección 'Administration' ??
 
 # HOWTO
 

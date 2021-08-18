@@ -58,7 +58,13 @@ public class Account {
     public static Account fromStringArray(final String[] rawData, final Boolean demoMode) {
         final Bank bank = CsvSerializationUtils.parseEnumFromCsv(rawData[0], Bank.class);
         final UUID id = CsvSerializationUtils.parseUUIDFromCsv(rawData[1]);
-        final String account = rawData[2];
+
+        String account = rawData[2];
+
+        if (demoMode) {
+            account = account.replaceAll("\\d", "X");
+        }
+
         final String alias = rawData[3];
         final AccountPurpose type = CsvSerializationUtils.parseEnumFromCsv(rawData[4], AccountPurpose.class);
         final Scope scope = CsvSerializationUtils.parseEnumFromCsv(rawData[5], Scope.class);
