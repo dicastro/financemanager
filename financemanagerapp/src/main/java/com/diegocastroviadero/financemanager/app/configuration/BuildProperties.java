@@ -18,6 +18,11 @@ public class BuildProperties {
 
     public BuildProperties(final String version, final String timestamp) {
         this.version = version;
-        this.timestamp = LocalDateTime.parse(timestamp, DateTimeFormatter.ofPattern("yyyyMMdd-HHmm")).withSecond(0).withNano(0);
+
+        if (timestamp.matches("\\d{8}-\\d{4}")) {
+            this.timestamp = LocalDateTime.parse(timestamp, DateTimeFormatter.ofPattern("yyyyMMdd-HHmm")).withSecond(0).withNano(0);
+        } else {
+            this.timestamp = LocalDateTime.parse(timestamp, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")).withSecond(0).withNano(0);
+        }
     }
 }
