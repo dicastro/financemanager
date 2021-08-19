@@ -6,6 +6,8 @@ import com.diegocastroviadero.financemanager.app.model.Bank;
 import com.diegocastroviadero.financemanager.app.model.Scope;
 import com.diegocastroviadero.financemanager.app.services.AccountService;
 import com.diegocastroviadero.financemanager.app.services.AuthService;
+import com.diegocastroviadero.financemanager.app.utils.IconUtils;
+import com.diegocastroviadero.financemanager.app.utils.Utils;
 import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
@@ -16,6 +18,8 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.Query;
@@ -72,18 +76,13 @@ public class AccountsView extends HorizontalLayout {
     private void configureGrid() {
         accountsGrid.addClassName("accounts-grid");
         accountsGrid.removeAllColumns();
-        accountsGrid.addComponentColumn(account -> {
-            final Image bankIcon = new Image(String.format("images/bank_logo_%s.svg", account.getBank().name()), account.getBank().name());
-            bankIcon.setWidth(1.0f, Unit.EM);
-
-            return bankIcon;
-        }).setHeader("Bank");
+        accountsGrid.addComponentColumn(IconUtils::getBankIcon);
         accountsGrid.addColumn(Account::getAccountNumber).setHeader("Account number");
         accountsGrid.addColumn(Account::getAlias).setHeader("Alias");
-        accountsGrid.addColumn(Account::getPurpose).setHeader("Purpose");
-        accountsGrid.addColumn(Account::getScope).setHeader("Scope");
-        accountsGrid.addColumn(account -> account.getBalanceDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).setHeader("Balance date");
-        accountsGrid.addColumn(account -> String.format("%.2f €", account.getBalance())).setHeader("Balance").setTextAlign(ColumnTextAlign.END);
+        accountsGrid.addComponentColumn(IconUtils::getPurposeIcon);
+        accountsGrid.addComponentColumn(IconUtils::getScopeIcon);
+        accountsGrid.addColumn(account -> Utils.tableFormatDate(account.getBalanceDate())).setHeader("Balance date");
+        accountsGrid.addColumn(account -> Utils.tableFormatMoney(account.getBalance())).setHeader("Balance").setTextAlign(ColumnTextAlign.END);
         accountsGrid.addColumn(account -> {
             String linkedAccountLabel = null;
 

@@ -5,16 +5,24 @@ import ch.obermuhlner.math.big.BigDecimalMath;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.time.Month;
-import java.time.YearMonth;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public final class Utils {
     private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
 
     private Utils() {
         // Util methods only
+    }
+
+    private static final DateTimeFormatter TABLE_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    public static String tableFormatDate(final LocalDate date) {
+        return date.format(TABLE_DATE_FORMATTER);
+    }
+
+    public static String tableFormatMoney(final BigDecimal quantity) {
+        return String.format("%.2f €", quantity);
     }
 
     public static ZonedDateTime now() {

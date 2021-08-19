@@ -1,6 +1,7 @@
 # TODO
 
 - Accounts
+  - Mostrar iconos en los combos del formulario de cuenta
   - El detalle de la cuenta mostrarlo debajo de la tabla
 
 - Movements
