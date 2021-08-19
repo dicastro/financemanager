@@ -4,6 +4,7 @@ import com.diegocastroviadero.financemanager.app.model.Account;
 import com.diegocastroviadero.financemanager.app.model.AccountPurpose;
 import com.diegocastroviadero.financemanager.app.model.Bank;
 import com.diegocastroviadero.financemanager.app.model.Scope;
+import com.diegocastroviadero.financemanager.app.utils.IconUtils;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -13,8 +14,11 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -22,6 +26,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -57,18 +62,37 @@ public class AccountForm extends FormLayout {
         binder.bindInstanceFields(this);
 
         bank.setReadOnly(Boolean.TRUE);
-        accountNumber.setReadOnly(Boolean.TRUE);
-        balance.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
-        balance.setPrefixComponent(new Icon(VaadinIcon.EURO));
-
         bank.setItems(banks);
         bank.setItemLabelGenerator(Bank::name);
 
+        accountNumber.setReadOnly(Boolean.TRUE);
+
+        balance.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
+        balance.setPrefixComponent(new Icon(VaadinIcon.EURO));
+
         purpose.setItems(accountPurposes);
         purpose.setItemLabelGenerator(AccountPurpose::name);
+        purpose.setRenderer(new ComponentRenderer<>(purpose -> {
+            final Icon icon = IconUtils.getPurposeIcon(purpose);
+            final Span text = new Span(purpose.name());
+
+            final HorizontalLayout layout = new HorizontalLayout(icon, text);
+            layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
+            return layout;
+        }));
 
         scope.setItems(scopes);
         scope.setItemLabelGenerator(Scope::name);
+        scope.setRenderer(new ComponentRenderer<>(scope -> {
+            final Icon icon = IconUtils.getScopeIcon(scope);
+            final Span text = new Span(scope.name());
+
+            final HorizontalLayout layout = new HorizontalLayout(icon, text);
+            layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
+            return layout;
+        }));
 
         link.setItemLabelGenerator(account -> StringUtils.isBlank(account.getAlias()) ? account.getAccountNumber() : account.getAlias());
         link.setClearButtonVisible(Boolean.TRUE);

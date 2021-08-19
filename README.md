@@ -1,9 +1,5 @@
 # TODO
 
-- Accounts
-  - Mostrar iconos en los combos del formulario de cuenta
-  - El detalle de la cuenta mostrarlo debajo de la tabla
-
 - Movements
   - La fecha visualizarla en formato dd/MM/yyyy
   - Poner icono del banco en el combo de las cuentas

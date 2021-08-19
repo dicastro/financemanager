@@ -65,7 +65,7 @@ public class AccountsView extends HorizontalLayout {
 
         final Div content = new Div(accountsGrid, accountForm, authDialog);
         content.addClassName("content");
-        content.setSizeFull();
+        //content.setSizeFull();
 
         add(content);
 
