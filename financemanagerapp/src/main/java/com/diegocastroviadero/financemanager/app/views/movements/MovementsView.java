@@ -5,6 +5,8 @@ import com.diegocastroviadero.financemanager.app.model.Movement;
 import com.diegocastroviadero.financemanager.app.services.AccountService;
 import com.diegocastroviadero.financemanager.app.services.AuthService;
 import com.diegocastroviadero.financemanager.app.services.MovementService;
+import com.diegocastroviadero.financemanager.app.utils.IconUtils;
+import com.diegocastroviadero.financemanager.app.utils.Utils;
 import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
@@ -13,9 +15,13 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import lombok.extern.slf4j.Slf4j;
@@ -62,14 +68,12 @@ public class MovementsView extends VerticalLayout {
     private void configureMovementsGrid() {
         movementsGrid.addClassName("movements-grid");
 
-        movementsGrid.removeColumnByKey("accountId");
-        movementsGrid.removeColumnByKey("account");
-        movementsGrid.removeColumnByKey("bank");
-        movementsGrid.removeColumnByKey("quantity");
+        movementsGrid.removeAllColumns();
 
-        movementsGrid.setColumns("index", "date", "concept");
-
-        movementsGrid.addColumn(Movement::getQuantity).setHeader("Quantity").setTextAlign(ColumnTextAlign.END);
+        movementsGrid.addColumn(Movement::getIndex).setHeader("#");
+        movementsGrid.addColumn(movement -> Utils.tableFormatDate(movement.getDate())).setHeader("Date");
+        movementsGrid.addColumn(Movement::getConcept).setHeader("Concept");
+        movementsGrid.addColumn(movement -> Utils.tableFormatMoney(movement.getQuantity())).setHeader("Quantity").setTextAlign(ColumnTextAlign.END);
 
         movementsGrid.getColumns().forEach(column -> column.setAutoWidth(Boolean.TRUE));
         movementsGrid.setHeightByRows(Boolean.TRUE);
@@ -97,8 +101,18 @@ public class MovementsView extends VerticalLayout {
             }
         });
 
+        accountFilter.getElement().getStyle().set("--vaadin-combo-box-overlay-width", "200px");
         accountFilter.setRequired(Boolean.TRUE);
         accountFilter.setItemLabelGenerator(Account::getLabel);
+        accountFilter.setRenderer(new ComponentRenderer<>(account -> {
+            final Image icon = IconUtils.getBankIcon(account);
+            final Span text = new Span(account.getLabel());
+
+            final HorizontalLayout layout = new HorizontalLayout(icon, text);
+            layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
+            return layout;
+        }));
 
         accountFilter.addValueChangeListener(event -> {
             if (null != monthFilter.getValue()) {
@@ -108,7 +122,7 @@ public class MovementsView extends VerticalLayout {
             }
         });
 
-        final HorizontalLayout toolbar = new HorizontalLayout(monthFilter, accountFilter);
+        final HorizontalLayout toolbar = new HorizontalLayout(accountFilter, monthFilter);
         toolbar.addClassName("toolbar");
 
         return toolbar;
