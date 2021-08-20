@@ -9,8 +9,6 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 
-import java.time.LocalDate;
-
 public final class IconUtils {
     private IconUtils() {}
 
@@ -23,13 +21,6 @@ public final class IconUtils {
         bankIcon.setWidth(1.0f, Unit.EM);
 
         return bankIcon;
-    }
-
-    public static Image getDayIcon(final LocalDate date, final String altText) {
-        final Image dayIcon = new Image(String.format("images/calendar/calendar_%d.svg", date.getDayOfMonth()), altText);
-        dayIcon.setWidth(1.3f, Unit.EM);
-
-        return dayIcon;
     }
 
     public static Icon getScopeIcon(final Account account) {

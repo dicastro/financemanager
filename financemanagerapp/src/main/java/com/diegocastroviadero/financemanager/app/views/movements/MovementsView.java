@@ -73,9 +73,9 @@ public class MovementsView extends VerticalLayout {
         movementsGrid.addColumn(Movement::getIndex)
                 .setHeader("#")
                 .setTextAlign(ColumnTextAlign.END);
-        movementsGrid.addComponentColumn(movement -> IconUtils.getDayIcon(movement.getDate(), Utils.tableFormatDate(movement.getDate())))
+        movementsGrid.addColumn(movement -> movement.getDate().getDayOfMonth())
                 .setHeader("Day")
-                .setTextAlign(ColumnTextAlign.CENTER);
+                .setTextAlign(ColumnTextAlign.END);
         movementsGrid.addColumn(Movement::getConcept)
                 .setHeader("Concept");
         movementsGrid.addColumn(movement -> Utils.tableFormatMoney(movement.getQuantity()))
