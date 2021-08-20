@@ -34,27 +34,29 @@ public abstract class AbstractPersistenceService {
     }
 
     protected List<YearMonth> getYearMonthRange(final String fileFilterRegex, final Pattern yearMonthExtractorRegex) {
-        FilenameFilter accountMovementsFileFilter = (dir, name) -> name.matches(fileFilterRegex);
+        return cacheService.putIfAbsent(fileFilterRegex, () -> {
+            final FilenameFilter accountMovementsFileFilter = (dir, name) -> name.matches(fileFilterRegex);
 
-        final File[] files = properties.getDbfiles().getBasePath().toFile().listFiles(accountMovementsFileFilter);
+            final File[] files = properties.getDbfiles().getBasePath().toFile().listFiles(accountMovementsFileFilter);
 
-        List<YearMonth> yearMonths = Collections.emptyList();
+            List<YearMonth> yearMonths = Collections.emptyList();
 
-        if (null != files) {
-            yearMonths = Stream.of(files)
-                    .map(File::getName)
-                    .map(filename -> yearMonthExtractorRegex.matcher(filename).results()
-                            .map(m -> m.group(1))
-                            .findFirst()
-                            .orElse(null))
-                    .filter(Objects::nonNull)
-                    .map(rawYearMonth -> YearMonth.parse(rawYearMonth, DateTimeFormatter.ofPattern("yyyyMM")))
-                    .distinct()
-                    .sorted(Comparator.reverseOrder())
-                    .collect(Collectors.toList());
-        }
+            if (null != files) {
+                yearMonths = Stream.of(files)
+                        .map(File::getName)
+                        .map(filename -> yearMonthExtractorRegex.matcher(filename).results()
+                                .map(m -> m.group(1))
+                                .findFirst()
+                                .orElse(null))
+                        .filter(Objects::nonNull)
+                        .map(rawYearMonth -> YearMonth.parse(rawYearMonth, DateTimeFormatter.ofPattern("yyyyMM")))
+                        .distinct()
+                        .sorted(Comparator.reverseOrder())
+                        .collect(Collectors.toList());
+            }
 
-        return yearMonths;
+            return yearMonths;
+        });
     }
 
     protected List<String[]> loadData(final File file) throws CsvIOException {
