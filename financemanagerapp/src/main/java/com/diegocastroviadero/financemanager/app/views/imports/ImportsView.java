@@ -4,6 +4,7 @@ import com.diegocastroviadero.financemanager.app.model.ImportFile;
 import com.diegocastroviadero.financemanager.app.model.ImportedFile;
 import com.diegocastroviadero.financemanager.app.services.AuthService;
 import com.diegocastroviadero.financemanager.app.services.ImportService;
+import com.diegocastroviadero.financemanager.app.utils.IconUtils;
 import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
@@ -86,14 +87,15 @@ public class ImportsView extends VerticalLayout {
 
     private void configureGrid() {
         importsGrid.addClassName("imports-grid");
-        importsGrid.setSizeFull();
-        importsGrid.setMultiSort(Boolean.TRUE);
+        importsGrid.setHeightByRows(Boolean.TRUE);
+        importsGrid.removeAllColumns();
 
-        importsGrid.removeColumnByKey("file");
-        importsGrid.removeColumnByKey("importable");
-        importsGrid.removeColumnByKey("importers");
-
-        importsGrid.setColumns("bank", "importScope", "accountNumber");
+        importsGrid.addComponentColumn(IconUtils::getBankIcon)
+                .setHeader("Bank");
+        importsGrid.addColumn(ImportFile::getImportScope)
+                .setHeader("Scope");
+        importsGrid.addColumn(ImportFile::getAccountNumber)
+                .setHeader("Account number");
 
         importsGrid.getColumns().forEach(column -> column.setAutoWidth(Boolean.TRUE));
     }

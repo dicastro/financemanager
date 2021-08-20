@@ -9,9 +9,7 @@
     - habrá varios botones con las opciones más comunes (año en curso, año pasado, últimos 2 años, últimos 3 años, últimos 4 años, últimos 5 años)
 
 - General
-  - En las tablas donde se muestre el banco... mostrar un logo
-  - En las tablas donde se muestre el scope de una cuenta (personal|shared) mostrar un icono
-  - En las tablas donde se muestre el purpose de una cuenta (expenses|credit|savings) mostrar un icono
+  - Revisar altura de las pantallas (en Imports se hace bien... y en esta no se añade ningún layout adicional)
 
 - Position
   - Si se ha visualizado un gráfico de una cuenta, al ocultar/mostrar el menú lateral, el gráfico no se adapta al tamaño correcto

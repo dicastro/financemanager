@@ -3,6 +3,8 @@ package com.diegocastroviadero.financemanager.app.views.plannedbudgets;
 import com.diegocastroviadero.financemanager.app.model.PlannedBudget;
 import com.diegocastroviadero.financemanager.app.model.Scope;
 import com.diegocastroviadero.financemanager.app.services.PlannedBudgetService;
+import com.diegocastroviadero.financemanager.app.utils.IconUtils;
+import com.diegocastroviadero.financemanager.app.utils.Utils;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvIOException;
 import com.vaadin.flow.component.button.Button;
@@ -22,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Month;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,9 +90,21 @@ public class PlannedBudgetsView extends VerticalLayout {
         budgetsGrid.addClassName("planned-budgets-grid");
         budgetsGrid.setSizeFull();
         budgetsGrid.setMultiSort(Boolean.TRUE);
-        budgetsGrid.removeColumnByKey("quantity");
-        budgetsGrid.setColumns("concept", "scope", "month");
-        budgetsGrid.addColumn(budget -> String.format("%.2f €", budget.getQuantity())).setHeader("Quantity").setTextAlign(ColumnTextAlign.END);
+        budgetsGrid.removeAllColumns();
+        budgetsGrid.addColumn(PlannedBudget::getConcept)
+                .setHeader("Concept")
+                .setSortProperty("concept");
+        budgetsGrid.addComponentColumn(IconUtils::getScopeIcon)
+                .setHeader("Scope")
+                .setComparator(Comparator.comparing(PlannedBudget::getScope))
+                .setSortProperty("scope");
+        budgetsGrid.addColumn(budget -> Utils.tableFormatMonthAbbreviated(budget.getMonth()))
+                .setHeader("Month")
+                .setComparator(Comparator.comparing(PlannedBudget::getMonth))
+                .setSortProperty("month");
+        budgetsGrid.addColumn(budget -> Utils.tableFormatMoney(budget.getQuantity()))
+                .setHeader("Quantity")
+                .setTextAlign(ColumnTextAlign.END);
 
         budgetsGrid.getColumns().forEach(column -> column.setAutoWidth(Boolean.TRUE));
         budgetsGrid.asSingleSelect().addValueChangeListener(event -> editBudget(event.getValue()));

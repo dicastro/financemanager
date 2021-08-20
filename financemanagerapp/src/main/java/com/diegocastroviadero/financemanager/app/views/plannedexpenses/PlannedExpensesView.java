@@ -3,6 +3,8 @@ package com.diegocastroviadero.financemanager.app.views.plannedexpenses;
 import com.diegocastroviadero.financemanager.app.model.PlannedExpense;
 import com.diegocastroviadero.financemanager.app.model.Scope;
 import com.diegocastroviadero.financemanager.app.services.PlannedExpenseService;
+import com.diegocastroviadero.financemanager.app.utils.IconUtils;
+import com.diegocastroviadero.financemanager.app.utils.Utils;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvIOException;
 import com.vaadin.flow.component.button.Button;
@@ -22,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Month;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,9 +90,21 @@ public class PlannedExpensesView extends VerticalLayout {
         expensesGrid.addClassName("planned-expenses-grid");
         expensesGrid.setSizeFull();
         expensesGrid.setMultiSort(Boolean.TRUE);
-        expensesGrid.removeColumnByKey("quantity");
-        expensesGrid.setColumns("concept", "scope", "month");
-        expensesGrid.addColumn(expense -> String.format("%.2f €", expense.getQuantity())).setHeader("Quantity").setTextAlign(ColumnTextAlign.END);
+        expensesGrid.removeAllColumns();
+        expensesGrid.addColumn(PlannedExpense::getConcept)
+                .setHeader("Concept")
+                .setSortProperty("concept");
+        expensesGrid.addComponentColumn(IconUtils::getScopeIcon)
+                .setHeader("Scope")
+                .setComparator(Comparator.comparing(PlannedExpense::getScope))
+                .setSortProperty("scope");
+        expensesGrid.addColumn(expense -> Utils.tableFormatMonthAbbreviated(expense.getMonth()))
+                .setHeader("Month")
+                .setComparator(Comparator.comparing(PlannedExpense::getMonth))
+                .setSortProperty("month");
+        expensesGrid.addColumn(expense -> Utils.tableFormatMoney(expense.getQuantity()))
+                .setHeader("Quantity")
+                .setTextAlign(ColumnTextAlign.END);
 
         expensesGrid.getColumns().forEach(column -> column.setAutoWidth(Boolean.TRUE));
         expensesGrid.asSingleSelect().addValueChangeListener(event -> editExpense(event.getValue()));

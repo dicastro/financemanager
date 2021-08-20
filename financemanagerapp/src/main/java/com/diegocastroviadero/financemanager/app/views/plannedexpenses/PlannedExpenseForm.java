@@ -2,6 +2,7 @@ package com.diegocastroviadero.financemanager.app.views.plannedexpenses;
 
 import com.diegocastroviadero.financemanager.app.model.PlannedExpense;
 import com.diegocastroviadero.financemanager.app.model.Scope;
+import com.diegocastroviadero.financemanager.app.utils.IconUtils;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -10,8 +11,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -19,6 +22,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +58,15 @@ public class PlannedExpenseForm extends FormLayout {
 
         scope.setItems(scopes);
         scope.setItemLabelGenerator(Scope::name);
+        scope.setRenderer(new ComponentRenderer<>(scope -> {
+            final Icon icon = IconUtils.getScopeIcon(scope);
+            final Span text = new Span(scope.name());
+
+            final HorizontalLayout layout = new HorizontalLayout(icon, text);
+            layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
+            return layout;
+        }));
 
         month.setItems(months);
         month.setItemLabelGenerator(Month::name);

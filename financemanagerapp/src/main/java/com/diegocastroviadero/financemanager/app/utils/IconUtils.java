@@ -1,9 +1,6 @@
 package com.diegocastroviadero.financemanager.app.utils;
 
-import com.diegocastroviadero.financemanager.app.model.Account;
-import com.diegocastroviadero.financemanager.app.model.AccountPurpose;
-import com.diegocastroviadero.financemanager.app.model.Bank;
-import com.diegocastroviadero.financemanager.app.model.Scope;
+import com.diegocastroviadero.financemanager.app.model.*;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
@@ -16,6 +13,10 @@ public final class IconUtils {
         return getBankIcon(account.getBank());
     }
 
+    public static Image getBankIcon(final ImportFile importFile) {
+        return getBankIcon(importFile.getBank());
+    }
+
     public static Image getBankIcon(final Bank bank) {
         final Image bankIcon = new Image(String.format("images/bank_logo_%s.svg", bank.name()), bank.name());
         bankIcon.setWidth(1.0f, Unit.EM);
@@ -25,6 +26,14 @@ public final class IconUtils {
 
     public static Icon getScopeIcon(final Account account) {
         return getScopeIcon(account.getScope());
+    }
+
+    public static Icon getScopeIcon(final PlannedBudget budget) {
+        return getScopeIcon(budget.getScope());
+    }
+
+    public static Icon getScopeIcon(final PlannedExpense expense) {
+        return getScopeIcon(expense.getScope());
     }
 
     public static Icon getScopeIcon(final Scope scope) {

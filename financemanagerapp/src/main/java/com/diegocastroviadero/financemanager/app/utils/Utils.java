@@ -25,6 +25,10 @@ public final class Utils {
         return String.format("%.2f €", quantity);
     }
 
+    public static String tableFormatMonthAbbreviated(final Month month) {
+        return month.name().substring(0, 3);
+    }
+
     public static ZonedDateTime now() {
         return ZonedDateTime.now(UTC_ZONE);
     }
