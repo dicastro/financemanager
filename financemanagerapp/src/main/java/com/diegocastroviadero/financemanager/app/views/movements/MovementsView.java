@@ -70,10 +70,17 @@ public class MovementsView extends VerticalLayout {
 
         movementsGrid.removeAllColumns();
 
-        movementsGrid.addColumn(Movement::getIndex).setHeader("#");
-        movementsGrid.addColumn(movement -> Utils.tableFormatDate(movement.getDate())).setHeader("Date");
-        movementsGrid.addColumn(Movement::getConcept).setHeader("Concept");
-        movementsGrid.addColumn(movement -> Utils.tableFormatMoney(movement.getQuantity())).setHeader("Quantity").setTextAlign(ColumnTextAlign.END);
+        movementsGrid.addColumn(Movement::getIndex)
+                .setHeader("#")
+                .setTextAlign(ColumnTextAlign.END);
+        movementsGrid.addComponentColumn(movement -> IconUtils.getDayIcon(movement.getDate(), Utils.tableFormatDate(movement.getDate())))
+                .setHeader("Day")
+                .setTextAlign(ColumnTextAlign.CENTER);
+        movementsGrid.addColumn(Movement::getConcept)
+                .setHeader("Concept");
+        movementsGrid.addColumn(movement -> Utils.tableFormatMoney(movement.getQuantity()))
+                .setHeader("Quantity")
+                .setTextAlign(ColumnTextAlign.END);
 
         movementsGrid.getColumns().forEach(column -> column.setAutoWidth(Boolean.TRUE));
         movementsGrid.setHeightByRows(Boolean.TRUE);
@@ -101,7 +108,7 @@ public class MovementsView extends VerticalLayout {
             }
         });
 
-        accountFilter.getElement().getStyle().set("--vaadin-combo-box-overlay-width", "200px");
+        accountFilter.getElement().getStyle().set("--vaadin-combo-box-overlay-width", "250px");
         accountFilter.setRequired(Boolean.TRUE);
         accountFilter.setItemLabelGenerator(Account::getLabel);
         accountFilter.setRenderer(new ComponentRenderer<>(account -> {
