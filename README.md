@@ -1,10 +1,5 @@
 # TODO
 
-- Movements
-  - En el filtro de cuenta/mes
-    - Al cambiar de cuenta se queda seleccionado el mes. Podría pasar que para la nueva cuenta que se selecciona no hay datos para ese mes
-      - Se tiene que actualizar la lista de meses con los meses disponibles para esa cuenta
-
 - Position
   - la fecha de balance mostrarla como dd/MM/yyyy
   - para la cuenta de indexa no se está ofuscando las cantidades de inversión en demo-mode

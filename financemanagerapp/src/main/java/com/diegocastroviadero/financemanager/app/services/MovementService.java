@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 @Service
 public class MovementService extends AbstractPersistenceService {
     private static final String ACCOUNT_MOVEMENTS_FILENAME_PATTERN = "movements_%s_%s.ecsv";
-    private static final String ACCOUNT_MOVEMENTS_FILENAME_REGEX = "movements_[a-f0-9-]+_[0-9]{6}.ecsv";
-    private static final Pattern YEARMONTH_EXTRACTOR_PATTERN = Pattern.compile("movements_[a-f0-9-]+_([0-9]{6}).ecsv");
+    private static final String ACCOUNT_MOVEMENTS_FILENAME_REGEX_TEMPLATE = "movements_%s_[0-9]{6}.ecsv";
+    private static final String ACCOUNT_MOVEMENTS_YEARMONTH_EXTRACTOR_PATTERN_TEMPLATE = "movements_%s_([0-9]{6}).ecsv";
 
     private final UserConfigService userConfigService;
 
@@ -49,7 +49,7 @@ public class MovementService extends AbstractPersistenceService {
     }
 
     public List<Movement> getMovementsByAccountAndFromMonth(final char[] password, final UUID accountId, final YearMonth fromYearMonth) throws CsvCryptoIOException {
-        List<YearMonth> yearMonths = getYearMonthRange(ACCOUNT_MOVEMENTS_FILENAME_REGEX, YEARMONTH_EXTRACTOR_PATTERN);
+        List<YearMonth> yearMonths = getYearMonthRange(getAccountMovementsFilenameRegex(accountId), getAccountMovementsYearMonthExtractorPattern(accountId));
 
         if (null != fromYearMonth) {
             yearMonths = yearMonths.stream()
@@ -94,8 +94,8 @@ public class MovementService extends AbstractPersistenceService {
         }
     }
 
-    public List<YearMonth> getYearMonthRange() {
-        return super.getYearMonthRange(ACCOUNT_MOVEMENTS_FILENAME_REGEX, YEARMONTH_EXTRACTOR_PATTERN);
+    public List<YearMonth> getYearMonthRange(final UUID accountId) {
+        return super.getYearMonthRange(getAccountMovementsFilenameRegex(accountId), getAccountMovementsYearMonthExtractorPattern(accountId));
     }
 
     private Map<YearMonth, List<Movement>> groupAccountMovementsByYearMonth(final List<Movement> accountMovements) {
@@ -150,5 +150,13 @@ public class MovementService extends AbstractPersistenceService {
                 .collect(Collectors.toList());
 
         persistData(rawMovements, password, file);
+    }
+
+    private String getAccountMovementsFilenameRegex(final UUID accountId) {
+        return String.format(ACCOUNT_MOVEMENTS_FILENAME_REGEX_TEMPLATE, accountId);
+    }
+
+    private Pattern getAccountMovementsYearMonthExtractorPattern(final UUID accountId) {
+        return Pattern.compile(String.format(ACCOUNT_MOVEMENTS_YEARMONTH_EXTRACTOR_PATTERN_TEMPLATE, accountId));
     }
 }

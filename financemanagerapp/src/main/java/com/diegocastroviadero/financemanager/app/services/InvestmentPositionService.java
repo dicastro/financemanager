@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 @Service
 public class InvestmentPositionService extends AbstractPersistenceService {
     private static final String ACCOUNT_INVESTMENT_POSITIONS_FILENAME_PATTERN = "investments_%s_%s.ecsv";
-    private static final String ACCOUNT_INVESTMENT_POSITIONS_FILENAME_REGEX = "investments_[a-f0-9-]+_[0-9]{6}.ecsv";
-    private static final Pattern YEARMONTH_EXTRACTOR_PATTERN = Pattern.compile("investments_[a-f0-9-]+_([0-9]{6}).ecsv");
+    private static final String ACCOUNT_INVESTMENT_POSITIONS_FILENAME_REGEX_TEMPLATE = "investments_%s_[0-9]{6}.ecsv";
+    private static final String ACCOUNT_INVESTMENT_POSITIONS_YEARMONTH_EXTRACTOR_PATTERN_TEMPLATE = "investments_%s_([0-9]{6}).ecsv";
 
     public InvestmentPositionService(final PersistenceProperties persistenceProperties, final CacheService cacheService) {
         super(persistenceProperties, cacheService);
@@ -47,7 +47,7 @@ public class InvestmentPositionService extends AbstractPersistenceService {
     }
 
     public List<InvestmentPosition> getInvestmentPositionsByAccountAndFromMonth(final char[] password, final UUID accountId, final YearMonth fromYearMonth) throws CsvCryptoIOException {
-        List<YearMonth> yearMonths = getYearMonthRange(ACCOUNT_INVESTMENT_POSITIONS_FILENAME_REGEX, YEARMONTH_EXTRACTOR_PATTERN);
+        List<YearMonth> yearMonths = getYearMonthRange(accountId);
 
         if (null != fromYearMonth) {
             yearMonths = yearMonths.stream()
@@ -69,7 +69,7 @@ public class InvestmentPositionService extends AbstractPersistenceService {
     public InvestmentPosition getLastInvestmentPositionByAccount(final char[] password, final UUID accountId) throws CsvCryptoIOException {
         InvestmentPosition lastInvestmentPosition = null;
 
-        final Optional<YearMonth> lastYearMonth = getYearMonthRange(ACCOUNT_INVESTMENT_POSITIONS_FILENAME_REGEX, YEARMONTH_EXTRACTOR_PATTERN)
+        final Optional<YearMonth> lastYearMonth = getYearMonthRange(accountId)
                 .stream().max(Comparator.naturalOrder());
 
         if (lastYearMonth.isPresent()) {
@@ -171,8 +171,6 @@ public class InvestmentPositionService extends AbstractPersistenceService {
     }
 
     public Map<YearMonth, BigDecimal> getInvestmentPositionsBalanceByMonth(final BigDecimal initialBalance, final List<InvestmentPosition> investmentPositions) {
-        final Map<YearMonth, BigDecimal> balancesByMonth = new TreeMap<>();
-
         return investmentPositions.stream()
                 .collect(Collectors.groupingBy(InvestmentPosition::getDateYearMonth, TreeMap::new, Collectors.toList()))
                 .entrySet().stream()
@@ -181,5 +179,17 @@ public class InvestmentPositionService extends AbstractPersistenceService {
                         .map(InvestmentPosition::getValue)
                         .orElse(BigDecimal.ZERO)))
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    }
+
+    private String getAccountInvestmentPositionsFilenameRegex(final UUID accountId) {
+        return String.format(ACCOUNT_INVESTMENT_POSITIONS_FILENAME_REGEX_TEMPLATE, accountId);
+    }
+
+    private Pattern getAccountInvestmentPositionsYearMonthExtractorPattern(final UUID accountId) {
+        return Pattern.compile(String.format(ACCOUNT_INVESTMENT_POSITIONS_YEARMONTH_EXTRACTOR_PATTERN_TEMPLATE, accountId));
+    }
+
+    private List<YearMonth> getYearMonthRange(final UUID accountId) {
+        return super.getYearMonthRange(getAccountInvestmentPositionsFilenameRegex(accountId), getAccountInvestmentPositionsYearMonthExtractorPattern(accountId));
     }
 }

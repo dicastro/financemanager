@@ -24,6 +24,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.shared.Registration;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.YearMonth;
@@ -41,8 +42,9 @@ public class MovementsView extends VerticalLayout {
     private final AccountService accountService;
     private final MovementService movementService;
 
-    final ComboBox<YearMonth> monthFilter = new ComboBox<>("Month");
     final ComboBox<Account> accountFilter = new ComboBox<>("Account");
+    final ComboBox<YearMonth> monthFilter = new ComboBox<>("Month");
+    Registration monthFilterListener;
 
     private final Grid<Movement> movementsGrid = new Grid<>(Movement.class);
 
@@ -87,27 +89,6 @@ public class MovementsView extends VerticalLayout {
     }
 
     private HorizontalLayout getToolbar() {
-        final List<YearMonth> months = movementService.getYearMonthRange();
-
-        monthFilter.setRequired(Boolean.TRUE);
-        monthFilter.setItemLabelGenerator(yearMonth -> yearMonth.format(DateTimeFormatter.ofPattern("yyyy/MM")));
-
-        if (months.isEmpty()) {
-            monthFilter.setEnabled(Boolean.FALSE);
-            Notification.show("There are no movements to be shown", 10000, Notification.Position.MIDDLE);
-        } else {
-            monthFilter.setItems(months);
-            monthFilter.setValue(months.get(0));
-        }
-
-        monthFilter.addValueChangeListener(event -> {
-            if (null != accountFilter.getValue()) {
-                updateValues(accountFilter.getValue().getId(), event.getValue());
-            } else {
-                Notification.show("Movements cannot be loaded because no account was selected", 5000, Notification.Position.MIDDLE);
-            }
-        });
-
         accountFilter.getElement().getStyle().set("--vaadin-combo-box-overlay-width", "250px");
         accountFilter.setRequired(Boolean.TRUE);
         accountFilter.setItemLabelGenerator(Account::getLabel);
@@ -122,17 +103,66 @@ public class MovementsView extends VerticalLayout {
         }));
 
         accountFilter.addValueChangeListener(event -> {
-            if (null != monthFilter.getValue()) {
-                updateValues(event.getValue().getId(), monthFilter.getValue());
+            final UUID accountId = event.getValue().getId();
+
+            final List<YearMonth> months = movementService.getYearMonthRange(accountId);
+
+            if (months.isEmpty()) {
+                monthFilter.setEnabled(Boolean.FALSE);
+                Notification.show("There are no movements to be shown", 10000, Notification.Position.MIDDLE);
             } else {
-                Notification.show("Movements cannot be loaded because no month was selected", 5000, Notification.Position.MIDDLE);
+                final YearMonth oldMonthValue = monthFilter.getValue();
+
+                if (null != monthFilterListener) {
+                    monthFilterListener.remove();
+                }
+
+                monthFilter.clear();
+                monthFilter.setItems(months);
+
+                if (null != oldMonthValue && months.contains(oldMonthValue)) {
+                    monthFilter.setValue(oldMonthValue);
+                } else {
+                    monthFilter.setValue(months.get(0));
+                }
+
+                monthFilterListener = configureMonthFilterValueChangeListener();
+
+                updateValues(accountId, monthFilter.getValue());
             }
         });
+
+        //final List<YearMonth> months = movementService.getYearMonthRange();
+
+        monthFilter.setRequired(Boolean.TRUE);
+        monthFilter.setItemLabelGenerator(yearMonth -> yearMonth.format(DateTimeFormatter.ofPattern("yyyy/MM")));
+
+        /*
+        if (months.isEmpty()) {
+            monthFilter.setEnabled(Boolean.FALSE);
+            Notification.show("There are no movements to be shown", 10000, Notification.Position.MIDDLE);
+        } else {
+            monthFilter.setItems(months);
+            monthFilter.setValue(months.get(0));
+        }
+        */
+
+        monthFilterListener = configureMonthFilterValueChangeListener();
 
         final HorizontalLayout toolbar = new HorizontalLayout(accountFilter, monthFilter);
         toolbar.addClassName("toolbar");
 
         return toolbar;
+    }
+
+    private Registration configureMonthFilterValueChangeListener() {
+        return monthFilter.addValueChangeListener(event -> {
+            if (null != accountFilter.getValue()) {
+                updateValues(accountFilter.getValue().getId(), event.getValue());
+            } else {
+                Notification.show("Movements cannot be loaded because no account was selected", 5000, Notification.Position.MIDDLE);
+            }
+        });
     }
 
     private void populateAccountsInToolbar() {
