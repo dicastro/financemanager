@@ -56,8 +56,6 @@ public class MovementsView extends VerticalLayout {
         addClassName("movements-view");
         setSizeFull();
 
-        add(new H1("Movements"));
-
         configureMovementsGrid();
 
         final AuthDialog authDialog = authService.configureAuth(this);

@@ -55,8 +55,6 @@ public class ExpenseEstimationView extends VerticalLayout {
         addClassName("expense-estimation-view");
         setSizeFull();
 
-        add(new H1("Expense Estimation"));
-
         configurePlannedExpensesGrid();
         configurePlannedBudgetsGrid();
 

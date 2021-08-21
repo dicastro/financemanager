@@ -53,8 +53,6 @@ public class AccountsView extends HorizontalLayout {
         addClassName("accounts-view");
         setSizeFull();
 
-        add(new H1("Accounts"));
-
         configureGrid();
 
         accountForm = new AccountForm(Bank.values(), AccountPurpose.values(), Scope.values());

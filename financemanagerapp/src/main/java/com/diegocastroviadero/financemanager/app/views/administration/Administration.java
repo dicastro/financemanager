@@ -25,8 +25,6 @@ public class Administration extends VerticalLayout {
         addClassName("administration-view");
         setSizeFull();
 
-        add(new H1("Administration"));
-
         final TextField version = new TextField("Version");
         version.setReadOnly(Boolean.TRUE);
         version.setWidthFull();

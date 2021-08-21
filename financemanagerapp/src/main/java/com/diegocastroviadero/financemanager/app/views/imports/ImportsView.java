@@ -45,8 +45,6 @@ public class ImportsView extends VerticalLayout {
         addClassName("imports-view");
         setSizeFull();
 
-        add(new H1("Imports"));
-
         configureGrid();
 
         final AuthDialog authDialog = authService.configureAuth(this);

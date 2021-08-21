@@ -11,7 +11,6 @@
 
 - General
   - Revisar altura de las pantallas (en Imports se hace bien... y en esta no se añade ningún layout adicional)
-  - Revisar los títulos de las páginas y del menú
 
 - Icono para la aplicación
 

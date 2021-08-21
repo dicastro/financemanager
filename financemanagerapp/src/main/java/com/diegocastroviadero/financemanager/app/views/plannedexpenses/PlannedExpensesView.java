@@ -47,8 +47,6 @@ public class PlannedExpensesView extends VerticalLayout {
         addClassName("planned-expenses-view");
         setSizeFull();
 
-        add(new H1("Planned expenses"));
-
         configureGrid();
 
         expenseForm = new PlannedExpenseForm(Scope.values(), Month.values());

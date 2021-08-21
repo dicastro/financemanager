@@ -54,8 +54,6 @@ public class PositionView extends VerticalLayout {
 
         addClassName("position-view");
 
-        add(new H1("Position"));
-
         configurePositionsGrid();
 
         final AuthDialog authDialog = authService.configureAuth(this);

@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 
 @Slf4j
-@PWA(name = "FinanceManager", shortName = "FinanceManager", enableInstallPrompt = false)
+@PWA(name = "FinanceManager", shortName = "FM", enableInstallPrompt = false)
 @Theme(themeFolder = "financemanager")
 public class MainView extends AppLayout {
 
@@ -116,8 +116,8 @@ public class MainView extends AppLayout {
         final HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "FinanceManager logo"));
-        logoLayout.add(new H1("FinanceManager"));
+        logoLayout.add(new Image("images/logo.png", "Finance Manager logo"));
+        logoLayout.add(new H1("Finance Manager"));
 
         final VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
@@ -179,8 +179,16 @@ public class MainView extends AppLayout {
     }
 
     private String getCurrentPageTitle() {
-        final PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
+        final PageTitle pageTitle = getContent().getClass().getAnnotation(PageTitle.class);
 
-        return String.format("%s%s", userConfigService.isDemoMode() ? "[DEMO] " : "", title != null ? title.value() : "");
+        final String title;
+
+        if (null == pageTitle) {
+            title = "";
+        } else {
+            title = pageTitle.value().split("\\|")[0].trim();
+        }
+
+        return String.format("%s%s", userConfigService.isDemoMode() ? "[DEMO] " : "", title);
     }
 }
