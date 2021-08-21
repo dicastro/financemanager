@@ -5,11 +5,28 @@ import ch.obermuhlner.math.big.BigDecimalMath;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Currency;
 
 public final class Utils {
     private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
+
+    private static final DecimalFormatSymbols DFS;
+    private static final DecimalFormat MONEY_FORMAT;
+
+    static {
+        DFS = new DecimalFormatSymbols();
+        DFS.setCurrency(Currency.getInstance("EUR"));
+        DFS.setCurrencySymbol("€");
+        DFS.setDecimalSeparator(',');
+        DFS.setGroupingSeparator('.');
+        DFS.setMinusSign('-');
+
+        MONEY_FORMAT = new DecimalFormat("#,##0.00 €", DFS);
+    }
 
     private Utils() {
         // Util methods only
@@ -22,7 +39,7 @@ public final class Utils {
     }
 
     public static String tableFormatMoney(final BigDecimal quantity) {
-        return String.format("%.2f €", quantity);
+        return MONEY_FORMAT.format(quantity);
     }
 
     public static String tableFormatMonthAbbreviated(final Month month) {
