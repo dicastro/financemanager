@@ -22,8 +22,11 @@ public class InvestmentPositionService extends AbstractPersistenceService {
     private static final String ACCOUNT_INVESTMENT_POSITIONS_FILENAME_REGEX_TEMPLATE = "investments_%s_[0-9]{6}.ecsv";
     private static final String ACCOUNT_INVESTMENT_POSITIONS_YEARMONTH_EXTRACTOR_PATTERN_TEMPLATE = "investments_%s_([0-9]{6}).ecsv";
 
-    public InvestmentPositionService(final PersistenceProperties persistenceProperties, final CacheService cacheService) {
+    private final UserConfigService userConfigService;
+
+    public InvestmentPositionService(final PersistenceProperties persistenceProperties, final CacheService cacheService, final UserConfigService userConfigService) {
         super(persistenceProperties, cacheService);
+        this.userConfigService = userConfigService;
     }
 
     public List<InvestmentPosition> getInvestmentPositionsByAccountAndMonth(final char[] password, final UUID accountId, final YearMonth yearMonth) throws CsvCryptoIOException {
@@ -35,7 +38,7 @@ public class InvestmentPositionService extends AbstractPersistenceService {
             final List<String[]> rawCsvData = loadData(password, file);
 
             investmentPositions = rawCsvData.stream()
-                    .map(InvestmentPosition::fromStringArray)
+                    .map(rawInvestmentPosition -> InvestmentPosition.fromStringArray(rawInvestmentPosition, userConfigService.isDemoMode()))
                     .sorted(Comparator.comparing(InvestmentPosition::getIndex))
                     .collect(Collectors.toList());
 
@@ -80,7 +83,7 @@ public class InvestmentPositionService extends AbstractPersistenceService {
                 final List<String[]> rawCsvData = loadData(password, file);
 
                 lastInvestmentPosition = rawCsvData.stream()
-                        .map(InvestmentPosition::fromStringArray)
+                        .map(rawInvestmentPosition -> InvestmentPosition.fromStringArray(rawInvestmentPosition, userConfigService.isDemoMode()))
                         .sorted(Comparator.comparing(InvestmentPosition::getIndex))
                         .reduce((first, second) -> second)
                         .orElse(null);

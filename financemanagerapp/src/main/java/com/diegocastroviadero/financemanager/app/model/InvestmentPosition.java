@@ -1,5 +1,6 @@
 package com.diegocastroviadero.financemanager.app.model;
 
+import com.diegocastroviadero.financemanager.app.utils.Utils;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvSerializationUtils;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,16 +51,32 @@ public class InvestmentPosition {
         };
     }
 
-    public static InvestmentPosition fromStringArray(String[] rawData) {
+    public static InvestmentPosition fromStringArray(final String[] rawData, final Boolean demoMode) {
         final Long index = CsvSerializationUtils.parseLongFromCsv(rawData[0]);
         final Bank bank = CsvSerializationUtils.parseEnumFromCsv(rawData[1], Bank.class);
         final UUID accountId = CsvSerializationUtils.parseUUIDFromCsv(rawData[2]);
         final String account = rawData[3];
         final LocalDate parsedDate = CsvSerializationUtils.parseDateFromCsv(rawData[4]);
-        final BigDecimal parsedInverted = CsvSerializationUtils.parseLongAsBigDecimalFromCsv(rawData[5]);
-        final BigDecimal parsedValue = CsvSerializationUtils.parseLongAsBigDecimalFromCsv(rawData[6]);
+
+        BigDecimal parsedInverted = CsvSerializationUtils.parseLongAsBigDecimalFromCsv(rawData[5]);
+
+        if (demoMode) {
+            parsedInverted = Utils.obfuscateBigDecimal(parsedInverted);
+        }
+
+        BigDecimal parsedValue = CsvSerializationUtils.parseLongAsBigDecimalFromCsv(rawData[6]);
+
+        if (demoMode) {
+            parsedValue = Utils.obfuscateBigDecimal(parsedValue);
+        }
+
         final BigDecimal parsedProfitabilityPer = CsvSerializationUtils.parseLongAsBigDecimalFromCsv(rawData[7]);
-        final BigDecimal parsedProfitabilityQty = CsvSerializationUtils.parseLongAsBigDecimalFromCsv(rawData[8]);
+
+        BigDecimal parsedProfitabilityQty = CsvSerializationUtils.parseLongAsBigDecimalFromCsv(rawData[8]);
+
+        if (demoMode) {
+            parsedProfitabilityQty = Utils.obfuscateBigDecimal(parsedProfitabilityQty);
+        }
 
         return new InvestmentPosition(index, bank, accountId, account, parsedDate, parsedInverted, parsedValue, parsedProfitabilityPer, parsedProfitabilityQty);
     }
