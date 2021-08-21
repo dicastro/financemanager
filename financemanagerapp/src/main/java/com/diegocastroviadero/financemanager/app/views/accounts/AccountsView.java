@@ -75,14 +75,21 @@ public class AccountsView extends HorizontalLayout {
 
     private void configureGrid() {
         accountsGrid.addClassName("accounts-grid");
+
         accountsGrid.removeAllColumns();
+
         accountsGrid.addComponentColumn(IconUtils::getBankIcon);
-        accountsGrid.addColumn(Account::getAccountNumber).setHeader("Account number");
-        accountsGrid.addColumn(Account::getAlias).setHeader("Alias");
+        accountsGrid.addColumn(Account::getAccountNumber)
+                .setHeader("Account number");
+        accountsGrid.addColumn(Account::getAlias)
+                .setHeader("Alias");
         accountsGrid.addComponentColumn(IconUtils::getPurposeIcon);
         accountsGrid.addComponentColumn(IconUtils::getScopeIcon);
-        accountsGrid.addColumn(account -> Utils.tableFormatDate(account.getBalanceDate())).setHeader("Balance date");
-        accountsGrid.addColumn(account -> Utils.tableFormatMoney(account.getBalance())).setHeader("Balance").setTextAlign(ColumnTextAlign.END);
+        accountsGrid.addColumn(account -> Utils.tableFormatDate(account.getBalanceDate()))
+                .setHeader("Balance date");
+        accountsGrid.addColumn(account -> Utils.tableFormatMoney(account.getBalance()))
+                .setHeader("Balance")
+                .setTextAlign(ColumnTextAlign.END);
         accountsGrid.addColumn(account -> {
             String linkedAccountLabel = null;
 

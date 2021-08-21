@@ -5,6 +5,8 @@ import com.diegocastroviadero.financemanager.app.model.AccountPosition;
 import com.diegocastroviadero.financemanager.app.model.AccountPositionHistory;
 import com.diegocastroviadero.financemanager.app.services.AccountService;
 import com.diegocastroviadero.financemanager.app.services.AuthService;
+import com.diegocastroviadero.financemanager.app.utils.IconUtils;
+import com.diegocastroviadero.financemanager.app.utils.Utils;
 import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
@@ -105,18 +107,21 @@ public class PositionView extends VerticalLayout {
     }
 
     private void configurePositionsGrid() {
-        positionsGrid.addClassName("movements-grid");
+        positionsGrid.addClassName("account-position-grid");
 
-        positionsGrid.removeColumnByKey("accountId");
-        positionsGrid.removeColumnByKey("balance");
-        positionsGrid.removeColumnByKey("monthFrom");
-        positionsGrid.removeColumnByKey("type");
-        positionsGrid.removeColumnByKey("initialBalance");
+        positionsGrid.removeAllColumns();
 
-        positionsGrid.setColumns("bank", "scope", "alias", "balanceDate");
-
-        positionsGrid.addColumn(AccountPosition::getBalance).setHeader("Balance").setTextAlign(ColumnTextAlign.END);
-        positionsGrid.addColumn(AccountPosition::getExtra).setHeader("");
+        positionsGrid.addComponentColumn(IconUtils::getBankIcon);
+        positionsGrid.addComponentColumn(IconUtils::getScopeIcon);
+        positionsGrid.addColumn(AccountPosition::getAlias)
+                .setHeader("Alias");
+        positionsGrid.addColumn(accountPosition -> Utils.tableFormatDate(accountPosition.getBalanceDate()))
+                .setHeader("Balance date");
+        positionsGrid.addColumn(accountPosition -> Utils.tableFormatMoney(accountPosition.getBalance()))
+                .setHeader("Balance")
+                .setTextAlign(ColumnTextAlign.END);
+        positionsGrid.addColumn(AccountPosition::getExtra)
+                .setHeader("");
 
         positionsGrid.getColumns().forEach(column -> column.setAutoWidth(Boolean.TRUE));
         positionsGrid.asSingleSelect().addValueChangeListener(event -> showPositionHistory(event.getValue()));

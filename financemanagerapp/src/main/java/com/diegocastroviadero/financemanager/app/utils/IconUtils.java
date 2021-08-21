@@ -17,6 +17,10 @@ public final class IconUtils {
         return getBankIcon(importFile.getBank());
     }
 
+    public static Image getBankIcon(final AccountPosition accountPosition) {
+        return getBankIcon(accountPosition.getBank());
+    }
+
     public static Image getBankIcon(final Bank bank) {
         final Image bankIcon = new Image(String.format("images/bank_logo_%s.svg", bank.name()), bank.name());
         bankIcon.setWidth(1.0f, Unit.EM);
@@ -34,6 +38,10 @@ public final class IconUtils {
 
     public static Icon getScopeIcon(final PlannedExpense expense) {
         return getScopeIcon(expense.getScope());
+    }
+
+    public static Icon getScopeIcon(final AccountPosition accountPosition) {
+        return getScopeIcon(accountPosition.getScope());
     }
 
     public static Icon getScopeIcon(final Scope scope) {

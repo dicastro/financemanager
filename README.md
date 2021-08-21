@@ -1,7 +1,6 @@
 # TODO
 
 - Position
-  - la fecha de balance mostrarla como dd/MM/yyyy
   - para la cuenta de indexa no se está ofuscando las cantidades de inversión en demo-mode
   - añadir en el history un filtro por fechas
     - con una fecha desde que como mínimo podría ser la fecha del balance inicial de la cuenta (valor por defecto)
@@ -10,6 +9,7 @@
 
 - General
   - Revisar altura de las pantallas (en Imports se hace bien... y en esta no se añade ningún layout adicional)
+  - Revisar los títulos de las páginas y del menú
 
 - Position
   - Si se ha visualizado un gráfico de una cuenta, al ocultar/mostrar el menú lateral, el gráfico no se adapta al tamaño correcto
