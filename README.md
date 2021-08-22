@@ -1,9 +1,7 @@
 # TODO
 
 - Position
-  - visualizar el gráfico como se visualizan los formularios de alta (a la derecha y en pantallas pequeñas la tabla se oculta)
-  - meter en el gráfico un botón de close (para cerrarlo por si se hubiera ocultado la tabla)
-  - revisar el redimensionamiento del gráfico si se expande/oculta el menu lateral
+  - la primera vez que se muestra la grafica no ocupa todo el espacio, si se oculta y se vuelve a mostrar sí
   - añadir en el history un filtro por fechas
     - con una fecha desde que como mínimo podría ser la fecha del balance inicial de la cuenta (valor por defecto)
     - y con una fecha hasta que como máximo podría ser el último mes para el que haya movimientos (valor por defecto)
@@ -11,6 +9,7 @@
 
 - General
   - Revisar altura de las pantallas (en Imports se hace bien... y en esta no se añade ningún layout adicional)
+  - Al hacer logout forzar la limpieza de la caché
 
 - Icono para la aplicación
 

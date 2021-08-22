@@ -12,14 +12,9 @@ import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.WrongEncryptionPasswordException;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.Query;
@@ -27,7 +22,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -63,7 +57,6 @@ public class AccountsView extends HorizontalLayout {
 
         final Div content = new Div(accountsGrid, accountForm, authDialog);
         content.addClassName("content");
-        //content.setSizeFull();
 
         add(content);
 

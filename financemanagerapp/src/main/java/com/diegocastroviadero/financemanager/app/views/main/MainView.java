@@ -34,6 +34,7 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.Theme;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 
@@ -45,14 +46,16 @@ public class MainView extends AppLayout {
     private final CacheProperties cacheProperties;
     private final UserConfigService userConfigService;
     private final AuthCleanerService authCleanerService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     private final Tabs menu;
     private final H1 viewTitle;
 
-    public MainView(final CacheProperties cacheProperties, final UserConfigService userConfigService, final AuthCleanerService authCleanerService) {
+    public MainView(final CacheProperties cacheProperties, final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final ApplicationEventPublisher applicationEventPublisher) {
         this.cacheProperties = cacheProperties;
         this.userConfigService = userConfigService;
         this.authCleanerService = authCleanerService;
+        this.applicationEventPublisher = applicationEventPublisher;
 
         menu = createMenu();
         viewTitle = new H1();
@@ -69,7 +72,12 @@ public class MainView extends AppLayout {
         layout.setWidthFull();
         layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
-        layout.add(new DrawerToggle());
+
+        final DrawerToggle drawerToggle = new DrawerToggle();
+        drawerToggle.addClickListener(event -> applicationEventPublisher.publishEvent(new DrawerToggleEvent(this, isDrawerOpened())));
+
+        layout.add(drawerToggle);
+
         layout.add(viewTitle);
         layout.add(new Avatar());
 

@@ -161,20 +161,20 @@ public class AccountForm extends FormLayout {
     public static abstract class AccountFormEvent extends ComponentEvent<AccountForm> {
         private final Account account;
 
-        protected AccountFormEvent(AccountForm source, Account account) {
+        protected AccountFormEvent(final AccountForm source, final Account account) {
             super(source, false);
             this.account = account;
         }
     }
 
     public static class SaveEvent extends AccountFormEvent {
-        SaveEvent(AccountForm source, Account account) {
+        SaveEvent(final AccountForm source, final Account account) {
             super(source, account);
         }
     }
 
     public static class CloseEvent extends AccountFormEvent {
-        CloseEvent(AccountForm source) {
+        CloseEvent(final AccountForm source) {
             super(source, null);
         }
     }

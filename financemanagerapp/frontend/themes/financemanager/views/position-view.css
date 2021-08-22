@@ -1,4 +1,22 @@
 .position-view {
     display: block;
-    padding: 1em;
+}
+
+.position-view .content {
+    display: flex;
+}
+
+.position-view .position-grid {
+    flex: 2;
+}
+
+.position-view .position-chart {
+    flex: 1;
+    padding: var(--lumo-space-m);
+}
+
+@media all and (max-width: 1100px) {
+    .position-view.showing .position-grid {
+        display: none;
+    }
 }
