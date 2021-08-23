@@ -1,8 +1,5 @@
 # TODO
 
-- General
-  - Revisar altura de las pantallas (en Imports se hace bien... y en esta no se añade ningún layout adicional)
-  
 - Icono para la aplicación
 
 - PACKAGE AND DEPLOY 1.1.0

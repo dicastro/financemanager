@@ -11,7 +11,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -56,12 +55,12 @@ public class PlannedExpensesView extends VerticalLayout {
 
         final Div content = new Div(expensesGrid, expenseForm);
         content.addClassName("content");
-        content.setSizeFull();
+        //content.setSizeFull();
 
         add(getToolbar(), content);
 
-        updateExpensesGrid();
         closeEditor();
+        updateExpensesGrid();
     }
 
     private HorizontalLayout getToolbar() {
@@ -86,9 +85,11 @@ public class PlannedExpensesView extends VerticalLayout {
 
     private void configureGrid() {
         expensesGrid.addClassName("planned-expenses-grid");
-        expensesGrid.setSizeFull();
+
         expensesGrid.setMultiSort(Boolean.TRUE);
+
         expensesGrid.removeAllColumns();
+
         expensesGrid.addColumn(PlannedExpense::getConcept)
                 .setHeader("Concept")
                 .setSortProperty("concept");

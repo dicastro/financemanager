@@ -11,7 +11,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -56,12 +55,11 @@ public class PlannedBudgetsView extends VerticalLayout {
 
         final Div content = new Div(budgetsGrid, budgetForm);
         content.addClassName("content");
-        content.setSizeFull();
 
         add(getToolbar(), content);
 
-        updateBudgetsGrid();
         closeEditor();
+        updateBudgetsGrid();
     }
 
     private HorizontalLayout getToolbar() {
@@ -86,9 +84,11 @@ public class PlannedBudgetsView extends VerticalLayout {
 
     private void configureGrid() {
         budgetsGrid.addClassName("planned-budgets-grid");
-        budgetsGrid.setSizeFull();
+
         budgetsGrid.setMultiSort(Boolean.TRUE);
+
         budgetsGrid.removeAllColumns();
+
         budgetsGrid.addColumn(PlannedBudget::getConcept)
                 .setHeader("Concept")
                 .setSortProperty("concept");
