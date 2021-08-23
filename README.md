@@ -1,11 +1,5 @@
 # TODO
 
-- Position
-  - en la columna donde se pone el beneficio de la inversión
-    - poner un separador pipe
-    - poner la cantidad en el mismo formato que en las tablas: con separadores de miles, decimales, símbolo de moneda, etc.
-    - meter colores: si positivo ponerlo verde, si negativo ponerlo rojo
-
 - General
   - Revisar altura de las pantallas (en Imports se hace bien... y en esta no se añade ningún layout adicional)
   - Al hacer logout forzar la limpieza de la caché

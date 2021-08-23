@@ -49,7 +49,7 @@ public class IndexaAccountPositionCalculator implements AccountPositionCalculato
                 .scope(account.getScope())
                 .type(account.getPurpose())
                 .balance(balance)
-                .extra(String.format("(%.2f%% - %.2f)", lastInvestmentPosition.getProfitabilityPer(), profitQty))
+                .extra(String.format("(%.2f%% | %s)", lastInvestmentPosition.getProfitabilityPer(), Utils.tableFormatMoney(profitQty)))
                 .balanceDate(YearMonth.from(lastInvestmentPosition.getDate()).atEndOfMonth())
                 .monthFrom(account.getBalanceDateYearMonth())
                 .initialBalance(account.getBalance())
