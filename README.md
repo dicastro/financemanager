@@ -1,21 +1,42 @@
 # TODO
 
 - Position
-  - la primera vez que se muestra la grafica no ocupa todo el espacio, si se oculta y se vuelve a mostrar sí
-  - añadir en el history un filtro por fechas
-    - con una fecha desde que como mínimo podría ser la fecha del balance inicial de la cuenta (valor por defecto)
-    - y con una fecha hasta que como máximo podría ser el último mes para el que haya movimientos (valor por defecto)
-    - habrá varios botones con las opciones más comunes (año en curso, año pasado, últimos 2 años, últimos 3 años, últimos 4 años, últimos 5 años)
+  - en la columna donde se pone el beneficio de la inversión
+    - poner un separador pipe
+    - poner la cantidad en el mismo formato que en las tablas: con separadores de miles, decimales, símbolo de moneda, etc.
+    - meter colores: si positivo ponerlo verde, si negativo ponerlo rojo
 
 - General
   - Revisar altura de las pantallas (en Imports se hace bien... y en esta no se añade ningún layout adicional)
   - Al hacer logout forzar la limpieza de la caché
+    - Cambiar las duraciones de las expiraciones de las cachés (10 mins local, 30 mins prod)
 
 - Icono para la aplicación
 
 - PACKAGE AND DEPLOY 1.1.0
 
 # Backlog
+
+- Accounts
+  - Meter apartado para ver el cálculo de balances de cada cuenta (fecha del último import de la cuenta y fecha del último balance calculado)
+    - Con botón para calcular balances
+    - Con barra de progreso en función de los ficheros a procesar
+  - ¿Qué pasa con las inversiones? ¿Cómo se guardan?
+
+- Position
+  - en el detalle añadir:
+    - ahorro/pérdida último mes
+    - comparación ahorro/pérdida mismo mes año anterior
+    - ahorro/pérdida año en curso
+    - comparación ahorro/pérdida mismo periodo año anterior
+  - leer las posiciones de los balances calculados
+  - añadir en el history un filtro por fechas
+    - con una fecha desde que como mínimo podría ser la fecha del balance inicial de la cuenta (valor por defecto)
+    - y con una fecha hasta que como máximo podría ser el último mes para el que haya movimientos (valor por defecto)
+    - habrá varios botones con las opciones más comunes (año en curso, año pasado, últimos 2 años, últimos 3 años, últimos 4 años, últimos 5 años)
+
+- Movements
+  - Cambiar filtro año/mes por 2 combos (años y meses) y poner boton de siguiente y anterior
 
 - Import
   - Poder subir directamente un fichero (y seleccionar el banco y la cuenta)
@@ -27,6 +48,14 @@
 - Ejecutar la imagen con otro usuario que no sea root
   - Hay que tener en cuenta los permisos de los ficheros que se creen
   - En el NAS habría que crear otro usuario y que el contenedor se ejecutase con ese mismo usuario
+
+- Crypter
+  - Que con cada comando lea la contraseña del disco (ahora mismo: para cambiar la contraseña de cifrado hace falta descifrar, SALIR, cambiar la contraseña en el fichero, volver a ejecutar crypter y finalmente cifrar de nuevo)
+
+- Cryptoutils
+  - Al descifrar que se borre el fichero meta
+
+# Ideas
 
 - Añadir sección para estudiar el consumo eléctrico
   - se podrán cargar los ficheros csv de consumo por horas
@@ -40,16 +69,6 @@
   - calcula lo que queda pendiente de pago de intereses
   - calcula el ahorro comparando con otro tipo de interés
   - calcula el ahorro amortizando anticipadamente
-
-- Crypter
-  - Que con cada comando lea la contraseña del disco (ahora mismo: para cambiar la contraseña de cifrado hace falta descifrar, SALIR, cambiar la contraseña en el fichero, volver a ejecutar crypter y finalmente cifrar de nuevo)
-
-- Cryptoutils
-  - Al descifrar que se borre el fichero meta
-
-# Ideas
-
-- Mover la gestión de cuentas (Account) a la sección 'Administration' ??
 
 # HOWTO
 

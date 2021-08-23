@@ -1,7 +1,7 @@
 package com.diegocastroviadero.financemanager.app.views.position;
 
-import com.diegocastroviadero.financemanager.app.model.AccountPosition;
 import com.diegocastroviadero.financemanager.app.model.AccountPositionHistory;
+import com.diegocastroviadero.financemanager.app.utils.Utils;
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.ApexChartsBuilder;
 import com.github.appreciated.apexcharts.config.builder.*;
@@ -34,7 +34,7 @@ public class PositionChart extends VerticalLayout {
 
     private ApexCharts chart;
 
-    final Div chartRegion = new Div();
+    final Div content = new Div();
     final Button close = new Button("Close");
 
     final List<ShortcutRegistration> shortcuts = new ArrayList<>();
@@ -42,44 +42,41 @@ public class PositionChart extends VerticalLayout {
     public PositionChart() {
         addClassName("position-chart");
 
-        chartRegion.setSizeFull();
+        content.setSizeFull();
 
-        add(chartRegion, createButtonsLayout());
+        add(content, createButtonsLayout());
     }
 
     public void show(final AccountPositionHistory accountPositionHistory) {
         this.accountPositionHistory = accountPositionHistory;
 
-        setVisible(Boolean.TRUE);
-
         shortcuts.add(close.addClickShortcut(Key.ESCAPE));
 
-        update();
+        updateChart();
     }
 
     public void hide() {
         this.accountPositionHistory = null;
 
-        setVisible(Boolean.FALSE);
-
         shortcuts.forEach(ShortcutRegistration::remove);
         shortcuts.clear();
 
-        update();
+        updateChart();
     }
 
     public void rerender() {
-        update();
+        Utils.sleepMillis(250);
+        updateChart();
     }
 
-    private void update() {
+    private void updateChart() {
         if (null != chart) {
-            chartRegion.remove(chart);
+            content.remove(chart);
         }
 
         if (null != accountPositionHistory) {
             chart = getChart(accountPositionHistory.getLabels(), getSeriesFromValues(accountPositionHistory));
-            chartRegion.add(chart);
+            content.add(chart);
         }
     }
 
@@ -123,7 +120,7 @@ public class PositionChart extends VerticalLayout {
                 .toArray(Series[]::new);
     }
 
-    private HorizontalLayout createButtonsLayout() {
+    private Component createButtonsLayout() {
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
         close.addClickListener(event -> fireEvent(new PositionChart.CloseEvent(this)));

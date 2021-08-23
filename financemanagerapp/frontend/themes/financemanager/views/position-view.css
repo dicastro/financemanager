@@ -10,7 +10,11 @@
     flex: 2;
 }
 
-.position-view .position-chart {
+.position-view:not(.showing) .position-chart {
+    display: none;
+}
+
+.position-view.showing .position-chart {
     flex: 1;
     padding: var(--lumo-space-m);
 }

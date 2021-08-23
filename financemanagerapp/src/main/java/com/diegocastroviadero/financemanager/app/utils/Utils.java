@@ -85,4 +85,11 @@ public final class Utils {
 
         return result;
     }
+
+    public static void sleepMillis(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException ignore) {
+        }
+    }
 }

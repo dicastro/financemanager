@@ -35,7 +35,7 @@ public class PositionView extends VerticalLayout implements ApplicationListener<
     private final AccountService accountService;
 
     private final Grid<AccountPosition> positionsGrid = new Grid<>(AccountPosition.class);
-    private final PositionChart chart;
+    private final PositionChart positionChart;
 
     public PositionView(final AuthService authService, final AccountService accountService, final GenericApplicationContext context) {
         this.authService = authService;
@@ -48,12 +48,12 @@ public class PositionView extends VerticalLayout implements ApplicationListener<
 
         configurePositionsGrid();
 
-        chart = new PositionChart();
-        chart.addListener(PositionChart.CloseEvent.class, e -> closeChart());
+        positionChart = new PositionChart();
+        positionChart.addListener(PositionChart.CloseEvent.class, e -> closeChart());
 
         final AuthDialog authDialog = authService.configureAuth(this);
 
-        final Div content = new Div(positionsGrid, chart, authDialog);
+        final Div content = new Div(positionsGrid, positionChart, authDialog);
         content.addClassName("content");
 
         add(content);
@@ -140,7 +140,7 @@ public class PositionView extends VerticalLayout implements ApplicationListener<
                     final AccountPositionHistory accountPositionHistory = accountService.getAccountPositionHistory(password, accountPosition);
 
                     addClassName("showing");
-                    chart.show(accountPositionHistory);
+                    positionChart.show(accountPositionHistory);
                 } catch (WrongEncryptionPasswordException e) {
                     final String errorMessage = String.format("History of account '%s' cannot be shown because provided encryption password is wrong", accountPosition.getAccountId());
                     log.error(errorMessage);
@@ -158,13 +158,13 @@ public class PositionView extends VerticalLayout implements ApplicationListener<
     }
 
     private void closeChart() {
-        chart.hide();
+        positionChart.hide();
         positionsGrid.deselectAll();
         removeClassName("showing");
     }
 
     @Override
     public void onApplicationEvent(final DrawerToggleEvent drawerToggleEvent) {
-        chart.rerender();
+        positionChart.rerender();
     }
 }
