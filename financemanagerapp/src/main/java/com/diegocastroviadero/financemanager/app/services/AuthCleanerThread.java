@@ -45,6 +45,9 @@ public class AuthCleanerThread extends Thread {
 
                         if (noopCleans > cacheProperties.getNoopCleansToInvalidateSession()) {
                             session.getSession().invalidate();
+
+                            log.info("(scheduled) Session '{}' has been invalidated after {} noop cleans", sessionId, cacheProperties.getNoopCleansToInvalidateSession());
+
                             sessionOpened.set(false);
                         }
                     } else {
