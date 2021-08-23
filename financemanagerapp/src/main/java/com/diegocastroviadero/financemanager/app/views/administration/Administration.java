@@ -1,14 +1,12 @@
 package com.diegocastroviadero.financemanager.app.views.administration;
 
 import com.diegocastroviadero.financemanager.app.services.AuthCleanerService;
-import com.diegocastroviadero.financemanager.app.services.AuthService;
 import com.diegocastroviadero.financemanager.app.services.CacheCleanerService;
 import com.diegocastroviadero.financemanager.app.services.UserConfigService;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -21,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @PageTitle("Administration | Finance Manager")
 public class Administration extends VerticalLayout {
 
-    public Administration(final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final CacheCleanerService cacheCleanerService, final AuthService authService) {
+    public Administration(final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final CacheCleanerService cacheCleanerService) {
         addClassName("administration-view");
         setSizeFull();
 

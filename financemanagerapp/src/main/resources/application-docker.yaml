@@ -6,7 +6,7 @@ logging:
 
 financemanagerapp:
   cache:
-    clean-interval: 600000
+    clean-interval: 1800000 # 30 minutes
   import:
     base-path: /financemanager/import
     deleteA-after-import: true

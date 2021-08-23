@@ -48,12 +48,16 @@ public class AuthService {
         }
     }
 
-    public void forgetPassword() {
-        forgetPassword(VaadinSession.getCurrent());
+    public boolean forgetPassword() {
+        return forgetPassword(VaadinSession.getCurrent());
     }
 
-    public void forgetPassword(final VaadinSession session) {
+    public boolean forgetPassword(final VaadinSession session) {
+        final boolean passwordWillBeCleaned = null != session.getAttribute(AUTHPASSWORD_ENTRY_KEY);
+
         session.setAttribute(AUTHPASSWORD_ENTRY_KEY, null);
+
+        return passwordWillBeCleaned;
     }
 
     private char[] getAuthPassword() {

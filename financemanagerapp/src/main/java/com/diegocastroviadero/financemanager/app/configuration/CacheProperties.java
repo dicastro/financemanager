@@ -15,4 +15,5 @@ public class CacheProperties {
     public static final String CACHE_CONFIG_PREFIX = "financemanagerapp.cache";
 
     private Long cleanInterval;
+    private Integer noopCleansToInvalidateSession;
 }

@@ -2,9 +2,7 @@
 
 - General
   - Revisar altura de las pantallas (en Imports se hace bien... y en esta no se añade ningún layout adicional)
-  - Al hacer logout forzar la limpieza de la caché
-    - Cambiar las duraciones de las expiraciones de las cachés (10 mins local, 30 mins prod)
-
+  
 - Icono para la aplicación
 
 - PACKAGE AND DEPLOY 1.1.0

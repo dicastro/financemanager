@@ -147,7 +147,7 @@ public class MainView extends AppLayout {
                 session.getSession()
                         .setMaxInactiveInterval(-1);
 
-                final AuthCleanerThread authCleanerThread = new AuthCleanerThread(cacheProperties.getCleanInterval(), authCleanerService, session);
+                final AuthCleanerThread authCleanerThread = new AuthCleanerThread(cacheProperties, authCleanerService, session);
                 session.setAttribute(AuthCleanerThread.class, authCleanerThread);
                 authCleanerThread.start();
 
