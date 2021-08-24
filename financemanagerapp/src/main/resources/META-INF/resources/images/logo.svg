@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="80.102272"
+   inkscape:export-xdpi="80.102272"
+   inkscape:export-filename="C:\work\repos\financemanager\financemanagerapp\src\main\resources\META-INF\resources\images\logo.png"
+   width="269.6553"
+   height="269.6553"
+   viewBox="0 0 71.346298 71.3463"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="financemanager_logo.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     units="px"
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="351.18285"
+     inkscape:cy="174.07968"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-58.633785,-87.594107)">
+    <path
+       id="path947"
+       style="fill:#2ca05a;stroke:none;stroke-width:1.51168;stroke-linecap:round;stroke-linejoin:round"
+       d="M 129.98,158.93982 H 58.633785 v -7.9375 H 129.98 Z" />
+    <g
+       transform="matrix(1,0,0,0.93315879,0,5.8548962)"
+       id="g879">
+      <path
+         id="rect864"
+         style="fill:#808080;stroke:none;stroke-width:1.56488;stroke-linecap:round;stroke-linejoin:round"
+         d="M 129.98008,96.100162 H 58.633785 v -8.506055 h 71.346295 z" />
+      <path
+         d="m 109.90953,96.099635 v -8.50535 H 94.306941 v 8.50535 z"
+         style="fill:#87de87;fill-opacity:1;stroke:none;stroke-width:2.04259;stroke-linecap:round;stroke-linejoin:round"
+         id="path937" />
+    </g>
+    <g
+       transform="matrix(1,0,0,0.9331758,0,5.831063)"
+       id="g883">
+      <path
+         id="rect860"
+         style="fill:#808080;stroke:none;stroke-width:1.56481;stroke-linecap:round;stroke-linejoin:round"
+         d="M 129.98008,113.11114 H 58.633785 v -8.50535 h 71.346295 z" />
+      <path
+         d="m 109.90953,113.11116 v -8.5059 H 94.306933 v 8.5059 z"
+         style="fill:#ff8080;fill-opacity:1;stroke:none;stroke-width:2.04251;stroke-linecap:round;stroke-linejoin:round"
+         id="path1117" />
+    </g>
+    <g
+       transform="matrix(1,0,0,0.93320432,0,5.8051294)"
+       id="g887">
+      <path
+         id="rect856"
+         style="fill:#808080;stroke:none;stroke-width:1.56479;stroke-linecap:round;stroke-linejoin:round"
+         d="M 129.98008,130.12167 H 58.633785 v -8.50511 h 71.346295 z" />
+      <path
+         id="path1121"
+         style="fill:#ffe680;fill-opacity:1;stroke:none;stroke-width:2.04248;stroke-linecap:round;stroke-linejoin:round"
+         d="m 109.90953,130.12218 v -8.50564 H 94.306941 v 8.50564 z" />
+    </g>
+    <g
+       transform="matrix(1,0,0,0.93319993,0,5.7829755)"
+       id="g891">
+      <path
+         id="rect835-3"
+         style="fill:#808080;stroke:none;stroke-width:1.56478;stroke-linecap:round;stroke-linejoin:round"
+         d="M 129.98008,147.13331 H 58.633785 v -8.50498 h 71.346295 z" />
+      <path
+         id="path1131"
+         style="fill:#87de87;fill-opacity:1;stroke:none;stroke-width:2.04246;stroke-linecap:round;stroke-linejoin:round"
+         d="m 109.90953,147.13312 v -8.50549 H 94.306941 v 8.50549 z" />
+    </g>
+  </g>
+</svg>

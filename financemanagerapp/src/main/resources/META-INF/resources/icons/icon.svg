@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="icon.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 71.346298 71.3463"
+   height="269.6553"
+   width="269.6553"
+   inkscape:export-filename="C:\work\repos\financemanager\financemanagerapp\src\main\resources\META-INF\resources\icons\icon.png"
+   inkscape:export-xdpi="182.2787"
+   inkscape:export-ydpi="182.2787">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     fit-margin-bottom="0"
+     fit-margin-right="0"
+     fit-margin-left="0"
+     fit-margin-top="0"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="148.67995"
+     inkscape:cx="-190.80451"
+     inkscape:zoom="1"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     units="px" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-58.633785,-87.594107)"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <path
+       inkscape:export-ydpi="182.2787"
+       inkscape:export-xdpi="182.2787"
+       d="M 129.98,158.9398 H 58.633785 v -7.9375 H 129.98 Z"
+       style="fill:#2ca05a;stroke:none;stroke-width:1.51168;stroke-linecap:round;stroke-linejoin:round"
+       id="path947" />
+    <g
+       inkscape:export-ydpi="182.2787"
+       inkscape:export-xdpi="182.2787"
+       transform="matrix(1,0,0,2,0,-87.594111)"
+       id="g873">
+      <path
+         d="M 129.98008,91.562858 H 58.633785 v -3.96875 h 71.346295 z"
+         style="fill:#808080;stroke:none;stroke-width:1.06892;stroke-linecap:round;stroke-linejoin:round"
+         id="rect864" />
+      <path
+         id="path937"
+         style="fill:#ff8080;fill-opacity:1;stroke:none;stroke-width:1.39522;stroke-linecap:round;stroke-linejoin:round"
+         d="M 109.90953,91.562612 V 87.594191 H 94.306941 v 3.968421 z" />
+    </g>
+    <g
+       inkscape:export-ydpi="182.2787"
+       inkscape:export-xdpi="182.2787"
+       id="g887"
+       transform="matrix(1,0,0,0.93320432,0,-4.7629115)">
+      <path
+         d="M 129.98008,130.12167 H 58.633785 v -8.50511 h 71.346295 z"
+         style="fill:#808080;stroke:none;stroke-width:1.56479;stroke-linecap:round;stroke-linejoin:round"
+         id="rect856" />
+      <path
+         d="m 109.90953,130.12218 v -8.50564 H 94.306941 v 8.50564 z"
+         style="fill:#ffe680;fill-opacity:1;stroke:none;stroke-width:2.04248;stroke-linecap:round;stroke-linejoin:round"
+         id="path1121" />
+    </g>
+    <g
+       inkscape:export-ydpi="182.2787"
+       inkscape:export-xdpi="182.2787"
+       id="g891"
+       transform="matrix(1,0,0,0.93319993,0,0.4989404)">
+      <path
+         d="M 129.98008,147.13331 H 58.633785 v -8.50498 h 71.346295 z"
+         style="fill:#808080;stroke:none;stroke-width:1.56478;stroke-linecap:round;stroke-linejoin:round"
+         id="rect835-3" />
+      <path
+         d="m 109.90953,147.13312 v -8.50549 H 94.306941 v 8.50549 z"
+         style="fill:#87de87;fill-opacity:1;stroke:none;stroke-width:2.04246;stroke-linecap:round;stroke-linejoin:round"
+         id="path1131" />
+    </g>
+  </g>
+</svg>
