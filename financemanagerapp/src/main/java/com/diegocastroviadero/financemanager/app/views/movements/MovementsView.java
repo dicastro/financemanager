@@ -14,7 +14,6 @@ import com.diegocastroviadero.financemanager.cryptoutils.exception.WrongEncrypti
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
@@ -130,20 +129,8 @@ public class MovementsView extends VerticalLayout {
             }
         });
 
-        //final List<YearMonth> months = movementService.getYearMonthRange();
-
         monthFilter.setRequired(Boolean.TRUE);
         monthFilter.setItemLabelGenerator(yearMonth -> yearMonth.format(DateTimeFormatter.ofPattern("yyyy/MM")));
-
-        /*
-        if (months.isEmpty()) {
-            monthFilter.setEnabled(Boolean.FALSE);
-            Notification.show("There are no movements to be shown", 10000, Notification.Position.MIDDLE);
-        } else {
-            monthFilter.setItems(months);
-            monthFilter.setValue(months.get(0));
-        }
-        */
 
         monthFilterListener = configureMonthFilterValueChangeListener();
 

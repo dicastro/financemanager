@@ -2,16 +2,24 @@
 
 - Block force brute authentication
   - https://www.baeldung.com/spring-security-block-brute-force-authentication-attempts
-  
+
 - Administration
   - Añadir opción de hacer backup y que se descargue
     - Al hacer import dejar de hacer el backup que se hace ahí
+
+- Movements
+  - Se apura mucho en la vista y no se distingue si se ve el último movimiento o si se está cortando la tabla
 
 - PACKAGE AND DEPLOY 1.1.0
 
 # Backlog
 
+- Import
+  - Poder subir directamente un fichero (y seleccionar el banco y la cuenta)
+    - En vez de tener que dejarlos en una carpeta 'import'
+
 - Accounts
+  - Meter apartado en el que se ven los meses disponibles (con opción a borrar)
   - Meter apartado para ver el cálculo de balances de cada cuenta (fecha del último import de la cuenta y fecha del último balance calculado)
     - Con botón para calcular balances
     - Con barra de progreso en función de los ficheros a procesar
@@ -30,11 +38,7 @@
     - habrá varios botones con las opciones más comunes (año en curso, año pasado, últimos 2 años, últimos 3 años, últimos 4 años, últimos 5 años)
 
 - Movements
-  - Cambiar filtro año/mes por 2 combos (años y meses) y poner boton de siguiente y anterior
-
-- Import
-  - Poder subir directamente un fichero (y seleccionar el banco y la cuenta)
-    - En vez de tener que dejarlos en una carpeta 'import'
+  - Poner boton de siguiente y anterior en el filtro año/mes
 
 - General
   - La barra de cargando es muy sutil... debería ser una cortinilla en toda la página
