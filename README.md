@@ -2,14 +2,14 @@
 
 - Block force brute authentication
   - https://www.baeldung.com/spring-security-block-brute-force-authentication-attempts
+  
+- Administration
+  - Añadir opción de hacer backup y que se descargue
+    - Al hacer import dejar de hacer el backup que se hace ahí
 
 - PACKAGE AND DEPLOY 1.1.0
 
 # Backlog
-
-- Administration
-  - Añadir opción de hacer backup y que se descargue
-    - Al hacer import dejar de hacer el backup que se hace ahí
 
 - Accounts
   - Meter apartado para ver el cálculo de balances de cada cuenta (fecha del último import de la cuenta y fecha del último balance calculado)
