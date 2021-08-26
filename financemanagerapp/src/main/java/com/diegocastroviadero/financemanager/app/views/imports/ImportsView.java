@@ -7,11 +7,8 @@ import com.diegocastroviadero.financemanager.app.services.ImportService;
 import com.diegocastroviadero.financemanager.app.utils.IconUtils;
 import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
-import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
-import com.diegocastroviadero.financemanager.cryptoutils.exception.WrongEncryptionPasswordException;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -64,23 +61,17 @@ public class ImportsView extends VerticalLayout {
     }
 
     private void importAction() {
-        boolean backupSuccessful = importService.backupFiles();
+        log.debug("Importing all files ...");
 
-        if (backupSuccessful) {
-            log.debug("Importing all files ...");
+        final List<ImportFile> importFiles = importsGrid.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
 
-            final List<ImportFile> importFiles = importsGrid.getDataProvider().fetch(new Query<>()).collect(Collectors.toList());
+        importFiles.stream()
+                .map(ImportFile::doImport)
+                .filter(ImportedFile::hasError)
+                .forEach(erroneousImportedFile -> Notification.show(erroneousImportedFile.getErrorCauses().stream()
+                        .collect(Collectors.joining("\n - ", "- ", "")), 5000, Notification.Position.BOTTOM_START));
 
-            importFiles.stream()
-                    .map(ImportFile::doImport)
-                    .filter(ImportedFile::hasError)
-                    .forEach(erroneousImportedFile -> Notification.show(erroneousImportedFile.getErrorCauses().stream()
-                            .collect(Collectors.joining("\n - ", "- ", "")), 5000, Notification.Position.BOTTOM_START));
-
-            updateImportsGrid();
-        } else {
-            Notification.show("Import could not be done, because existing data could not be backed up", 5000, Notification.Position.MIDDLE);
-        }
+        updateImportsGrid();
     }
 
     private void configureGrid() {
@@ -100,39 +91,28 @@ public class ImportsView extends VerticalLayout {
 
     private void updateImportsGrid() {
         authService.authenticate(this, password -> {
-            try {
-                final List<ImportFile> imports = importService.getFilesToImport(password);
+            final List<ImportFile> imports = importService.getFilesToImport(password);
 
-                final Map<Boolean, List<ImportFile>> importsByImportable = imports.stream()
-                        .collect(Collectors.groupingBy(ImportFile::isImportable));
+            final Map<Boolean, List<ImportFile>> importsByImportable = imports.stream()
+                    .collect(Collectors.groupingBy(ImportFile::isImportable));
 
-                if (importsByImportable.containsKey(Boolean.TRUE)
-                        && !importsByImportable.get(Boolean.TRUE).isEmpty()) {
-                    importsGrid.setItems(importsByImportable.get(Boolean.TRUE));
-                    importButton.setEnabled(Boolean.TRUE);
-                } else {
-                    importsGrid.setItems(Collections.emptyList());
-                    importButton.setEnabled(Boolean.FALSE);
-                }
+            if (importsByImportable.containsKey(Boolean.TRUE)
+                    && !importsByImportable.get(Boolean.TRUE).isEmpty()) {
+                importsGrid.setItems(importsByImportable.get(Boolean.TRUE));
+                importButton.setEnabled(Boolean.TRUE);
+            } else {
+                importsGrid.setItems(Collections.emptyList());
+                importButton.setEnabled(Boolean.FALSE);
+            }
 
-                if (importsByImportable.containsKey(Boolean.FALSE)
-                        && !importsByImportable.get(Boolean.FALSE).isEmpty()) {
-                    final String message = importsByImportable.get(Boolean.FALSE).stream()
-                            .map(ImportFile::getFile)
-                            .map(File::getName)
-                            .collect(Collectors.joining(", ", "The following files are not importable: ", ""));
+            if (importsByImportable.containsKey(Boolean.FALSE)
+                    && !importsByImportable.get(Boolean.FALSE).isEmpty()) {
+                final String message = importsByImportable.get(Boolean.FALSE).stream()
+                        .map(ImportFile::getFile)
+                        .map(File::getName)
+                        .collect(Collectors.joining(", ", "The following files are not importable: ", ""));
 
-                    Notification.show(message, 10000, Notification.Position.BOTTOM_START);
-                }
-            } catch (WrongEncryptionPasswordException e) {
-                final String errorMessage = "Some accounts from import files could not be registered because provided encryption password is wrong";
-                log.error(errorMessage);
-                authService.forgetPassword();
-                Notification.show(errorMessage, 5000, Notification.Position.MIDDLE);
-            } catch (CsvCryptoIOException e) {
-                final String errorMessage = "Some accounts from import files could not be registered because an unexpected error";
-                log.error(errorMessage, e);
-                Notification.show(errorMessage, 5000, Notification.Position.MIDDLE);
+                Notification.show(message, 10000, Notification.Position.BOTTOM_START);
             }
         });
     }

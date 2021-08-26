@@ -1,12 +1,17 @@
 package com.diegocastroviadero.financemanager.app.views.administration;
 
 import com.diegocastroviadero.financemanager.app.services.AuthCleanerService;
+import com.diegocastroviadero.financemanager.app.services.BackupService;
 import com.diegocastroviadero.financemanager.app.services.CacheCleanerService;
 import com.diegocastroviadero.financemanager.app.services.UserConfigService;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -19,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @PageTitle("Administration | Finance Manager")
 public class Administration extends VerticalLayout {
 
-    public Administration(final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final CacheCleanerService cacheCleanerService) {
+    public Administration(final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final CacheCleanerService cacheCleanerService, final BackupService backupService) {
         addClassName("administration-view");
         setSizeFull();
 
@@ -83,13 +88,26 @@ public class Administration extends VerticalLayout {
         final VerticalLayout cleanLayout = new VerticalLayout(authCacheLayout, globalCacheLayout, cleanAllLayout);
         cleanLayout.setWidthFull();
 
+        // Backup
+        final Button downloadButton = new Button("Get Backup", new Icon(VaadinIcon.DOWNLOAD_ALT));
+        downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        final Anchor downloadLink = new Anchor(backupService.backupFiles(e -> Notification.show("Backup could not be done", 5000, Notification.Position.MIDDLE)), "Backup");
+        downloadLink.getElement().setAttribute("download",true);
+        downloadLink.removeAll();
+        downloadLink.add(downloadButton);
+
+        final VerticalLayout downloadLayout = new VerticalLayout(downloadLink);
+        downloadLayout.setWidthFull();
+
+        // Demo mode
         final Checkbox demoMode = new Checkbox("Demo Mode", userConfigService.isDemoMode());
         demoMode.addValueChangeListener(e -> userConfigService.setDemoMode(e.getValue()));
 
         final VerticalLayout demoModeLayout = new VerticalLayout(demoMode);
         demoModeLayout.setWidthFull();
 
-        final VerticalLayout content = new VerticalLayout(versionLayout, cleanLayout, demoModeLayout);
+        final VerticalLayout content = new VerticalLayout(versionLayout, cleanLayout, downloadLayout, demoModeLayout);
         content.addClassName("content");
         content.setSizeFull();
 
