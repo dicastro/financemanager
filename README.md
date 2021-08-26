@@ -1,7 +1,5 @@
 # TODO
 
-- PACKAGE AND DEPLOY 1.1.0
-
 # Backlog
 
 - Import
