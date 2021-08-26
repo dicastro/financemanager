@@ -1,4 +1,4 @@
-package com.diegocastroviadero.financemanager.app.configuration;
+package com.diegocastroviadero.financemanager.app.security;
 
 import com.diegocastroviadero.financemanager.app.services.AuthCleanerService;
 import com.diegocastroviadero.financemanager.app.services.CacheCleanerService;
@@ -14,12 +14,14 @@ import java.io.IOException;
 
 @Component
 @AllArgsConstructor
-public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
+public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
     private final AuthCleanerService authCleanerService;
     private final CacheCleanerService cacheCleanerService;
 
     @Override
     public void onLogoutSuccess(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException, ServletException {
+        setDefaultTargetUrl("/login?logout");
+
         authCleanerService.cleanAuth();
         cacheCleanerService.cleanCache();
 

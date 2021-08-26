@@ -15,9 +15,12 @@ import java.util.stream.Stream;
 public class SecurityProperties {
     public static final String SECURITY_CONFIG_PREFIX = "financemanagerapp.security";
 
+    private final Integer incorrectLoginsToBlockIp;
     private final List<FMUser> users;
 
-    public SecurityProperties(final String users) {
+    public SecurityProperties(final Integer incorrectLoginsToBlockIp, final String users) {
+        this.incorrectLoginsToBlockIp = incorrectLoginsToBlockIp;
+
         this.users = Stream.of(users.split("\\|")).map(ru -> {
             final String[] credentialRolesSplit = ru.split("@");
             final String[] credentialSplit = credentialRolesSplit[0].split(":");

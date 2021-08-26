@@ -176,6 +176,12 @@
             <version>1.21</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1.1-jre</version>
+        </dependency>
+
         <!-- Used to apply log(BigDecimal) in order to obfuscate quantities in demo mode -->
         <dependency>
             <groupId>ch.obermuhlner</groupId>

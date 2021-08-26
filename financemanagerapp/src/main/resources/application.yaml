@@ -26,6 +26,7 @@ financemanagerapp:
     base-path: wksp/import
     delete-after-import: false
   security:
+    incorrect-logins-to-block-ip: 3
     users: ${FINANCEMANAGER_USERS:user:{noop}1@USER|admin:{noop}1@USER,ADMIN}
   persistence:
     dbfiles:

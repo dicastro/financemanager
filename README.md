@@ -1,8 +1,5 @@
 # TODO
 
-- Block force brute authentication
-  - https://www.baeldung.com/spring-security-block-brute-force-authentication-attempts
-
 - Administration
   - Añadir opción de hacer backup y que se descargue
     - Al hacer import dejar de hacer el backup que se hace ahí
@@ -83,6 +80,7 @@ java -Dkbscrapper.tesseract.dataPath=/financemanager/tessdata -Dkbscrapper.tesse
 - [Spring Boot application events explained](https://reflectoring.io/spring-boot-application-events-explained/)
 - [String events](https://www.baeldung.com/spring-events)
 - [Text To ASCII](https://patorjk.com/software/taag/#p=display&f=Big&t=Finance%20Manager%20App)
+- [Prevent Brute Force Authentication Attempts with Spring Security](https://www.baeldung.com/spring-security-block-brute-force-authentication-attempts)
 
 # NOTES
 

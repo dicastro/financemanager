@@ -1,5 +1,10 @@
 package com.diegocastroviadero.financemanager.app.configuration;
 
+import com.diegocastroviadero.financemanager.app.security.CustomInMemoryUserDetailsManager;
+import com.diegocastroviadero.financemanager.app.security.CustomLoginFailureHandler;
+import com.diegocastroviadero.financemanager.app.security.CustomLogoutSuccessHandler;
+import com.diegocastroviadero.financemanager.app.security.CustomRequestCache;
+import com.diegocastroviadero.financemanager.app.security.LoginAttemptService;
 import com.diegocastroviadero.financemanager.app.utils.SecurityUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +18,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.web.context.request.RequestContextListener;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,11 +31,10 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_PROCESSING_URL = "/login";
-    private static final String LOGIN_FAILURE_URL = "/login?error";
     private static final String LOGIN_URL = "/login";
-    private static final String LOGOUT_SUCCESS_URL = "/login";
 
-    private final LogoutSuccessHandler logoutSuccessHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final CustomLoginFailureHandler customLoginFailureHandler;
 
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {
@@ -37,7 +42,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(final SecurityProperties securityProperties) {
+    public RequestContextListener requestContextListener() {
+        return new RequestContextListener();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(final SecurityProperties securityProperties, final HttpServletRequest request, final LoginAttemptService loginAttemptService) {
         log.info("Users loaded: {}", securityProperties.getUsers().size());
 
         final List<UserDetails> users = securityProperties.getUsers().stream()
@@ -47,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .build())
                 .collect(Collectors.toList());
 
-        return new InMemoryUserDetailsManager(users);
+        return new CustomInMemoryUserDetailsManager(users, request, loginAttemptService);
     }
 
     /**
@@ -64,22 +74,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 // Restrict access to our application.
                 .and().authorizeRequests()
-
-                // Allow all flow internal requests.
-                .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
-
-                // Allow all requests by logged in users.
-                .anyRequest().authenticated()
+                    .antMatchers("/login", "/logout").permitAll()
+                    // Allow all flow internal requests.
+                    .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
+                    // Allow all requests by logged in users.
+                    .anyRequest().authenticated()
 
                 // Configure the login page.
-                .and().formLogin().loginPage(LOGIN_URL).permitAll()
-                .loginProcessingUrl(LOGIN_PROCESSING_URL)
-                .failureUrl(LOGIN_FAILURE_URL)
+                .and().formLogin()
+                    .loginPage(LOGIN_URL)
+                    .loginProcessingUrl(LOGIN_PROCESSING_URL)
+                    .failureHandler(customLoginFailureHandler)
 
                 // Configure logout
                 .and().logout()
-                    .logoutSuccessHandler(logoutSuccessHandler)
-                    .logoutSuccessUrl(LOGOUT_SUCCESS_URL)
+                    .logoutSuccessHandler(customLogoutSuccessHandler)
 
                 // Configure session management
                 .and()

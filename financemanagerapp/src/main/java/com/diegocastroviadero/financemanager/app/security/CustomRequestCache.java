@@ -1,4 +1,4 @@
-package com.diegocastroviadero.financemanager.app.configuration;
+package com.diegocastroviadero.financemanager.app.security;
 
 import com.diegocastroviadero.financemanager.app.utils.SecurityUtils;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;

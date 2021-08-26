@@ -1,4 +1,4 @@
-package com.diegocastroviadero.financemanager.app.configuration;
+package com.diegocastroviadero.financemanager.app.security;
 
 import com.diegocastroviadero.financemanager.app.utils.SecurityUtils;
 import com.diegocastroviadero.financemanager.app.views.login.LoginView;
@@ -10,7 +10,7 @@ import com.vaadin.flow.server.VaadinServiceInitListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ConfigureUIServiceInitListener implements VaadinServiceInitListener {
+public class CustomUIServiceInitListener implements VaadinServiceInitListener {
 
     @Override
     public void serviceInit(final ServiceInitEvent event) {
