@@ -1,3 +1,3 @@
 @echo off
 
-docker run -it --rm --name financemanagerapp -v /c/work/repos/financemanager/wksp:/financemanager/wksp -e SPRING_PROFILES_ACTIVE=docker qopuir/financemanagerapp:1.0.0-SNAPSHOT
+docker run -it --rm --name financemanagerapp -p 8080:8080 -v /c/work/repos/financemanager/wksp/import:/financemanager/import -v /c/work/repos/financemanager/wksp/shared/dbfiles:/financemanager/dbfiles -e SPRING_PROFILES_ACTIVE=docker -e FINANCEMANAGER_USERS="user:{noop}1@USER|admin:{noop}1@USER,ADMIN" qopuir/financemanagerapp:1.1.0
