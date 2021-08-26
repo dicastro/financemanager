@@ -9,7 +9,9 @@ financemanagerapp:
     clean-interval: 1800000 # 30 minutes
   import:
     base-path: /financemanager/import
-    deleteA-after-import: true
+    delete-after-import: true
+  security:
+    incorrect-logins-to-block-ip: 5
   persistence:
     dbfiles:
       base-path: /financemanager/dbfiles

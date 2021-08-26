@@ -1,10 +1,10 @@
 package com.diegocastroviadero.financemanager.app.security;
 
 import com.diegocastroviadero.financemanager.app.utils.SecurityUtils;
+import com.diegocastroviadero.financemanager.app.views.common.AccessDeniedException;
 import com.diegocastroviadero.financemanager.app.views.login.LoginView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.NotFoundException;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class CustomUIServiceInitListener implements VaadinServiceInitListener {
     private void beforeEnter(final BeforeEnterEvent event) {
         if (!SecurityUtils.isAccessGranted(event.getNavigationTarget())) {
             if (SecurityUtils.isUserLoggedIn()) {
-                event.rerouteToError(NotFoundException.class);
+                event.rerouteToError(AccessDeniedException.class);
             } else {
                 event.rerouteTo(LoginView.class);
             }

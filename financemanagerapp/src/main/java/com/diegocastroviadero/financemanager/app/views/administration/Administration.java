@@ -18,10 +18,12 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
 
 @Slf4j
 @Route(value = "administration", layout = MainView.class)
 @PageTitle("Administration | Finance Manager")
+@Secured("ROLE_ADMIN")
 public class Administration extends VerticalLayout {
 
     public Administration(final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final CacheCleanerService cacheCleanerService, final BackupService backupService) {
@@ -93,7 +95,7 @@ public class Administration extends VerticalLayout {
         downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         final Anchor downloadLink = new Anchor(backupService.backupFiles(e -> Notification.show("Backup could not be done", 5000, Notification.Position.MIDDLE)), "Backup");
-        downloadLink.getElement().setAttribute("download",true);
+        downloadLink.getElement().setAttribute("download", true);
         downloadLink.removeAll();
         downloadLink.add(downloadButton);
 
