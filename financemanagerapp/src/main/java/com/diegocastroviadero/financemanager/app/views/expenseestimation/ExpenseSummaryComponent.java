@@ -1,5 +1,6 @@
 package com.diegocastroviadero.financemanager.app.views.expenseestimation;
 
+import com.diegocastroviadero.financemanager.app.utils.Utils;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -31,6 +32,6 @@ public class ExpenseSummaryComponent extends VerticalLayout {
     }
 
     private void refresh() {
-        quantitySpan.setText(quantity.toString());
+        quantitySpan.setText(Utils.tableFormatMoney(quantity));
     }
 }

@@ -14,6 +14,7 @@ import com.diegocastroviadero.financemanager.cryptoutils.exception.WrongEncrypti
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
@@ -59,7 +60,10 @@ public class MovementsView extends VerticalLayout {
 
         final AuthDialog authDialog = authService.configureAuth(this);
 
-        add(getToolbar(), movementsGrid, authDialog);
+        final Div content = new Div(movementsGrid, authDialog);
+        content.setClassName("content");
+
+        add(getToolbar(), content);
 
         populateAccountsInToolbar();
     }

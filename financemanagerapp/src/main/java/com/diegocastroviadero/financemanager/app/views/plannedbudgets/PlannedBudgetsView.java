@@ -105,6 +105,7 @@ public class PlannedBudgetsView extends VerticalLayout {
                 .setTextAlign(ColumnTextAlign.END);
 
         budgetsGrid.getColumns().forEach(column -> column.setAutoWidth(Boolean.TRUE));
+        budgetsGrid.setHeightByRows(Boolean.TRUE);
         budgetsGrid.asSingleSelect().addValueChangeListener(event -> editBudget(event.getValue()));
     }
 

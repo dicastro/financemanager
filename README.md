@@ -1,12 +1,5 @@
 # TODO
 
-- Administration
-  - Añadir opción de hacer backup y que se descargue
-    - Al hacer import dejar de hacer el backup que se hace ahí
-
-- Movements
-  - Se apura mucho en la vista y no se distingue si se ve el último movimiento o si se está cortando la tabla
-
 - PACKAGE AND DEPLOY 1.1.0
 
 # Backlog

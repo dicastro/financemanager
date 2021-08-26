@@ -1,17 +1,20 @@
 .planned-budgets-view {
     display: block;
 }
+
 .planned-budgets-view .content {
     display: flex;
+    overflow: hidden;
 }
 
 .planned-budgets-view .planned-budgets-grid {
     flex: 2;
+    margin-bottom: var(--lumo-space-m);
 }
 
 .planned-budgets-view .planned-budget-form {
     flex: 1;
-    padding: var(--lumo-space-m);
+    padding: var(--lumo-space-m) 0 var(--lumo-space-m) var(--lumo-space-m);
 }
 
 @media all and (max-width: 1100px) {

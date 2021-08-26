@@ -55,7 +55,6 @@ public class PlannedExpensesView extends VerticalLayout {
 
         final Div content = new Div(expensesGrid, expenseForm);
         content.addClassName("content");
-        //content.setSizeFull();
 
         add(getToolbar(), content);
 
@@ -106,6 +105,7 @@ public class PlannedExpensesView extends VerticalLayout {
                 .setTextAlign(ColumnTextAlign.END);
 
         expensesGrid.getColumns().forEach(column -> column.setAutoWidth(Boolean.TRUE));
+        expensesGrid.setHeightByRows(Boolean.TRUE);
         expensesGrid.asSingleSelect().addValueChangeListener(event -> editExpense(event.getValue()));
     }
 

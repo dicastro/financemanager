@@ -4,15 +4,17 @@
 
 .planned-expenses-view .content {
     display: flex;
+    overflow: hidden;
 }
 
 .planned-expenses-view .planned-expenses-grid {
     flex: 2;
+    margin-bottom: var(--lumo-space-m);
 }
 
 .planned-expenses-view .planned-expense-form {
     flex: 1;
-    padding: var(--lumo-space-m);
+    padding: var(--lumo-space-m) 0 var(--lumo-space-m) var(--lumo-space-m);
 }
 
 @media all and (max-width: 1100px) {
