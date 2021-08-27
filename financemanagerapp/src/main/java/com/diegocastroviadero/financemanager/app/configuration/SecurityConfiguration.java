@@ -33,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_PROCESSING_URL = "/login";
     private static final String LOGIN_URL = "/login";
 
+    private final SecurityProperties securityProperties;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     private final CustomLoginFailureHandler customLoginFailureHandler;
 
@@ -65,34 +66,45 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        // Not using Spring CSRF here to be able to use plain HTML for the login page
-        http.csrf().disable()
+        http
+                // Not using Spring CSRF here to be able to use plain HTML for the login page
+                .csrf().disable();
 
-                // Register our CustomRequestCache that saves unauthorized access attempts, so
-                // the user is redirected after login.
-                .requestCache().requestCache(new CustomRequestCache())
+        if (securityProperties.getRequiresHttps()) {
+            http
+                    .requiresChannel()
+                        .anyRequest().requiresSecure();
+        }
+
+        http
+                // Register our CustomRequestCache that saves unauthorized access attempts, so the user is redirected after login.
+                .requestCache()
+                    .requestCache(new CustomRequestCache())
+                    .and()
 
                 // Restrict access to our application.
-                .and().authorizeRequests()
+                .authorizeRequests()
                     .antMatchers("/login", "/logout").permitAll()
                     // Allow all flow internal requests.
                     .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
                     // Allow all requests by logged in users.
                     .anyRequest().authenticated()
+                    .and()
 
                 // Configure the login page.
-                .and().formLogin()
+                .formLogin()
                     .loginPage(LOGIN_URL)
                     .loginProcessingUrl(LOGIN_PROCESSING_URL)
                     .failureHandler(customLoginFailureHandler)
+                    .and()
 
                 // Configure logout
-                .and().logout()
+                .logout()
                     .logoutSuccessHandler(customLogoutSuccessHandler)
+                    .and()
 
                 // Configure session management
-                .and()
-                    .sessionManagement()
+                .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.NEVER);
     }
 

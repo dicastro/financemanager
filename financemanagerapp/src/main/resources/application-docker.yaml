@@ -11,6 +11,7 @@ financemanagerapp:
     base-path: /financemanager/import
     delete-after-import: true
   security:
+    requires-https: true
     incorrect-logins-to-block-ip: 5
   persistence:
     dbfiles:

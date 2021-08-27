@@ -7,6 +7,12 @@ logging:
 server:
   port: ${PORT:8080}
   shutdown: graceful
+  forward-headers-strategy: native
+  tomcat:
+    remote-ip:
+      remote-ip-header: x-forwarded-for
+      protocol-header: x-forwarded-proto
+      port-header: x-forwarded-port
 
 spring:
   lifecycle:
@@ -26,6 +32,7 @@ financemanagerapp:
     base-path: wksp/import
     delete-after-import: false
   security:
+    requires-https: false
     incorrect-logins-to-block-ip: 3
     users: ${FINANCEMANAGER_USERS:user:{noop}1@USER|admin:{noop}1@USER,ADMIN}
   persistence:

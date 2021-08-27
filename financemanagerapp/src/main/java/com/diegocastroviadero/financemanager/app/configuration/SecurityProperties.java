@@ -15,10 +15,12 @@ import java.util.stream.Stream;
 public class SecurityProperties {
     public static final String SECURITY_CONFIG_PREFIX = "financemanagerapp.security";
 
+    private final Boolean requiresHttps;
     private final Integer incorrectLoginsToBlockIp;
     private final List<FMUser> users;
 
-    public SecurityProperties(final Integer incorrectLoginsToBlockIp, final String users) {
+    public SecurityProperties(final Boolean requiresHttps, final Integer incorrectLoginsToBlockIp, final String users) {
+        this.requiresHttps = requiresHttps;
         this.incorrectLoginsToBlockIp = incorrectLoginsToBlockIp;
 
         this.users = Stream.of(users.split("\\|")).map(ru -> {
