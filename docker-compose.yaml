@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile-financemanagerapp
-    image: qopuir/financemanagerapp:1.1.1
+    image: qopuir/financemanagerapp:1.2.0
     container_name: financemanagerapp
     ports:
       - 8080:8080

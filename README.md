@@ -1,10 +1,29 @@
 # TODO
 
-# Backlog
+- Cryptoutils
+  - Al descifrar que se borre el fichero meta
+
+- Crypter
+  - Que con cada comando lea la contraseña del disco (ahora mismo: para cambiar la contraseña de cifrado hace falta descifrar, SALIR, cambiar la contraseña en el fichero, volver a ejecutar crypter y finalmente cifrar de nuevo)
+
+- Movements
+  - Poner boton de siguiente y anterior en el filtro año/mes
 
 - Import
   - Poder subir directamente un fichero (y seleccionar el banco y la cuenta)
     - En vez de tener que dejarlos en una carpeta 'import'
+
+- Administration
+  - Botón de cargar backup
+    - Poner un diálogo de confirmación antes de hacer la carga
+    - Tras cargar el backup se borra la caché de ficheros
+  - Al tener botón de descargar/cargar backup ya no hace falta los volúmenes que mapean a una carpeta de disco
+    - Se pueden utilizar volúmenes docker
+      - Al usar los volúmenes docker, se puede ejecutar el contenedor con un usuario que no sea root
+
+- PACKAGE and DEPLOY 1.2.0
+
+# Backlog
 
 - Accounts
   - Meter apartado en el que se ven los meses disponibles (con opción a borrar)
@@ -25,21 +44,8 @@
     - y con una fecha hasta que como máximo podría ser el último mes para el que haya movimientos (valor por defecto)
     - habrá varios botones con las opciones más comunes (año en curso, año pasado, últimos 2 años, últimos 3 años, últimos 4 años, últimos 5 años)
 
-- Movements
-  - Poner boton de siguiente y anterior en el filtro año/mes
-
 - General
   - La barra de cargando es muy sutil... debería ser una cortinilla en toda la página
-
-- Ejecutar la imagen con otro usuario que no sea root
-  - Hay que tener en cuenta los permisos de los ficheros que se creen
-  - En el NAS habría que crear otro usuario y que el contenedor se ejecutase con ese mismo usuario
-
-- Crypter
-  - Que con cada comando lea la contraseña del disco (ahora mismo: para cambiar la contraseña de cifrado hace falta descifrar, SALIR, cambiar la contraseña en el fichero, volver a ejecutar crypter y finalmente cifrar de nuevo)
-
-- Cryptoutils
-  - Al descifrar que se borre el fichero meta
 
 # Ideas
 
