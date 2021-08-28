@@ -1,14 +1,5 @@
 # TODO
 
-- Cryptoutils
-  - Al descifrar que se borre el fichero meta
-
-- Crypter
-  - Que con cada comando lea la contraseña del disco (ahora mismo: para cambiar la contraseña de cifrado hace falta descifrar, SALIR, cambiar la contraseña en el fichero, volver a ejecutar crypter y finalmente cifrar de nuevo)
-
-- Movements
-  - Poner boton de siguiente y anterior en el filtro año/mes
-
 - Import
   - Poder subir directamente un fichero (y seleccionar el banco y la cuenta)
     - En vez de tener que dejarlos en una carpeta 'import'

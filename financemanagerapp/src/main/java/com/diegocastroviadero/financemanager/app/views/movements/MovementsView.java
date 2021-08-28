@@ -11,12 +11,17 @@ import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.WrongEncryptionPasswordException;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -43,8 +48,12 @@ public class MovementsView extends VerticalLayout {
     private final MovementService movementService;
 
     final ComboBox<Account> accountFilter = new ComboBox<>("Account");
+    final Button previousMonth = new Button(new Icon(VaadinIcon.ARROW_LEFT));
     final ComboBox<YearMonth> monthFilter = new ComboBox<>("Month");
+    final Button nextMonth = new Button(new Icon(VaadinIcon.ARROW_RIGHT));
+
     Registration monthFilterListener;
+    List<YearMonth> months;
 
     private final Grid<Movement> movementsGrid = new Grid<>(Movement.class);
 
@@ -89,7 +98,7 @@ public class MovementsView extends VerticalLayout {
         movementsGrid.setHeightByRows(Boolean.TRUE);
     }
 
-    private HorizontalLayout getToolbar() {
+    private Component getToolbar() {
         accountFilter.getElement().getStyle().set("--vaadin-combo-box-overlay-width", "250px");
         accountFilter.setRequired(Boolean.TRUE);
         accountFilter.setItemLabelGenerator(Account::getLabel);
@@ -106,12 +115,16 @@ public class MovementsView extends VerticalLayout {
         accountFilter.addValueChangeListener(event -> {
             final UUID accountId = event.getValue().getId();
 
-            final List<YearMonth> months = movementService.getYearMonthRange(accountId);
+            months = movementService.getYearMonthRange(accountId);
 
             if (months.isEmpty()) {
                 monthFilter.setEnabled(Boolean.FALSE);
+                previousMonth.setEnabled(Boolean.FALSE);
+                nextMonth.setEnabled(Boolean.FALSE);
                 Notification.show("There are no movements to be shown", 10000, Notification.Position.MIDDLE);
             } else {
+                monthFilter.setEnabled(Boolean.TRUE);
+
                 final YearMonth oldMonthValue = monthFilter.getValue();
 
                 if (null != monthFilterListener) {
@@ -127,10 +140,26 @@ public class MovementsView extends VerticalLayout {
                     monthFilter.setValue(months.get(0));
                 }
 
+                updatePreviousNextMonthButtons();
+
                 monthFilterListener = configureMonthFilterValueChangeListener();
 
                 updateValues(accountId, monthFilter.getValue());
             }
+        });
+
+        previousMonth.setEnabled(Boolean.FALSE);
+        previousMonth.addClickListener(event -> {
+            final int currentMonthPosition = months.indexOf(monthFilter.getValue());
+
+            monthFilter.setValue(months.get(currentMonthPosition + 1));
+        });
+
+        nextMonth.setEnabled(Boolean.FALSE);
+        nextMonth.addClickListener(event -> {
+            final int currentMonthPosition = months.indexOf(monthFilter.getValue());
+
+            monthFilter.setValue(months.get(currentMonthPosition - 1));
         });
 
         monthFilter.setRequired(Boolean.TRUE);
@@ -138,20 +167,54 @@ public class MovementsView extends VerticalLayout {
 
         monthFilterListener = configureMonthFilterValueChangeListener();
 
-        final HorizontalLayout toolbar = new HorizontalLayout(accountFilter, monthFilter);
-        toolbar.addClassName("toolbar");
+        final HorizontalLayout accountLayout = new HorizontalLayout();
+        accountLayout.setWidthFull();
+        accountLayout.setDefaultVerticalComponentAlignment(Alignment.END);
 
-        return toolbar;
+        accountLayout.expand(accountFilter);
+
+        accountLayout.add(accountFilter);
+
+        final HorizontalLayout monthLayout = new HorizontalLayout();
+        monthLayout.setWidthFull();
+        monthLayout.setDefaultVerticalComponentAlignment(Alignment.END);
+
+        monthLayout.expand(monthFilter);
+        monthLayout.setFlexGrow(0.15, previousMonth);
+        monthLayout.setFlexGrow(0.15, nextMonth);
+
+        monthLayout.add(previousMonth, monthFilter, nextMonth);
+
+        return new FormLayout(accountLayout, monthLayout);
     }
 
     private Registration configureMonthFilterValueChangeListener() {
         return monthFilter.addValueChangeListener(event -> {
+            updatePreviousNextMonthButtons();
+
             if (null != accountFilter.getValue()) {
                 updateValues(accountFilter.getValue().getId(), event.getValue());
             } else {
                 Notification.show("Movements cannot be loaded because no account was selected", 5000, Notification.Position.MIDDLE);
             }
         });
+    }
+
+    private void updatePreviousNextMonthButtons() {
+        final YearMonth selectedMonth = monthFilter.getValue();
+
+        final int selectedMonthPosition = months.indexOf(selectedMonth);
+
+        if (selectedMonthPosition == 0) {
+            nextMonth.setEnabled(Boolean.FALSE);
+            previousMonth.setEnabled(Boolean.TRUE);
+        } else if (selectedMonthPosition == (months.size() - 1)) {
+            nextMonth.setEnabled(Boolean.TRUE);
+            previousMonth.setEnabled(Boolean.FALSE);
+        } else {
+            nextMonth.setEnabled(Boolean.TRUE);
+            previousMonth.setEnabled(Boolean.TRUE);
+        }
     }
 
     private void populateAccountsInToolbar() {
