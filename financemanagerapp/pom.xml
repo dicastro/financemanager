@@ -13,6 +13,7 @@
     <properties>
         <java.version>11</java.version>
         <vaadin.version>14.6.8</vaadin.version>
+        <springboot.version>2.4.5</springboot.version>
     </properties>
 
     <parent>
@@ -237,6 +238,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springboot.version}</version>
                 <!-- Clean build and startup time for Vaadin apps sometimes may exceed
                      the default Spring Boot's 30sec timeout.  -->
                 <configuration>
