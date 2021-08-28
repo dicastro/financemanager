@@ -6,8 +6,8 @@ services:
       dockerfile: ./docker/Dockerfile
       args:
         BUNDLE_NAME: crypter
-        BUNDLE_VERSION: 1.0.0-SNAPSHOT
-    image: qopuir/crypter:1.0.0-SNAPSHOT
+        BUNDLE_VERSION: 1.1.0
+    image: qopuir/crypter:1.1.0
     ports:
       - 5005:5005
       - 8080:8080

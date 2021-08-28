@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 @ShellComponent
@@ -34,41 +35,52 @@ public class DecryptCommand {
             if (whatif) {
                 System.out.printf("%nWhatIf activated, no files will be decrypted%n");
             } else {
-                System.out.printf("%nDecrypting ...%n");
+                final AtomicReference<String> encryptionPassword = new AtomicReference<>();
 
-                Stream.of(csvEncryptedFiles).forEach(file -> {
-                    List<String[]> decryptedCsvElements = null;
+                try {
+                    encryptionPassword.set(CrypterContext.getEncryptionPassword());
+                } catch (Exception ignore) {
+                }
 
-                    try {
-                        decryptedCsvElements = CsvCryptoUtils.decryptFromCsvFile(CrypterContext.getEncryptionPassword().toCharArray(), file, insecure);
-                    } catch (CsvCryptoIOException e) {
-                        System.out.printf("  - Not decrypted: %s (error while decrypting)%n", file.getName());
-                    }
+                if (null == encryptionPassword.get()) {
+                    System.out.printf("%nDecryption could not be done, there was an error reading encryption password from file");
+                } else {
+                    System.out.printf("%nDecrypting ...%n");
 
-                    if (null != decryptedCsvElements) {
-                        if (decryptedCsvElements.isEmpty()) {
-                            deleteEncryptedCsvFile(file);
+                    Stream.of(csvEncryptedFiles).forEach(file -> {
+                        List<String[]> decryptedCsvElements = null;
 
-                            System.out.printf("  - Deleted: %s (empty csv)%n", file.getName());
-                        } else {
-                            final File csvTmpFile = getCsvTmpFile(file);
+                        try {
+                            decryptedCsvElements = CsvCryptoUtils.decryptFromCsvFile(encryptionPassword.get().toCharArray(), file, insecure);
+                        } catch (CsvCryptoIOException e) {
+                            System.out.printf("  - Not decrypted: %s (error while decrypting)%n", file.getName());
+                        }
 
-                            try {
-                                CsvUtils.persistToCsvFile(decryptedCsvElements, csvTmpFile);
+                        if (null != decryptedCsvElements) {
+                            if (decryptedCsvElements.isEmpty()) {
+                                CsvCryptoUtils.deleteEncryptedCsvFile(file);
 
-                                deleteEncryptedCsvFile(file);
+                                System.out.printf("  - Deleted: %s (empty csv)%n", file.getName());
+                            } else {
+                                final File csvTmpFile = getCsvTmpFile(file);
 
-                                commitCsvTmpFile(csvTmpFile);
+                                try {
+                                    CsvUtils.persistToCsvFile(decryptedCsvElements, csvTmpFile);
 
-                                System.out.printf("  - Decrypted: %s%n", file.getName());
-                            } catch (IOException e) {
-                                System.out.printf("  - Not decrypted: %s (error while persisting)%n", file.getName());
+                                    CsvCryptoUtils.deleteEncryptedCsvFile(file);
 
-                                rollbackCsvTmpFile(csvTmpFile);
+                                    commitCsvTmpFile(csvTmpFile);
+
+                                    System.out.printf("  - Decrypted: %s%n", file.getName());
+                                } catch (IOException e) {
+                                    System.out.printf("  - Not decrypted: %s (error while persisting)%n", file.getName());
+
+                                    rollbackCsvTmpFile(csvTmpFile);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             return "";
@@ -85,12 +97,6 @@ public class DecryptCommand {
 
     private void commitCsvTmpFile(final File csvTmpFile) {
         csvTmpFile.renameTo(Utils.getSiblingFile(csvTmpFile, Extensions.CSV_DECRYPTED_EXTENSION));
-    }
-
-    private void deleteEncryptedCsvFile(final File csvFile) {
-        final File csvMetaFile = Utils.getSiblingFile(csvFile, Extensions.META_EXTENSION);
-        csvFile.delete();
-        csvMetaFile.delete();
     }
 
     private void rollbackCsvTmpFile(final File csvTmpFile) {
