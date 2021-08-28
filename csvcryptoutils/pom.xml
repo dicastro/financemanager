@@ -5,7 +5,7 @@
 
     <groupId>com.diegocastroviadero.financemanager</groupId>
     <artifactId>csvcryptoutils</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>csvcryptoutils</name>
     <description>Finance Manager - CSV Crypto Utils</description>
     <packaging>jar</packaging>

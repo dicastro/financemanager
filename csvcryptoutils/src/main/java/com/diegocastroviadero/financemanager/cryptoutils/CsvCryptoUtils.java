@@ -11,13 +11,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.crypto.*;
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.security.InvalidAlgorithmParameterException;
@@ -139,6 +147,22 @@ public class CsvCryptoUtils {
         }
 
         return readElements;
+    }
+
+    public static void deleteEncryptedCsvFile(final File csvFile) {
+        csvFile.delete();
+
+        final File metaFile = getCsvMetaFile(csvFile);
+
+        if (metaFile.exists()) {
+            metaFile.delete();
+        }
+
+        final File hashFile = getCsvHashFile(csvFile);
+
+        if (hashFile.exists()) {
+            hashFile.delete();
+        }
     }
 
     private static File getCsvMetaFile(final File csvFile) {
