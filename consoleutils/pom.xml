@@ -5,7 +5,7 @@
 
     <groupId>com.diegocastroviadero.financemanager</groupId>
     <artifactId>consoleutils</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>consoleutils</name>
     <description>Finance Manager - Console Utils</description>
     <packaging>jar</packaging>
