@@ -11,7 +11,6 @@ import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvIOExceptio
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -185,8 +184,8 @@ public class ExpenseEstimationView extends VerticalLayout {
         final Map<Scope, List<PlannedExpense>> monthPlannedExpensesByScope = getPlannedExpenses(month);
         final Map<Scope, List<PlannedBudget>> monthPlannedBudgetsByScope = getPlannedBudgets(month);
 
-        plannedExpensesGrid.setItems(monthPlannedExpensesByScope.get(selectedScope));
-        plannedBudgetsGrid.setItems(monthPlannedBudgetsByScope.get(selectedScope));
+        plannedExpensesGrid.setItems(monthPlannedExpensesByScope.getOrDefault(selectedScope, Collections.emptyList()));
+        plannedBudgetsGrid.setItems(monthPlannedBudgetsByScope.getOrDefault(selectedScope, Collections.emptyList()));
 
         final Map<Scope, BigDecimal> monthExpenseSummary = calculateExpenseSummary(monthPlannedExpensesByScope, monthPlannedBudgetsByScope);
 

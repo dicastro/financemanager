@@ -1,6 +1,5 @@
 package com.diegocastroviadero.financemanager.app.services;
 
-import com.diegocastroviadero.financemanager.app.configuration.PersistenceProperties;
 import com.diegocastroviadero.financemanager.app.model.PlannedExpense;
 import com.diegocastroviadero.financemanager.app.model.Scope;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvIOException;
@@ -10,7 +9,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -18,8 +21,8 @@ import java.util.stream.Collectors;
 public class PlannedExpenseService extends AbstractPersistenceService {
     private static final String PLANNED_EXPENSES_FILENAME = "planned_expenses.csv";
 
-    public PlannedExpenseService(final PersistenceProperties properties, final CacheService cacheService) {
-        super(properties, cacheService);
+    public PlannedExpenseService(final PersistencePropertiesService propertiesService, final CacheService cacheService) {
+        super(propertiesService, cacheService);
     }
 
     public List<PlannedExpense> getAllPlannedExpenses() throws CsvIOException {

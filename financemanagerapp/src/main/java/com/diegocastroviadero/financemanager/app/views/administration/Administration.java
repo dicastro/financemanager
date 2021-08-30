@@ -4,19 +4,27 @@ import com.diegocastroviadero.financemanager.app.services.AuthCleanerService;
 import com.diegocastroviadero.financemanager.app.services.BackupService;
 import com.diegocastroviadero.financemanager.app.services.CacheCleanerService;
 import com.diegocastroviadero.financemanager.app.services.UserConfigService;
+import com.diegocastroviadero.financemanager.app.views.common.ConfirmationDialog;
+import com.diegocastroviadero.financemanager.app.views.common.LoadBackupException;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import elemental.json.Json;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
 
@@ -26,18 +34,48 @@ import org.springframework.security.access.annotation.Secured;
 @Secured("ROLE_ADMIN")
 public class Administration extends VerticalLayout {
 
+    private final UserConfigService userConfigService;
+    private final AuthCleanerService authCleanerService;
+    private final CacheCleanerService cacheCleanerService;
+    private final BackupService backupService;
+
     public Administration(final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final CacheCleanerService cacheCleanerService, final BackupService backupService) {
+        this.userConfigService = userConfigService;
+        this.authCleanerService = authCleanerService;
+        this.cacheCleanerService = cacheCleanerService;
+        this.backupService = backupService;
+
         addClassName("administration-view");
         setSizeFull();
 
-        final TextField version = new TextField("Version");
+        final Component versionLayout = getVersionLayout();
+
+        final Component cacheLayout = getCacheLayout();
+
+        final Component backupLayout = getBackupLayout();
+
+        final Component demoLayout = getDemoLayout();
+
+        final VerticalLayout content = new VerticalLayout(versionLayout, cacheLayout, backupLayout, demoLayout);
+        content.addClassName("content");
+        content.setSizeFull();
+
+        add(content);
+    }
+
+    private Component getVersionLayout() {
+        final TextField version = new TextField();
         version.setReadOnly(Boolean.TRUE);
         version.setWidthFull();
         version.setValue(userConfigService.getVersionLabel());
 
-        final VerticalLayout versionLayout = new VerticalLayout(version);
+        final VerticalLayout versionLayout = new VerticalLayout(new H2("Version"), version);
         versionLayout.setWidthFull();
 
+        return versionLayout;
+    }
+
+    private Component getCacheLayout() {
         // Auth cache layout
         final TextField authCacheStatus = new TextField("Auth cache status");
         authCacheStatus.setReadOnly(Boolean.TRUE);
@@ -87,11 +125,15 @@ public class Administration extends VerticalLayout {
         cleanAllLayout.setDefaultVerticalComponentAlignment(Alignment.END);
 
         // Clean main layout
-        final VerticalLayout cleanLayout = new VerticalLayout(authCacheLayout, globalCacheLayout, cleanAllLayout);
+        final VerticalLayout cleanLayout = new VerticalLayout(new H2("Cache"), authCacheLayout, globalCacheLayout, cleanAllLayout);
         cleanLayout.setWidthFull();
 
-        // Backup
+        return cleanLayout;
+    }
+
+    private Component getBackupLayout() {
         final Button downloadButton = new Button("Get Backup", new Icon(VaadinIcon.DOWNLOAD_ALT));
+        downloadButton.setWidthFull();
         downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         final Anchor downloadLink = new Anchor(backupService.backupFiles(e -> Notification.show("Backup could not be done", 5000, Notification.Position.MIDDLE)), "Backup");
@@ -99,20 +141,71 @@ public class Administration extends VerticalLayout {
         downloadLink.removeAll();
         downloadLink.add(downloadButton);
 
-        final VerticalLayout downloadLayout = new VerticalLayout(downloadLink);
+        final MemoryBuffer uploadBuffer = new MemoryBuffer();
+
+        final Button uploadButton = new Button("Load Backup", new Icon(VaadinIcon.UPLOAD_ALT));
+        uploadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
+
+        final Upload uploadBackup = new Upload(uploadBuffer);
+        uploadBackup.setMaxFiles(1);
+        uploadBackup.setUploadButton(uploadButton);
+        uploadBackup.setDropLabel(new Label("Upload a .tar.gz backup file"));
+        uploadBackup.setAcceptedFileTypes("application/x-gzip");
+
+        final ConfirmationDialog confirmationDialog = new ConfirmationDialog("Confirm backup load");
+
+        confirmationDialog.addListener(ConfirmationDialog.ConfirmedEvent.class, confirmedEvent -> {
+            final String backupFileName = uploadBuffer.getFileData().getFileName();
+
+            try {
+                backupService.loadBackup(backupFileName, uploadBuffer.getInputStream());
+
+                Notification.show(String.format("Backup '%s' has been loaded successfully", backupFileName), 5000, Notification.Position.MIDDLE);
+            } catch (LoadBackupException e) {
+                Notification.show(String.format("There was an error loading backup '%s'. Try again later", backupFileName), 5000, Notification.Position.MIDDLE);
+            } finally {
+                cleanUploadedFiles(uploadBackup);
+            }
+        });
+
+        confirmationDialog.addListener(ConfirmationDialog.CancelledEvent.class, confirmedEvent -> cleanUploadedFiles(uploadBackup));
+
+        uploadBackup.addSucceededListener(uploadedEvent -> confirmationDialog.open(String.format("Are you sure, you want to load backup '%s'?", uploadedEvent.getFileName())));
+
+        uploadBackup.addFileRejectedListener(event -> Notification.show(String.format("Error uploading backup file '%s' to server. Try again later", event.getErrorMessage()), 5000, Notification.Position.MIDDLE));
+
+        uploadBackup.getElement().addEventListener("file-remove", event -> {
+            // Nothing to do
+        });
+
+        final HorizontalLayout hl = new HorizontalLayout();
+        hl.setWidthFull();
+        hl.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+
+        hl.expand(uploadBackup);
+        hl.setFlexGrow(0.25, downloadLink);
+
+        hl.add(downloadLink, uploadBackup);
+
+        final VerticalLayout downloadLayout = new VerticalLayout(new H2("Backup"), hl);
         downloadLayout.setWidthFull();
 
+        return downloadLayout;
+    }
+
+    private void cleanUploadedFiles(final Upload upload) {
+        upload.getElement()
+                .setPropertyJson("files", Json.createArray());
+    }
+
+    private Component getDemoLayout() {
         // Demo mode
-        final Checkbox demoMode = new Checkbox("Demo Mode", userConfigService.isDemoMode());
+        final Checkbox demoMode = new Checkbox("Activate demo mode", userConfigService.isDemoMode());
         demoMode.addValueChangeListener(e -> userConfigService.setDemoMode(e.getValue()));
 
-        final VerticalLayout demoModeLayout = new VerticalLayout(demoMode);
+        final VerticalLayout demoModeLayout = new VerticalLayout(new H2("Demo"), demoMode);
         demoModeLayout.setWidthFull();
 
-        final VerticalLayout content = new VerticalLayout(versionLayout, cleanLayout, downloadLayout, demoModeLayout);
-        content.addClassName("content");
-        content.setSizeFull();
-
-        add(content);
+        return demoModeLayout;
     }
 }

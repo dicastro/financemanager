@@ -37,11 +37,11 @@ public class CacheService {
         return result;
     }
 
-    public void put(final String key, final Object value) {
+    public <T> T put(final String key, final T value) {
         log.debug("Storing key '{}' in cache ...", key);
 
         synchronized (cache) {
-            cache.put(key, value);
+            return (T) cache.put(key, value);
         }
     }
 
@@ -50,6 +50,13 @@ public class CacheService {
 
         synchronized (cache) {
             cache.remove(key);
+        }
+    }
+
+    public void invalidateAllStartingWith(final String keyPrefix) {
+        synchronized (cache) {
+            cache.entrySet()
+                    .removeIf(e -> e.getKey().startsWith(keyPrefix));
         }
     }
 }

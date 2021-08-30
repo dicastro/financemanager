@@ -1,6 +1,5 @@
 package com.diegocastroviadero.financemanager.app.services;
 
-import com.diegocastroviadero.financemanager.app.configuration.PersistenceProperties;
 import com.diegocastroviadero.financemanager.app.model.InvestmentPosition;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvSerializationUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
@@ -10,8 +9,14 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -24,8 +29,8 @@ public class InvestmentPositionService extends AbstractPersistenceService {
 
     private final UserConfigService userConfigService;
 
-    public InvestmentPositionService(final PersistenceProperties persistenceProperties, final CacheService cacheService, final UserConfigService userConfigService) {
-        super(persistenceProperties, cacheService);
+    public InvestmentPositionService(final PersistencePropertiesService propertiesService, final CacheService cacheService, final UserConfigService userConfigService) {
+        super(propertiesService, cacheService);
         this.userConfigService = userConfigService;
     }
 

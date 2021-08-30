@@ -1,6 +1,5 @@
 package com.diegocastroviadero.financemanager.app.services;
 
-import com.diegocastroviadero.financemanager.app.configuration.PersistenceProperties;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvCryptoUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
@@ -21,23 +20,25 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractPersistenceService {
-    protected final PersistenceProperties properties;
+    public static final String PERSISTENCE_CACHE_KEY_PREFIX = "FILE_";
+
+    protected final PersistencePropertiesService propertiesService;
     protected final CacheService cacheService;
 
-    public AbstractPersistenceService(final PersistenceProperties properties, final CacheService cacheService) {
-        this.properties = properties;
+    public AbstractPersistenceService(final PersistencePropertiesService propertiesService, final CacheService cacheService) {
+        this.propertiesService = propertiesService;
         this.cacheService = cacheService;
     }
 
     protected File getFile(final String filename) {
-        return properties.getDbfiles().getBasePath().resolve(filename).toFile();
+        return propertiesService.getFile(filename);
     }
 
     protected List<YearMonth> getYearMonthRange(final String fileFilterRegex, final Pattern yearMonthExtractorRegex) {
         return cacheService.putIfAbsent(fileFilterRegex, () -> {
             final FilenameFilter accountMovementsFileFilter = (dir, name) -> name.matches(fileFilterRegex);
 
-            final File[] files = properties.getDbfiles().getBasePath().toFile().listFiles(accountMovementsFileFilter);
+            final File[] files = propertiesService.listFiles(accountMovementsFileFilter);
 
             List<YearMonth> yearMonths = Collections.emptyList();
 
@@ -104,6 +105,6 @@ public abstract class AbstractPersistenceService {
     }
 
     protected String getCacheKey(final File file) {
-        return file.getName();
+        return String.format("%s%s", PERSISTENCE_CACHE_KEY_PREFIX, file.getName());
     }
 }

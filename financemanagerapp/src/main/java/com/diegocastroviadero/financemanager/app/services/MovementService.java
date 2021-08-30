@@ -1,6 +1,5 @@
 package com.diegocastroviadero.financemanager.app.services;
 
-import com.diegocastroviadero.financemanager.app.configuration.PersistenceProperties;
 import com.diegocastroviadero.financemanager.app.model.Movement;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvSerializationUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
@@ -29,8 +28,8 @@ public class MovementService extends AbstractPersistenceService {
 
     private final UserConfigService userConfigService;
 
-    public MovementService(final PersistenceProperties persistenceProperties, final CacheService cacheService, final UserConfigService userConfigService) {
-        super(persistenceProperties, cacheService);
+    public MovementService(final PersistencePropertiesService persistencePropertiesService, final CacheService cacheService, final UserConfigService userConfigService) {
+        super(persistencePropertiesService, cacheService);
         this.userConfigService = userConfigService;
     }
 

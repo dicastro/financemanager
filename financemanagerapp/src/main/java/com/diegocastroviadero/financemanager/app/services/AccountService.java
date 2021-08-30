@@ -1,7 +1,10 @@
 package com.diegocastroviadero.financemanager.app.services;
 
-import com.diegocastroviadero.financemanager.app.configuration.PersistenceProperties;
-import com.diegocastroviadero.financemanager.app.model.*;
+import com.diegocastroviadero.financemanager.app.model.Account;
+import com.diegocastroviadero.financemanager.app.model.AccountPosition;
+import com.diegocastroviadero.financemanager.app.model.AccountPositionHistory;
+import com.diegocastroviadero.financemanager.app.model.AccountPurpose;
+import com.diegocastroviadero.financemanager.app.model.Bank;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -23,8 +26,8 @@ public class AccountService extends AbstractPersistenceService {
     private final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators;
 
 
-    public AccountService(final PersistenceProperties properties, final CacheService cacheService, final UserConfigService userConfigService, final List<AccountPositionCalculator> accountPositionCalculators, final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators) {
-        super(properties, cacheService);
+    public AccountService(final PersistencePropertiesService propertiesService, final CacheService cacheService, final UserConfigService userConfigService, final List<AccountPositionCalculator> accountPositionCalculators, final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators) {
+        super(propertiesService, cacheService);
         this.userConfigService = userConfigService;
         this.accountPositionCalculators = accountPositionCalculators;
         this.accountPositionHistoryCalculators = accountPositionHistoryCalculators;

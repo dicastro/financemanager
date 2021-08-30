@@ -1,13 +1,19 @@
 package com.diegocastroviadero.financemanager.app.utils;
 
 import ch.obermuhlner.math.big.BigDecimalMath;
+import org.apache.commons.io.FileUtils;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 
@@ -86,10 +92,18 @@ public final class Utils {
         return result;
     }
 
-    public static void sleepMillis(long millis) {
+    public static void sleepMillis(final long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException ignore) {
         }
+    }
+
+    public static boolean deleteFolder(final Path path) {
+        return FileUtils.deleteQuietly(path.toFile());
+    }
+
+    public static String getDateTimeAsTimestamp() {
+        return now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"));
     }
 }

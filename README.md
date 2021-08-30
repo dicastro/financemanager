@@ -5,10 +5,7 @@
     - En vez de tener que dejarlos en una carpeta 'import'
 
 - Administration
-  - Botón de cargar backup
-    - Poner un diálogo de confirmación antes de hacer la carga
-    - Tras cargar el backup se borra la caché de ficheros
-  - Al tener botón de descargar/cargar backup ya no hace falta los volúmenes que mapean a una carpeta de disco
+  - Al tener botón de descargar/cargar backup y la carga directa de ficheros ya no hace falta los volúmenes que mapean a una carpeta de disco
     - Se pueden utilizar volúmenes docker
       - Al usar los volúmenes docker, se puede ejecutar el contenedor con un usuario que no sea root
 
@@ -35,8 +32,27 @@
     - y con una fecha hasta que como máximo podría ser el último mes para el que haya movimientos (valor por defecto)
     - habrá varios botones con las opciones más comunes (año en curso, año pasado, últimos 2 años, últimos 3 años, últimos 4 años, últimos 5 años)
 
+- PlannedBudgets
+  - Incluir diálogo de confirmación al borrar un elemento
+
+- PlannedExpenses
+  - Incluir diálogo de confirmación al borrar un elemento
+
 - General
-  - La barra de cargando es muy sutil... debería ser una cortinilla en toda la página
+  - La barra de cargando es muy sutil y no se ve
+    - Crear componente que sea un diálogo con una barrita de cargando y que tenga la posibilidad de mostrar textos con lo que se va haciendo
+    - Ej del proceso de carga de un backup:
+      - Renombrando ficheros
+      - Descomprimiendo backup en directorio temporal
+      - Copiando backup
+      - Borrando ficheros originales
+      - Limpiando directorio temporal
+    - Incluir el componente de carga en:
+      - Carga de backup
+
+- Al hacer el backup incluir un fichero generado con metadatos del backup
+  - Que incluya: fecha de generación, número de ficheros incluidos, nombres de ficheros incluidos, hashes de ficheros incluidos
+  - Al cargar un backup se comprobará con el fichero de metadatos si los datos cargados con correctos
 
 # Ideas
 
