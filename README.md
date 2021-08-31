@@ -4,6 +4,10 @@
   - Poder subir directamente un fichero (y seleccionar el banco y la cuenta)
     - En vez de tener que dejarlos en una carpeta 'import'
 
+- Accounts
+  - Poder borrar una cuenta
+    - Al borrar una cuenta también se borran todos sus movimientos e inversiones
+
 - Administration
   - Al tener botón de descargar/cargar backup y la carga directa de ficheros ya no hace falta los volúmenes que mapean a una carpeta de disco
     - Se pueden utilizar volúmenes docker
@@ -37,6 +41,11 @@
 
 - PlannedExpenses
   - Incluir diálogo de confirmación al borrar un elemento
+
+- Externalizar los importers
+  - Como si fueran una especie de plugin de tal forma que la aplicación sea más reutilizable
+    si alguien quiere utilizarla y tiene otros bancos o exporta los datos de otra forma, tendría que
+    crearse un jar con sus importers y el resto funcionaría
 
 - General
   - La barra de cargando es muy sutil y no se ve

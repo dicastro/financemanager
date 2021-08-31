@@ -2,6 +2,10 @@
     display: block;
 }
 
+.planned-budgets-view .toolbar {
+    margin-top: 0;
+}
+
 .planned-budgets-view .content {
     display: flex;
     overflow: hidden;

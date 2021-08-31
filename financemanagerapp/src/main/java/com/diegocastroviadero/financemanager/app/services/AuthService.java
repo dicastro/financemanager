@@ -18,6 +18,8 @@ public class AuthService {
     private final Map<Class<? extends Component>, AuthDialog> map = new HashMap<>();
 
     public AuthDialog configureAuth(final Component component) {
+        map.remove(component.getClass());
+
         final AuthDialog authDialog = new AuthDialog();
         map.put(component.getClass(), authDialog);
 

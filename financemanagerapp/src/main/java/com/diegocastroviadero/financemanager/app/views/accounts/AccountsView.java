@@ -53,9 +53,9 @@ public class AccountsView extends HorizontalLayout {
         accountForm.addListener(AccountForm.SaveEvent.class, this::prepareSaveAccount);
         accountForm.addListener(AccountForm.CloseEvent.class, e -> closeEditor());
 
-        final AuthDialog authDialog = authService.configureAuth(this);
+        authService.configureAuth(this);
 
-        final Div content = new Div(accountsGrid, accountForm, authDialog);
+        final Div content = new Div(accountsGrid, accountForm);
         content.addClassName("content");
 
         add(content);

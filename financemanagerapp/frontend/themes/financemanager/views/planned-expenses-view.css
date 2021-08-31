@@ -2,6 +2,10 @@
     display: block;
 }
 
+.planned-expenses-view .toolbar {
+    margin-top: 0;
+}
+
 .planned-expenses-view .content {
     display: flex;
     overflow: hidden;

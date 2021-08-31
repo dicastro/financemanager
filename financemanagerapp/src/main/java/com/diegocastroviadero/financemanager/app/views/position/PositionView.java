@@ -51,9 +51,9 @@ public class PositionView extends VerticalLayout implements ApplicationListener<
         positionChart = new PositionChart();
         positionChart.addListener(PositionChart.CloseEvent.class, e -> closeChart());
 
-        final AuthDialog authDialog = authService.configureAuth(this);
+        authService.configureAuth(this);
 
-        final Div content = new Div(positionsGrid, positionChart, authDialog);
+        final Div content = new Div(positionsGrid, positionChart);
         content.addClassName("content");
 
         add(content);

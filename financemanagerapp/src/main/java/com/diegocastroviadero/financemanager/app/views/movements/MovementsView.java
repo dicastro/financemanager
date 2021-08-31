@@ -67,9 +67,9 @@ public class MovementsView extends VerticalLayout {
 
         configureMovementsGrid();
 
-        final AuthDialog authDialog = authService.configureAuth(this);
+        authService.configureAuth(this);
 
-        final Div content = new Div(movementsGrid, authDialog);
+        final Div content = new Div(movementsGrid);
         content.setClassName("content");
 
         add(getToolbar(), content);

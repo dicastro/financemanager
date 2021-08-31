@@ -12,7 +12,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -30,16 +30,16 @@ import org.springframework.security.access.annotation.Secured;
 
 @Slf4j
 @Route(value = "administration", layout = MainView.class)
-@PageTitle("Administration | Finance Manager")
+@PageTitle("AdministrationView | Finance Manager")
 @Secured("ROLE_ADMIN")
-public class Administration extends VerticalLayout {
+public class AdministrationView extends VerticalLayout {
 
     private final UserConfigService userConfigService;
     private final AuthCleanerService authCleanerService;
     private final CacheCleanerService cacheCleanerService;
     private final BackupService backupService;
 
-    public Administration(final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final CacheCleanerService cacheCleanerService, final BackupService backupService) {
+    public AdministrationView(final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final CacheCleanerService cacheCleanerService, final BackupService backupService) {
         this.userConfigService = userConfigService;
         this.authCleanerService = authCleanerService;
         this.cacheCleanerService = cacheCleanerService;
@@ -56,11 +56,7 @@ public class Administration extends VerticalLayout {
 
         final Component demoLayout = getDemoLayout();
 
-        final VerticalLayout content = new VerticalLayout(versionLayout, cacheLayout, backupLayout, demoLayout);
-        content.addClassName("content");
-        content.setSizeFull();
-
-        add(content);
+        add(versionLayout, cacheLayout, backupLayout, demoLayout);
     }
 
     private Component getVersionLayout() {
@@ -69,10 +65,12 @@ public class Administration extends VerticalLayout {
         version.setWidthFull();
         version.setValue(userConfigService.getVersionLabel());
 
-        final VerticalLayout versionLayout = new VerticalLayout(new H2("Version"), version);
-        versionLayout.setWidthFull();
+        final VerticalLayout layout = new VerticalLayout(new H4("Version"), version);
+        layout.setWidthFull();
+        layout.setPadding(Boolean.FALSE);
+        layout.setSpacing(Boolean.FALSE);
 
-        return versionLayout;
+        return layout;
     }
 
     private Component getCacheLayout() {
@@ -125,10 +123,12 @@ public class Administration extends VerticalLayout {
         cleanAllLayout.setDefaultVerticalComponentAlignment(Alignment.END);
 
         // Clean main layout
-        final VerticalLayout cleanLayout = new VerticalLayout(new H2("Cache"), authCacheLayout, globalCacheLayout, cleanAllLayout);
-        cleanLayout.setWidthFull();
+        final VerticalLayout layout = new VerticalLayout(new H4("Cache"), authCacheLayout, globalCacheLayout, cleanAllLayout);
+        layout.setWidthFull();
+        layout.setPadding(Boolean.FALSE);
+        layout.setSpacing(Boolean.FALSE);
 
-        return cleanLayout;
+        return layout;
     }
 
     private Component getBackupLayout() {
@@ -174,10 +174,6 @@ public class Administration extends VerticalLayout {
 
         uploadBackup.addFileRejectedListener(event -> Notification.show(String.format("Error uploading backup file '%s' to server. Try again later", event.getErrorMessage()), 5000, Notification.Position.MIDDLE));
 
-        uploadBackup.getElement().addEventListener("file-remove", event -> {
-            // Nothing to do
-        });
-
         final HorizontalLayout hl = new HorizontalLayout();
         hl.setWidthFull();
         hl.setDefaultVerticalComponentAlignment(Alignment.CENTER);
@@ -187,10 +183,12 @@ public class Administration extends VerticalLayout {
 
         hl.add(downloadLink, uploadBackup);
 
-        final VerticalLayout downloadLayout = new VerticalLayout(new H2("Backup"), hl);
-        downloadLayout.setWidthFull();
+        final VerticalLayout layout = new VerticalLayout(new H4("Backup"), hl);
+        layout.setWidthFull();
+        layout.setPadding(Boolean.FALSE);
+        layout.setSpacing(Boolean.FALSE);
 
-        return downloadLayout;
+        return layout;
     }
 
     private void cleanUploadedFiles(final Upload upload) {
@@ -203,9 +201,11 @@ public class Administration extends VerticalLayout {
         final Checkbox demoMode = new Checkbox("Activate demo mode", userConfigService.isDemoMode());
         demoMode.addValueChangeListener(e -> userConfigService.setDemoMode(e.getValue()));
 
-        final VerticalLayout demoModeLayout = new VerticalLayout(new H2("Demo"), demoMode);
-        demoModeLayout.setWidthFull();
+        final VerticalLayout layout = new VerticalLayout(new H4("Demo"), demoMode);
+        layout.setWidthFull();
+        layout.setPadding(Boolean.FALSE);
+        layout.setSpacing(Boolean.FALSE);
 
-        return demoModeLayout;
+        return layout;
     }
 }

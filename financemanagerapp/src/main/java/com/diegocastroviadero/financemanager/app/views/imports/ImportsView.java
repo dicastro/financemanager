@@ -44,9 +44,9 @@ public class ImportsView extends VerticalLayout {
 
         configureGrid();
 
-        final AuthDialog authDialog = authService.configureAuth(this);
+        authService.configureAuth(this);
 
-        add(getToolbar(), importsGrid, authDialog);
+        add(getToolbar(), importsGrid);
 
         updateImportsGrid();
     }

@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @AllArgsConstructor
@@ -17,6 +19,19 @@ import java.util.List;
 public class ImportService {
     private final ImportProperties importProperties;
     private final List<Importer> importers;
+
+    public String extractAccountNumberFromFilename(final String filename) {
+        final Pattern p = Pattern.compile("(?:import_|movimientos_)?(?:[a-z]+_)?((?:ES)?[0-9 ]+)(?:_[0-9]{6})?(?:\\.csv|\\.xls)");
+        final Matcher m = p.matcher(filename);
+
+        String accountNumber = null;
+
+        if (m.matches()) {
+            accountNumber = m.group(1);
+        }
+
+        return accountNumber;
+    }
 
     public List<ImportFile> getFilesToImport(final char[] password) {
         final List<ImportFile> result;

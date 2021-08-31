@@ -5,6 +5,7 @@
 @import url('./views/planned-expenses-view.css');
 @import url('./views/position-view.css');
 @import url('./views/accounts-view.css');
+@import url('./views/import-view.css');
 @import url('lumo-css-framework/all-classes.css');
 html {
     --lumo-font-size: 1rem;

@@ -1,0 +1,11 @@
+.import-view {
+    display: block;
+}
+
+.import-view .toolbar {
+    margin-top: 0;
+}
+
+.import-view .content {
+    display: flex;
+}

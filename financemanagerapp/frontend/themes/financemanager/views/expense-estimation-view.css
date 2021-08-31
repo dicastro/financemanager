@@ -1,4 +1,7 @@
 .expense-estimation-view {
     display: block;
-    padding: 1em;
+}
+
+.expense-estimation-view .toolbar {
+    margin-top: 0;
 }

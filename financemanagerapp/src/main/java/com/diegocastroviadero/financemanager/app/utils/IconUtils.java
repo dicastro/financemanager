@@ -22,7 +22,9 @@ public final class IconUtils {
     }
 
     public static Image getBankIcon(final Bank bank) {
-        final Image bankIcon = new Image(String.format("images/bank_logo_%s.svg", bank.name()), bank.name());
+        final String bankName = bank == null ? "UNKNOWN" : bank.name();
+
+        final Image bankIcon = new Image(String.format("images/bank_logo_%s.svg", bankName), bankName);
         bankIcon.setWidth(1.0f, Unit.EM);
 
         return bankIcon;
