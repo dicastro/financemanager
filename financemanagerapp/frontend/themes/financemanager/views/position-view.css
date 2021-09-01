@@ -16,7 +16,7 @@
 
 .position-view.showing .position-chart {
     flex: 1;
-    padding: var(--lumo-space-m);
+    padding-left: var(--lumo-space-m);
 }
 
 @media all and (max-width: 1100px) {

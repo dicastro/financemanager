@@ -1,6 +1,8 @@
 package com.diegocastroviadero.financemanager.app.services.kb;
 
 import com.diegocastroviadero.financemanager.app.configuration.ImportProperties;
+import com.diegocastroviadero.financemanager.app.model.AccountPurpose;
+import com.diegocastroviadero.financemanager.app.model.Bank;
 import com.diegocastroviadero.financemanager.app.model.ImportScope;
 import com.diegocastroviadero.financemanager.app.services.AccountService;
 import com.diegocastroviadero.financemanager.app.services.MovementService;
@@ -24,5 +26,11 @@ public class KbAccountMovementImporter extends AbstractKbImporter {
     @Override
     protected String getFilenameRegex() {
         return FILENAME_REGEX;
+    }
+
+    @Override
+    public boolean applies(final Bank bank, final AccountPurpose purpose) {
+        return Bank.KB == bank
+                && AccountPurpose.CREDIT != purpose;
     }
 }

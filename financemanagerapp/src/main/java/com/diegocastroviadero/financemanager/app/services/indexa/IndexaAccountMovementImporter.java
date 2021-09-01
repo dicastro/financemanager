@@ -1,7 +1,9 @@
 package com.diegocastroviadero.financemanager.app.services.indexa;
 
 import com.diegocastroviadero.financemanager.app.configuration.ImportProperties;
-import com.diegocastroviadero.financemanager.app.model.*;
+import com.diegocastroviadero.financemanager.app.model.Account;
+import com.diegocastroviadero.financemanager.app.model.ImportScope;
+import com.diegocastroviadero.financemanager.app.model.Movement;
 import com.diegocastroviadero.financemanager.app.services.AccountService;
 import com.diegocastroviadero.financemanager.app.services.MovementService;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvUtils;
@@ -9,8 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,8 +35,8 @@ public class IndexaAccountMovementImporter extends AbstractIndexaImporter<Moveme
     }
 
     @Override
-    protected List<Movement> loadElements(final File file, final Account account) throws IOException {
-        final List<String[]> rawRows = CsvUtils.readFromCsvFile(file, 1, ';');
+    protected List<Movement> loadElements(final InputStream is, final String fileName, final Account account) throws IOException {
+        final List<String[]> rawRows = CsvUtils.readFromCsvFile(is, fileName, 1, ';');
 
         final LinkedList<Movement> movements = rawRows.stream()
                 .filter(rawRow -> !StringUtils.equals("0,00€", rawRow[5]))

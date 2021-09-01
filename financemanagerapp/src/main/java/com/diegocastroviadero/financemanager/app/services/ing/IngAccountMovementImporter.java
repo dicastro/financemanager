@@ -2,6 +2,7 @@ package com.diegocastroviadero.financemanager.app.services.ing;
 
 import com.diegocastroviadero.financemanager.app.configuration.ImportProperties;
 import com.diegocastroviadero.financemanager.app.model.Account;
+import com.diegocastroviadero.financemanager.app.model.AccountPurpose;
 import com.diegocastroviadero.financemanager.app.model.Bank;
 import com.diegocastroviadero.financemanager.app.model.ImportScope;
 import com.diegocastroviadero.financemanager.app.model.Movement;
@@ -17,8 +18,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +42,11 @@ public class IngAccountMovementImporter extends AbstractImporter<Movement> {
     @Override
     public boolean applies(final File file) {
         return file.getName().matches(FILENAME_REGEX);
+    }
+
+    @Override
+    public boolean applies(final Bank bank, final AccountPurpose purpose) {
+        return Bank.ING == bank;
     }
 
     @Override
@@ -72,25 +78,23 @@ public class IngAccountMovementImporter extends AbstractImporter<Movement> {
     }
 
     @Override
-    protected List<Movement> loadElements(final File file, final Account account) throws IOException {
+    protected List<Movement> loadElements(final InputStream is, final String fileName, final Account account) throws IOException {
         final LinkedList<Movement> movements = new LinkedList<>();
 
-        final FileInputStream fis = new FileInputStream(file);
-
-        final HSSFWorkbook wb = new HSSFWorkbook(fis);
+        final HSSFWorkbook wb = new HSSFWorkbook(is);
         final HSSFSheet sheet = wb.getSheetAt(0);
 
         boolean processingRows = false;
 
         rowiter: for (Row row : sheet) {
-            log.trace("Iterating over row #{} of file '{}'", row.getRowNum(), file.getName());
+            log.trace("Iterating over row #{} of file '{}'", row.getRowNum(), fileName);
 
             List<String> columns = new ArrayList<>();
 
             int blankCellsConsecutive = 0;
 
             for (Cell cell : row) {
-                log.trace("Iterating over cell #{} of row #{} of file '{}'", cell.getColumnIndex(), cell.getRowIndex(), file.getName());
+                log.trace("Iterating over cell #{} of row #{} of file '{}'", cell.getColumnIndex(), cell.getRowIndex(), fileName);
 
                 final String stringCellValue = cell.toString();
 
@@ -121,7 +125,7 @@ public class IngAccountMovementImporter extends AbstractImporter<Movement> {
             }
 
             if (!columns.isEmpty()) {
-                log.debug("Read row from file '{}': {}", file.getName(), String.join(", ", columns));
+                log.debug("Read row from file '{}': {}", fileName, String.join(", ", columns));
 
                 movements.add(Movement.builder()
                         .bank(getBank())

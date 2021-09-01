@@ -55,15 +55,17 @@ public final class IconUtils {
     }
 
     public static Icon getScopeIcon(final Scope scope) {
-        final Icon scopeIcon;
+        final VaadinIcon scopeIcon;
 
         if (scope == Scope.PERSONAL) {
-            scopeIcon = new Icon(VaadinIcon.MALE);
+            scopeIcon = VaadinIcon.MALE;
+        } else if (scope == Scope.SHARED) {
+            scopeIcon = VaadinIcon.GROUP;
         } else {
-            scopeIcon = new Icon(VaadinIcon.GROUP);
+            scopeIcon = VaadinIcon.MINUS;
         }
 
-        return scopeIcon;
+        return scopeIcon.create();
     }
 
     public static Image getPurposeIcon(final Account account) {

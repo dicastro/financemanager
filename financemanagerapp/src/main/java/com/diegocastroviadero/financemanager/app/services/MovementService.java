@@ -1,8 +1,10 @@
 package com.diegocastroviadero.financemanager.app.services;
 
 import com.diegocastroviadero.financemanager.app.model.Movement;
+import com.diegocastroviadero.financemanager.app.services.events.AccountDeletedEvent;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvSerializationUtils;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -19,12 +21,14 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
-public class MovementService extends AbstractPersistenceService {
-    private static final String ACCOUNT_MOVEMENTS_FILENAME_PATTERN = "movements_%s_%s.ecsv";
-    private static final String ACCOUNT_MOVEMENTS_FILENAME_REGEX_TEMPLATE = "movements_%s_[0-9]{6}.ecsv";
-    private static final String ACCOUNT_MOVEMENTS_YEARMONTH_EXTRACTOR_PATTERN_TEMPLATE = "movements_%s_([0-9]{6}).ecsv";
+public class MovementService extends AbstractPersistenceService implements ApplicationListener<AccountDeletedEvent> {
+    private static final String ACCOUNT_MOVEMENTS_BY_ACCOUNT_FILENAME_PREFIX = "movements_%s";
+    private static final String ACCOUNT_MOVEMENTS_FILENAME_PATTERN = ACCOUNT_MOVEMENTS_BY_ACCOUNT_FILENAME_PREFIX + "_%s.ecsv";
+    private static final String ACCOUNT_MOVEMENTS_FILENAME_REGEX_TEMPLATE = ACCOUNT_MOVEMENTS_BY_ACCOUNT_FILENAME_PREFIX + "_[0-9]{6}.ecsv";
+    private static final String ACCOUNT_MOVEMENTS_YEARMONTH_EXTRACTOR_PATTERN_TEMPLATE = ACCOUNT_MOVEMENTS_BY_ACCOUNT_FILENAME_PREFIX + "_([0-9]{6}).ecsv";
 
     private final UserConfigService userConfigService;
 
@@ -163,5 +167,14 @@ public class MovementService extends AbstractPersistenceService {
 
     private Pattern getAccountMovementsYearMonthExtractorPattern(final UUID accountId) {
         return Pattern.compile(String.format(ACCOUNT_MOVEMENTS_YEARMONTH_EXTRACTOR_PATTERN_TEMPLATE, accountId));
+    }
+
+    @Override
+    public void onApplicationEvent(final AccountDeletedEvent event) {
+        final File[] filesToDelete = propertiesService.listFiles((dir, filename) -> filename.startsWith(String.format(ACCOUNT_MOVEMENTS_BY_ACCOUNT_FILENAME_PREFIX, event.getAccount().getId())));
+
+        if (null != filesToDelete && filesToDelete.length > 0) {
+            Stream.of(filesToDelete).forEach(File::delete);
+        }
     }
 }

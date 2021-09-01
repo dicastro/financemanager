@@ -1,16 +1,7 @@
 # TODO
 
 - Import
-  - Poder subir directamente un fichero (y seleccionar el banco y la cuenta)
-    - En vez de tener que dejarlos en una carpeta 'import'
-  - En el formulario de registro de cuenta se indicará:
-    - banco, numero de cuenta, alias, propósito de la cuenta
-  - Los importers se determinarán en función de:
-    - banco, propósito de la cuenta
-      - kb + credit -> KbCreditImporter
-      - kb + savings|expenses -> KbMovementsImporter
-      - ing + savings|expenses -> IngMovementsImporter
-      - ic + inverted_savings -> IcMovementsImporter + IcInvestmentsImporter
+  - Borrar el viejo import y todo lo que no se use
 
 - Accounts
   - Poder borrar una cuenta
@@ -77,6 +68,11 @@
 - Al hacer el backup incluir un fichero generado con metadatos del backup
   - Que incluya: fecha de generación, número de ficheros incluidos, nombres de ficheros incluidos, hashes de ficheros incluidos
   - Al cargar un backup se comprobará con el fichero de metadatos si los datos cargados con correctos
+
+- Gestionar errores en Eventos Spring
+  - Hay un evento 'AccountDeletedEvent' que borra movements e investments después de borrar una cuenta
+    - ¿Qué pasa si falla ese borrado? Se quedarían movements o investments ocupando espacio
+        - Añadir algún mecanismo de limpieza que borre estos ficheros sin cuenta asociada cada X tiempo
 
 # Ideas
 

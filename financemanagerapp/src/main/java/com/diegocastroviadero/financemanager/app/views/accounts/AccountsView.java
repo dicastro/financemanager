@@ -8,6 +8,7 @@ import com.diegocastroviadero.financemanager.app.services.AccountService;
 import com.diegocastroviadero.financemanager.app.services.AuthService;
 import com.diegocastroviadero.financemanager.app.utils.IconUtils;
 import com.diegocastroviadero.financemanager.app.utils.Utils;
+import com.diegocastroviadero.financemanager.app.views.common.ConfirmationDialog;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.WrongEncryptionPasswordException;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -48,8 +50,13 @@ public class AccountsView extends HorizontalLayout {
 
         configureGrid();
 
+        final ConfirmationDialog confirmationDialog = new ConfirmationDialog("Confirm account deletion");
+
+        confirmationDialog.addListener(ConfirmationDialog.ConfirmedEvent.class, event -> prepareDeleteAccount((Account) event.getContext().get("account")));
+
         accountForm = new AccountForm(Bank.values(), AccountPurpose.values(), Scope.values());
         accountForm.addListener(AccountForm.SaveEvent.class, this::prepareSaveAccount);
+        accountForm.addListener(AccountForm.DeleteEvent.class, event -> confirmationDialog.open(String.format("Are you sure you want to delete account '%s' (%s)", event.getAccount().getAlias(), event.getAccount().getAccountNumber()), Map.of("account", event.getAccount())));
         accountForm.addListener(AccountForm.CloseEvent.class, e -> closeEditor());
 
         authService.configureAuth(this);
@@ -96,24 +103,51 @@ public class AccountsView extends HorizontalLayout {
         accountsGrid.setHeightByRows(Boolean.TRUE);
     }
 
-    private void prepareSaveAccount(AccountForm.SaveEvent event) {
-        authService.authenticate(this, this::saveAccount);
+    private void prepareSaveAccount(final AccountForm.SaveEvent event) {
+        authService.authenticate(this, password -> saveAccount(password, event.getAccount()));
     }
 
-    private void saveAccount(final char[] password) {
-        boolean persisted = true;
+    private void saveAccount(final char[] password, final Account account) {
+        boolean close = true;
+
         try {
             accountService.persistAccounts(password, accountsGrid.getDataProvider().fetch(new Query<>()).collect(Collectors.toList()));
+        } catch (WrongEncryptionPasswordException e) {
+            Notification.show(String.format("Account '%s' (%s) could not be persisted because provided encryption password is not correct", account.getAlias(), account.getAccountNumber()), 5000, Notification.Position.MIDDLE);
+            close = false;
         } catch (CsvCryptoIOException e) {
-            log.error("Error while persisting account changes", e);
-            persisted = false;
+            final String message = String.format("There was an error while persisting account '%s' (%s)", account.getAlias(), account.getAccountNumber());
+            log.error(message, e);
+            Notification.show(message, 5000, Notification.Position.MIDDLE);
         }
 
-        updateAccountGrid(password);
-        closeEditor();
+        if (close) {
+            updateAccountGrid(password);
+            closeEditor();
+        }
+    }
 
-        if (!persisted) {
-            Notification.show("Account data could not be persisted", 5000, Notification.Position.MIDDLE);
+    private void prepareDeleteAccount(final Account account) {
+        authService.authenticate(this, password -> deleteAccount(password, account));
+    }
+
+    private void deleteAccount(final char[] password, final Account account) {
+        boolean close = true;
+
+        try {
+            accountService.deleteAccount(password, account);
+        } catch (WrongEncryptionPasswordException e) {
+            Notification.show(String.format("Account '%s' (%s) could not be deleted because provided encryption password is not correct", account.getAlias(), account.getAccountNumber()), 5000, Notification.Position.MIDDLE);
+            close = false;
+        } catch (CsvCryptoIOException e) {
+            final String message = String.format("There was an error deleting account '%s' (%s)", account.getAlias(), account.getAccountNumber());
+            log.error(message, e);
+            Notification.show(message, 5000, Notification.Position.MIDDLE);
+        }
+
+        if (close) {
+            updateAccountGrid(password);
+            closeEditor();
         }
     }
 

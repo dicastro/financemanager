@@ -7,7 +7,6 @@ import com.diegocastroviadero.financemanager.app.services.AuthService;
 import com.diegocastroviadero.financemanager.app.services.MovementService;
 import com.diegocastroviadero.financemanager.app.utils.IconUtils;
 import com.diegocastroviadero.financemanager.app.utils.Utils;
-import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.WrongEncryptionPasswordException;

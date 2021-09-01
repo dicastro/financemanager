@@ -1,6 +1,7 @@
 package com.diegocastroviadero.financemanager.app.services.indexa;
 
 import com.diegocastroviadero.financemanager.app.configuration.ImportProperties;
+import com.diegocastroviadero.financemanager.app.model.AccountPurpose;
 import com.diegocastroviadero.financemanager.app.model.Bank;
 import com.diegocastroviadero.financemanager.app.services.AbstractImporter;
 import com.diegocastroviadero.financemanager.app.services.AccountService;
@@ -21,6 +22,11 @@ public abstract class AbstractIndexaImporter<T> extends AbstractImporter<T> {
     @Override
     public boolean applies(final File file) {
         return file.getName().matches(FILENAME_REGEX);
+    }
+
+    @Override
+    public boolean applies(final Bank bank, final AccountPurpose purpose) {
+        return Bank.IC == bank;
     }
 
     @Override

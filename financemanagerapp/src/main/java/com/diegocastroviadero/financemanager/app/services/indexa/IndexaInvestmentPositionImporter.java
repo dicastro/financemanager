@@ -10,8 +10,8 @@ import com.diegocastroviadero.financemanager.cryptoutils.CsvUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,8 +35,8 @@ public class IndexaInvestmentPositionImporter extends AbstractIndexaImporter<Inv
     }
 
     @Override
-    protected List<InvestmentPosition> loadElements(final File file, final Account account) throws IOException {
-        final List<String[]> rawRows = CsvUtils.readFromCsvFile(file, 1, ';');
+    protected List<InvestmentPosition> loadElements(final InputStream is, final String fileName, final Account account) throws IOException {
+        final List<String[]> rawRows = CsvUtils.readFromCsvFile(is, fileName, 1, ';');
 
         final LinkedList<InvestmentPosition> investmentPositions = rawRows.stream()
                 .map(rawRow -> InvestmentPosition.builder()

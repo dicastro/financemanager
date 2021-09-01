@@ -1,12 +1,16 @@
 package com.diegocastroviadero.financemanager.app.services;
 
 import com.diegocastroviadero.financemanager.app.configuration.ImportProperties;
+import com.diegocastroviadero.financemanager.app.model.Account;
 import com.diegocastroviadero.financemanager.app.model.ImportFile;
+import com.diegocastroviadero.financemanager.app.model.ImportFile.ImportFileBuilder;
+import com.diegocastroviadero.financemanager.app.model.ImporterResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +48,7 @@ public class ImportService {
             result = new ArrayList<>();
 
             for (File file : filesInImportPath) {
-                ImportFile.ImportFileBuilder importFileBuilder = null;
+                ImportFileBuilder importFileBuilder = null;
 
                 for (Importer importer : importers) {
                     if (importer.applies(file)) {
@@ -78,5 +82,17 @@ public class ImportService {
         }
 
         return result;
+    }
+
+    public List<ImporterResult> importFile(final char[] password, final InputStream fis, final String fileName, final Account account) {
+        final List<ImporterResult> importerResults = new ArrayList<>();
+
+        for (Importer importer : importers) {
+            if (importer.applies(account.getBank(), account.getPurpose())) {
+                importerResults.add(importer.doImport(password, fis, fileName, account));
+            }
+        }
+
+        return importerResults;
     }
 }

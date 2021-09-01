@@ -45,6 +45,8 @@ public class PositionChart extends VerticalLayout {
         content.setSizeFull();
 
         add(content, createButtonsLayout());
+        setSpacing(Boolean.FALSE);
+        setPadding(Boolean.FALSE);
     }
 
     public void show(final AccountPositionHistory accountPositionHistory) {

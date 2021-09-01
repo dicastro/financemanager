@@ -5,8 +5,10 @@ import com.diegocastroviadero.financemanager.app.model.AccountPosition;
 import com.diegocastroviadero.financemanager.app.model.AccountPositionHistory;
 import com.diegocastroviadero.financemanager.app.model.AccountPurpose;
 import com.diegocastroviadero.financemanager.app.model.Bank;
+import com.diegocastroviadero.financemanager.app.services.events.AccountDeletedEvent;
 import com.diegocastroviadero.financemanager.cryptoutils.exception.CsvCryptoIOException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -25,27 +27,35 @@ public class AccountService extends AbstractPersistenceService {
     private final List<AccountPositionCalculator> accountPositionCalculators;
     private final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public AccountService(final PersistencePropertiesService propertiesService, final CacheService cacheService, final UserConfigService userConfigService, final List<AccountPositionCalculator> accountPositionCalculators, final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators) {
+    public AccountService(final PersistencePropertiesService propertiesService, final CacheService cacheService, final UserConfigService userConfigService, final List<AccountPositionCalculator> accountPositionCalculators, final List<AccountPositionHistoryCalculator> accountPositionHistoryCalculators, final ApplicationEventPublisher applicationEventPublisher) {
         super(propertiesService, cacheService);
         this.userConfigService = userConfigService;
         this.accountPositionCalculators = accountPositionCalculators;
         this.accountPositionHistoryCalculators = accountPositionHistoryCalculators;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     public Account registerAccount(final char[] password, final Bank bank, final String newAccount) throws CsvCryptoIOException {
+        return registerAccount(password, bank, newAccount, null, null);
+    }
+
+    public Account registerAccount(final char[] password, final Bank bank, final String accountNumber, final String alias, final AccountPurpose purpose) throws CsvCryptoIOException {
         final List<Account> existingAccounts = getAllAccounts(password);
 
         Account foundAccount = existingAccounts.stream()
-                .filter(a -> StringUtils.equals(a.getAccountNumber(), newAccount))
+                .filter(a -> StringUtils.equals(a.getAccountNumber(), accountNumber))
                 .findFirst()
                 .orElse(null);
 
         if (null == foundAccount) {
             foundAccount = Account.builder()
                     .bank(bank)
-                    .accountNumber(newAccount)
+                    .accountNumber(accountNumber)
                     .id(UUID.randomUUID())
+                    .alias(alias)
+                    .purpose(purpose)
                     .balance(BigDecimal.ZERO)
                     .build();
 
@@ -124,5 +134,19 @@ public class AccountService extends AbstractPersistenceService {
                 .get(); // DefaultAccountPositionHistoryCalculator always applies and it is the last element of accountPositionHistoryCalculators list, so always one AccountPositionHistoryCalculator will be found
 
         return accountPositionHistoryCalculator.getAccountPositionHistory(password, accountPosition);
+    }
+
+    public void deleteAccount(final char[] password, final Account account) throws CsvCryptoIOException {
+        final List<Account> accounts = getAllAccounts(password);
+
+        final boolean removed = accounts.removeIf(a -> a.getId().equals(account.getId()));
+
+        if (removed) {
+            persistAccounts(password, accounts);
+
+            // It is assumed that listeners of AcountDeletedEvent are not going to fail
+            // because they are only removing files from disk
+            applicationEventPublisher.publishEvent(new AccountDeletedEvent(this, account));
+        }
     }
 }

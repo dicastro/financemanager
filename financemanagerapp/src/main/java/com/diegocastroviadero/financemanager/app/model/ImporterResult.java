@@ -10,8 +10,8 @@ import java.util.List;
 
 @Builder
 @Getter
-public class ImportedFile {
-    private final File file;
+public class ImporterResult {
+    private final String fileName;
     @Singular
     private final List<String> errorCauses;
 

@@ -50,6 +50,7 @@ public class AccountForm extends FormLayout {
     final ComboBox<Account> link = new ComboBox<>("Link");
 
     final Button save = new Button("Save");
+    final Button delete = new Button("Delete");
     final Button close = new Button("Close");
 
     final List<ShortcutRegistration> shortcuts = new ArrayList<>();
@@ -104,6 +105,7 @@ public class AccountForm extends FormLayout {
         setAccount(account, linkableAccounts);
 
         shortcuts.add(save.addClickShortcut(Key.ENTER));
+        shortcuts.add(delete.addClickShortcut(Key.DELETE));
         shortcuts.add(close.addClickShortcut(Key.ESCAPE));
 
         setVisible(Boolean.TRUE);
@@ -133,15 +135,17 @@ public class AccountForm extends FormLayout {
 
     private HorizontalLayout createButtonsLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-
         save.addClickListener(event -> validateAndSave());
 
+        delete.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
+        delete.addClickListener(event -> delete());
+
+        close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         close.addClickListener(event -> fireEvent(new CloseEvent(this)));
 
         binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
 
-        return new HorizontalLayout(save, close);
+        return new HorizontalLayout(save, delete, close);
     }
 
     private void validateAndSave() {
@@ -151,6 +155,10 @@ public class AccountForm extends FormLayout {
         } catch (ValidationException e) {
             log.error("Account could not be saved because form is not valid", e);
         }
+    }
+
+    private void delete() {
+        fireEvent(new DeleteEvent(this, account));
     }
 
     @Override
@@ -170,6 +178,12 @@ public class AccountForm extends FormLayout {
 
     public static class SaveEvent extends AccountFormEvent {
         SaveEvent(final AccountForm source, final Account account) {
+            super(source, account);
+        }
+    }
+
+    public static class DeleteEvent extends AccountFormEvent {
+        DeleteEvent(final AccountForm source, final Account account) {
             super(source, account);
         }
     }

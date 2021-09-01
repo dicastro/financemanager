@@ -41,7 +41,7 @@ public final class Utils {
     private static final DateTimeFormatter TABLE_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public static String tableFormatDate(final LocalDate date) {
-        return date.format(TABLE_DATE_FORMATTER);
+        return date == null ? null : date.format(TABLE_DATE_FORMATTER);
     }
 
     public static String tableFormatMoney(final BigDecimal quantity) {

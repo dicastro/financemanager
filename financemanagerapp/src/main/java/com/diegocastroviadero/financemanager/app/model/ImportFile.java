@@ -43,14 +43,14 @@ public class ImportFile {
                 .collect(Collectors.joining(", "));
     }
 
-    public ImportedFile doImport() {
+    public ImporterResult doImport() {
         final List<String> importErrors = importers.stream()
                 .map(importer -> importer.doImport(password, file, bank, accountNumber))
                 .flatMap(importedFile -> importedFile.getErrorCauses().stream())
                 .collect(Collectors.toList());
 
-        return ImportedFile.builder()
-                .file(file)
+        return ImporterResult.builder()
+                .fileName(file.getName())
                 .errorCauses(importErrors)
                 .build();
     }

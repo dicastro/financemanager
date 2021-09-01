@@ -1,11 +1,10 @@
 package com.diegocastroviadero.financemanager.app.views.imports;
 
 import com.diegocastroviadero.financemanager.app.model.ImportFile;
-import com.diegocastroviadero.financemanager.app.model.ImportedFile;
+import com.diegocastroviadero.financemanager.app.model.ImporterResult;
 import com.diegocastroviadero.financemanager.app.services.AuthService;
 import com.diegocastroviadero.financemanager.app.services.ImportService;
 import com.diegocastroviadero.financemanager.app.utils.IconUtils;
-import com.diegocastroviadero.financemanager.app.views.common.AuthDialog;
 import com.diegocastroviadero.financemanager.app.views.main.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -67,7 +66,7 @@ public class ImportsView extends VerticalLayout {
 
         importFiles.stream()
                 .map(ImportFile::doImport)
-                .filter(ImportedFile::hasError)
+                .filter(ImporterResult::hasError)
                 .forEach(erroneousImportedFile -> Notification.show(erroneousImportedFile.getErrorCauses().stream()
                         .collect(Collectors.joining("\n - ", "- ", "")), 5000, Notification.Position.BOTTOM_START));
 

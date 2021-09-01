@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Row;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -60,25 +61,24 @@ public abstract class AbstractKbImporter extends AbstractImporter<Movement> {
     protected abstract String getFilenameRegex();
 
     @Override
-    protected List<Movement> loadElements(final File file, final Account account) throws IOException {
+    protected List<Movement> loadElements(final InputStream is, final String fileName, final Account account) throws IOException {
         final List<Movement> movements = new ArrayList<>();
 
-        final FileInputStream fis = new FileInputStream(file);
 
-        final HSSFWorkbook wb = new HSSFWorkbook(fis);
+        final HSSFWorkbook wb = new HSSFWorkbook(is);
         final HSSFSheet sheet = wb.getSheetAt(0);
 
         boolean processingRows = false;
 
         rowiter: for (Row row : sheet) {
-            log.trace("Iterating over row #{} of file '{}'", row.getRowNum(), file.getName());
+            log.trace("Iterating over row #{} of file '{}'", row.getRowNum(), fileName);
 
             List<String> columns = new ArrayList<>();
 
             int blankCellsConsecutive = 0;
 
             for (Cell cell : row) {
-                log.trace("Iterating over cell #{} of row #{} of file '{}'", cell.getColumnIndex(), cell.getRowIndex(), file.getName());
+                log.trace("Iterating over cell #{} of row #{} of file '{}'", cell.getColumnIndex(), cell.getRowIndex(), fileName);
 
                 final String stringCellValue = cell.toString();
 
@@ -109,7 +109,7 @@ public abstract class AbstractKbImporter extends AbstractImporter<Movement> {
             }
 
             if (!columns.isEmpty()) {
-                log.debug("Read row from file '{}': {}", file.getName(), String.join(", ", columns));
+                log.debug("Read row from file '{}': {}", fileName, String.join(", ", columns));
 
                 movements.add(Movement.builder()
                         .bank(getBank())
