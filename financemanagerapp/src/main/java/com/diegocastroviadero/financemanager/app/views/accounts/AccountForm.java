@@ -14,6 +14,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -72,7 +73,7 @@ public class AccountForm extends FormLayout {
         purpose.setItems(accountPurposes);
         purpose.setItemLabelGenerator(AccountPurpose::name);
         purpose.setRenderer(new ComponentRenderer<>(purpose -> {
-            final Icon icon = IconUtils.getPurposeIcon(purpose);
+            final Image icon = IconUtils.getPurposeIcon(purpose);
             final Span text = new Span(purpose.name());
 
             final HorizontalLayout layout = new HorizontalLayout(icon, text);

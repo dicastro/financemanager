@@ -1,13 +1,20 @@
 package com.diegocastroviadero.financemanager.app.utils;
 
-import com.diegocastroviadero.financemanager.app.model.*;
-import com.vaadin.flow.component.Unit;
+import com.diegocastroviadero.financemanager.app.model.Account;
+import com.diegocastroviadero.financemanager.app.model.AccountPosition;
+import com.diegocastroviadero.financemanager.app.model.AccountPurpose;
+import com.diegocastroviadero.financemanager.app.model.Bank;
+import com.diegocastroviadero.financemanager.app.model.ImportFile;
+import com.diegocastroviadero.financemanager.app.model.PlannedBudget;
+import com.diegocastroviadero.financemanager.app.model.PlannedExpense;
+import com.diegocastroviadero.financemanager.app.model.Scope;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 
 public final class IconUtils {
-    private IconUtils() {}
+    private IconUtils() {
+    }
 
     public static Image getBankIcon(final Account account) {
         return getBankIcon(account.getBank());
@@ -24,10 +31,11 @@ public final class IconUtils {
     public static Image getBankIcon(final Bank bank) {
         final String bankName = bank == null ? "UNKNOWN" : bank.name();
 
-        final Image bankIcon = new Image(String.format("images/bank_logo_%s.svg", bankName), bankName);
-        bankIcon.setWidth(1.0f, Unit.EM);
+        final Image icon = new Image(String.format("images/bank_logo_%s.svg", bankName), bankName);
+        icon.setMaxWidth("var(--iron-icon-width, 24px)");
+        icon.setMaxHeight("var(--iron-icon-width, 24px)");
 
-        return bankIcon;
+        return icon;
     }
 
     public static Icon getScopeIcon(final Account account) {
@@ -58,21 +66,15 @@ public final class IconUtils {
         return scopeIcon;
     }
 
-    public static Icon getPurposeIcon(final Account account) {
+    public static Image getPurposeIcon(final Account account) {
         return getPurposeIcon(account.getPurpose());
     }
 
-    public static Icon getPurposeIcon(final AccountPurpose purpose) {
-        final Icon purposeIcon;
+    public static Image getPurposeIcon(final AccountPurpose purpose) {
+        final Image icon = new Image(String.format("images/account_purpose_logo_%s.svg", purpose.name()), purpose.name());
+        icon.setMaxWidth("var(--iron-icon-width, 24px)");
+        icon.setMaxHeight("var(--iron-icon-width, 24px)");
 
-        if (purpose == AccountPurpose.CREDIT) {
-            purposeIcon = VaadinIcon.CREDIT_CARD.create();
-        } else if (purpose == AccountPurpose.SAVINGS) {
-            purposeIcon = VaadinIcon.PIGGY_BANK.create();
-        } else {
-            purposeIcon = VaadinIcon.CASH.create();
-        }
-
-        return purposeIcon;
+        return icon;
     }
 }

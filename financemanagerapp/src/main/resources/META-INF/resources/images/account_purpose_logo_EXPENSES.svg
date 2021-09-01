@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   height="682.66669"
+   width="938.66669"
+   sodipodi:docname="cash-multiple.svg"
+   id="svg915"
+   version="1.1"
+   viewBox="0 0 938.66669 682.66669"
+   style="overflow:hidden;fill:currentColor"
+   class="svg-icon">
+  <metadata
+     id="metadata921">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs919" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg915"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:cy="256"
+     inkscape:cx="469.33333"
+     inkscape:zoom="0.78222656"
+     fit-margin-bottom="0"
+     fit-margin-right="0"
+     fit-margin-left="0"
+     fit-margin-top="0"
+     showgrid="false"
+     id="namedview917"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <path
+     id="path913"
+     fill=""
+     d="M 768,0 H 0 V 512 H 768 V 0 M 384,128 A 128,128 0 0 0 256,256 128,128 0 0 0 384,384 128,128 0 0 0 512,256 128,128 0 0 0 384,128 M 597.33333,85.33333 a 85.333333,85.333333 0 0 0 85.33333,85.33334 v 170.66666 a 85.333333,85.333333 0 0 0 -85.33333,85.33334 H 170.66666 A 85.333333,85.333333 0 0 0 85.333333,341.33333 V 170.66667 A 85.333333,85.333333 0 0 0 170.66666,85.33333 h 426.66667 m 341.33333,85.33334 H 853.33333 V 597.33333 H 170.66666 v 85.33334 h 768 z" />
+</svg>

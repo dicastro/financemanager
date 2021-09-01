@@ -3,6 +3,14 @@
 - Import
   - Poder subir directamente un fichero (y seleccionar el banco y la cuenta)
     - En vez de tener que dejarlos en una carpeta 'import'
+  - En el formulario de registro de cuenta se indicará:
+    - banco, numero de cuenta, alias, propósito de la cuenta
+  - Los importers se determinarán en función de:
+    - banco, propósito de la cuenta
+      - kb + credit -> KbCreditImporter
+      - kb + savings|expenses -> KbMovementsImporter
+      - ing + savings|expenses -> IngMovementsImporter
+      - ic + inverted_savings -> IcMovementsImporter + IcInvestmentsImporter
 
 - Accounts
   - Poder borrar una cuenta
@@ -41,6 +49,13 @@
 
 - PlannedExpenses
   - Incluir diálogo de confirmación al borrar un elemento
+
+- Crear librería de iconos para todos los iconos de financemanager (logos de bancos y propósitos de cuentas)
+  - Usar [IcoMoon](https://icomoon.io/)
+  - [Aquí preguntan sobre ello](https://vaadin.com/forum/thread/18364785/how-to-include-custom-icon-sets-with-vaadin-14-3-0)
+  - Esto solucionaría el problema de las columnas de tablas con las imágenes que se cortan en dispositivos móviles
+  - https://vaadin.com/docs/v8/framework/articles/UsingFontIcons
+  - https://vaadin.com/docs/v8/framework/themes/themes-fonticon
 
 - Externalizar los importers
   - Como si fueran una especie de plugin de tal forma que la aplicación sea más reutilizable
