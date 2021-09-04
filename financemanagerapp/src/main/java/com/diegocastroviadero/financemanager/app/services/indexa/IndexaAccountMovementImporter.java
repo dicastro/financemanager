@@ -1,10 +1,7 @@
 package com.diegocastroviadero.financemanager.app.services.indexa;
 
-import com.diegocastroviadero.financemanager.app.configuration.ImportProperties;
 import com.diegocastroviadero.financemanager.app.model.Account;
-import com.diegocastroviadero.financemanager.app.model.ImportScope;
 import com.diegocastroviadero.financemanager.app.model.Movement;
-import com.diegocastroviadero.financemanager.app.services.AccountService;
 import com.diegocastroviadero.financemanager.app.services.MovementService;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +21,8 @@ import java.util.stream.Collectors;
 public class IndexaAccountMovementImporter extends AbstractIndexaImporter<Movement> {
     private final MovementService movementService;
 
-    public IndexaAccountMovementImporter(final ImportProperties properties, final AccountService accountService, final MovementService movementService) {
-        super(properties, accountService);
+    public IndexaAccountMovementImporter(final MovementService movementService) {
         this.movementService = movementService;
-    }
-
-    @Override
-    public ImportScope getImportScope() {
-        return ImportScope.ACCOUNT;
     }
 
     @Override
@@ -41,7 +32,7 @@ public class IndexaAccountMovementImporter extends AbstractIndexaImporter<Moveme
         final LinkedList<Movement> movements = rawRows.stream()
                 .filter(rawRow -> !StringUtils.equals("0,00€", rawRow[5]))
                 .map(rawRow -> Movement.builder()
-                        .bank(getBank())
+                        .bank(account.getBank())
                         .accountId(account.getId())
                         .account(account.getAccountNumber())
                         .date(IndexaUtils.parseMovementDate(rawRow[0]))

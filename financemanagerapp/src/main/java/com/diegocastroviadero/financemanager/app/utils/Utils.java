@@ -11,7 +11,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -58,10 +57,6 @@ public final class Utils {
 
     public static Month currentMonth() {
         return now().getMonth();
-    }
-
-    public static YearMonth previousYearMonth() {
-        return YearMonth.now(UTC_ZONE).minusMonths(1);
     }
 
     public static BigDecimal obfuscateBigDecimal(final BigDecimal input) {

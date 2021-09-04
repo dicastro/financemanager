@@ -1,11 +1,8 @@
 package com.diegocastroviadero.financemanager.app.services.kb;
 
-import com.diegocastroviadero.financemanager.app.configuration.ImportProperties;
 import com.diegocastroviadero.financemanager.app.model.Account;
-import com.diegocastroviadero.financemanager.app.model.Bank;
 import com.diegocastroviadero.financemanager.app.model.Movement;
 import com.diegocastroviadero.financemanager.app.services.AbstractImporter;
-import com.diegocastroviadero.financemanager.app.services.AccountService;
 import com.diegocastroviadero.financemanager.app.services.MovementService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,51 +11,19 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Slf4j
 public abstract class AbstractKbImporter extends AbstractImporter<Movement> {
-
     protected final MovementService movementService;
 
-    public AbstractKbImporter(final ImportProperties properties, final AccountService accountService, final MovementService movementService) {
-        super(properties, accountService);
+    public AbstractKbImporter(final MovementService movementService) {
         this.movementService = movementService;
     }
-
-    @Override
-    public Bank getBank() {
-        return Bank.KB;
-    }
-
-    @Override
-    public String getAccountNumber(final File file) {
-        final Pattern pattern = Pattern.compile(getFilenameRegex());
-        final Matcher matcher = pattern.matcher(file.getName());
-
-        String id = null;
-
-        if (matcher.matches()) {
-            id = matcher.group(1);
-        }
-
-        return id;
-    }
-
-    @Override
-    public boolean applies(final File file) {
-        return file.getName().matches(getFilenameRegex());
-    }
-
-    protected abstract String getFilenameRegex();
 
     @Override
     protected List<Movement> loadElements(final InputStream is, final String fileName, final Account account) throws IOException {
@@ -112,7 +77,7 @@ public abstract class AbstractKbImporter extends AbstractImporter<Movement> {
                 log.debug("Read row from file '{}': {}", fileName, String.join(", ", columns));
 
                 movements.add(Movement.builder()
-                        .bank(getBank())
+                        .bank(account.getBank())
                         .accountId(account.getId())
                         .account(account.getAccountNumber())
                         .date(KbUtils.parseMovementDate(columns.get(0)))

@@ -1,12 +1,5 @@
 # TODO
 
-- Import
-  - Borrar el viejo import y todo lo que no se use
-
-- Accounts
-  - Poder borrar una cuenta
-    - Al borrar una cuenta también se borran todos sus movimientos e inversiones
-
 - Administration
   - Al tener botón de descargar/cargar backup y la carga directa de ficheros ya no hace falta los volúmenes que mapean a una carpeta de disco
     - Se pueden utilizar volúmenes docker

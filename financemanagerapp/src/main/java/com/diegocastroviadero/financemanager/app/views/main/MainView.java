@@ -8,7 +8,6 @@ import com.diegocastroviadero.financemanager.app.views.accounts.AccountsView;
 import com.diegocastroviadero.financemanager.app.views.administration.AdministrationView;
 import com.diegocastroviadero.financemanager.app.views.expenseestimation.ExpenseEstimationView;
 import com.diegocastroviadero.financemanager.app.views.imports.ImportView;
-import com.diegocastroviadero.financemanager.app.views.imports.ImportsView;
 import com.diegocastroviadero.financemanager.app.views.movements.MovementsView;
 import com.diegocastroviadero.financemanager.app.views.plannedbudgets.PlannedBudgetsView;
 import com.diegocastroviadero.financemanager.app.views.plannedexpenses.PlannedExpensesView;
@@ -20,7 +19,6 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
@@ -111,7 +109,6 @@ public class MainView extends AppLayout {
                 createTab("Position", PositionView.class),
                 createTab("Movements", MovementsView.class),
                 createTab("Accounts", AccountsView.class),
-                createTab("Imports", ImportsView.class),
                 createTab("Import", ImportView.class),
                 createTab("Administration", AdministrationView.class)
         };

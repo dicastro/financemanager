@@ -1,10 +1,7 @@
 package com.diegocastroviadero.financemanager.app.services.indexa;
 
-import com.diegocastroviadero.financemanager.app.configuration.ImportProperties;
 import com.diegocastroviadero.financemanager.app.model.Account;
-import com.diegocastroviadero.financemanager.app.model.ImportScope;
 import com.diegocastroviadero.financemanager.app.model.InvestmentPosition;
-import com.diegocastroviadero.financemanager.app.services.AccountService;
 import com.diegocastroviadero.financemanager.app.services.InvestmentPositionService;
 import com.diegocastroviadero.financemanager.cryptoutils.CsvUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +21,8 @@ public class IndexaInvestmentPositionImporter extends AbstractIndexaImporter<Inv
 
     private final InvestmentPositionService investmentPositionService;
 
-    public IndexaInvestmentPositionImporter(final ImportProperties properties, final AccountService accountService, final InvestmentPositionService investmentPositionService) {
-        super(properties, accountService);
+    public IndexaInvestmentPositionImporter(final InvestmentPositionService investmentPositionService) {
         this.investmentPositionService = investmentPositionService;
-    }
-
-    @Override
-    public ImportScope getImportScope() {
-        return ImportScope.INVESTMENT_VALUES;
     }
 
     @Override
@@ -40,7 +31,7 @@ public class IndexaInvestmentPositionImporter extends AbstractIndexaImporter<Inv
 
         final LinkedList<InvestmentPosition> investmentPositions = rawRows.stream()
                 .map(rawRow -> InvestmentPosition.builder()
-                        .bank(getBank())
+                        .bank(account.getBank())
                         .accountId(account.getId())
                         .account(account.getAccountNumber())
                         .date(IndexaUtils.parseMovementDate(rawRow[0]))
