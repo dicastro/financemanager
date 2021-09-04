@@ -1,15 +1,10 @@
 logging:
   level:
-    root: WARN
-    org.atmosphere: WARN
     com.diegocastroviadero: INFO
 
 financemanagerapp:
   cache:
     clean-interval: 1800000 # 30 minutes
-  import:
-    base-path: /financemanager/import
-    delete-after-import: true
   security:
     requires-https: true
     incorrect-logins-to-block-ip: 5

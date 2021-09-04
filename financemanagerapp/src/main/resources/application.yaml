@@ -26,11 +26,8 @@ financemanagerapp:
     version: @project.version@
     timestamp: @maven.build.timestamp@
   cache:
-    clean-interval: 60000
+    clean-interval: 60000 # 1 minute
     noop-cleans-to-invalidate-session: 1
-  import:
-    base-path: wksp/import
-    delete-after-import: false
   security:
     requires-https: false
     incorrect-logins-to-block-ip: 3

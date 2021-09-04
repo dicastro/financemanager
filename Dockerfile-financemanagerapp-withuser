@@ -7,9 +7,8 @@ RUN apt-get update -qq && apt-get install -qq --no-install-recommends nodejs
 RUN useradd -m fmu
 
 RUN mkdir -p /csvcryptoutils/src \
-    && chown fmu:fmu /csvcryptoutils/src/
-
-RUN mkdir -p /financemanager/src \
+    && chown fmu:fmu /csvcryptoutils/src/ \
+    && mkdir -p /financemanager/src \
     && chown fmu:fmu /financemanager/src/
 
 USER fmu
@@ -17,7 +16,7 @@ USER fmu
 # CsvCryptoUtils
 WORKDIR /csvcryptoutils/src/
 
-COPY --chown=fmu csvcryptoutils/pom.xml ./
+COPY --chown=fmu:fmu csvcryptoutils/pom.xml ./
 COPY --chown=fmu:fmu csvcryptoutils/src ./src
 RUN mvn clean install -DskipTests
 
@@ -25,7 +24,7 @@ RUN mvn clean install -DskipTests
 WORKDIR /financemanager/src/
 
 # Copy pom.xml and prefetch dependencies so a repeated build can continue from the next step with existing dependencies
-COPY --chown=fmu financemanagerapp/pom.xml ./
+COPY --chown=fmu:fmu financemanagerapp/pom.xml ./
 RUN mvn dependency:go-offline -Pproduction
 
 # Copy all needed project files to a folder
@@ -43,8 +42,9 @@ RUN mvn clean package spring-boot:repackage -DskipTests -Pproduction
 FROM openjdk:11-jre-slim
 COPY --from=build /financemanager/src/target/*.jar /financemanager/app/app.jar
 RUN useradd -m fmu
+RUN mkdir /financemanager/dbfiles \
+    && chown fmu:fmu /financemanager/dbfiles
 USER fmu
 EXPOSE 8080
-VOLUME /financemanager/import
 VOLUME /financemanager/dbfiles
 CMD java -jar /financemanager/app/app.jar

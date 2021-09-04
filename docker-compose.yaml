@@ -4,19 +4,21 @@ services:
   financemanagerapp:
     build:
       context: .
-      dockerfile: ./Dockerfile-financemanagerapp
+      dockerfile: ./Dockerfile-financemanagerapp-withuser
     image: qopuir/financemanagerapp:1.2.0
     container_name: financemanagerapp
     ports:
       - 8080:8080
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - FINANCEMANAGER_USERS="user:{noop}1@USER|admin:{noop}1@USER,ADMIN"
+      - SPRING_PROFILES_ACTIVE=localdocker
+      - FINANCEMANAGER_USERS=admin:{noop}2@USER,ADMIN
     volumes:
-      - /c/work/repos/financemanager/wksp/import:/financemanager/import
-      - /c/work/repos/financemanager/wksp/shared/dbfiles:/financemanager/dbfiles
+      - financemanagerapp-dbfiles:/financemanager/dbfiles
     networks:
-      - financemanagerapp
+      - financemanagerapp-net
 
 networks:
-  financemanagerapp:
+  financemanagerapp-net:
+
+volumes:
+  financemanagerapp-dbfiles:

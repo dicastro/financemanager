@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(value = {
-        ImportProperties.class,
         PersistenceProperties.class,
         BuildProperties.class,
         CacheProperties.class,

@@ -35,6 +35,5 @@ RUN mvn clean package spring-boot:repackage -DskipTests -Pproduction
 FROM openjdk:11-jre-slim
 COPY --from=build /financemanager/src/target/*.jar /financemanager/app/app.jar
 EXPOSE 8080
-VOLUME /financemanager/import
 VOLUME /financemanager/dbfiles
 CMD java -jar /financemanager/app/app.jar

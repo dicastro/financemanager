@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -57,6 +58,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .roles(fmUser.getRoles())
                         .build())
                 .collect(Collectors.toList());
+
+        if (log.isDebugEnabled()) {
+            users.forEach(userDetails -> {
+                log.debug("Loaded user '{}' with password '{}' and roles: {}",
+                        userDetails.getUsername(),
+                        userDetails.getPassword(),
+                        userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining("', '", "'", "'")));
+            });
+        }
 
         return new CustomInMemoryUserDetailsManager(users, request, loginAttemptService);
     }
