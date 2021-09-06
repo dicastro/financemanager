@@ -1,27 +1,32 @@
 # TODO
 
-- PACKAGE and DEPLOY 1.3.0
+- Al hacer el backup incluir un fichero generado con metadatos del backup
+  - Que incluya: version, fecha de generación, número de ficheros incluidos, nombres de ficheros incluidos, hashes de ficheros incluidos
+  - Antes de cargar el backup se comprobará si el backup que se ba a cargar es el mismo
+    - Si es el mismo mostrar un warn y no hacer nada (o preguntar si se quiere reimportar)
+  - Después de cargar el backup se comprobará con el fichero de metadatos si los datos cargados con correctos
 
-# Backlog
+- Antes de calcular el balance de una cuenta mirar si en el fichero de balances de la cuenta ya está calculado
+  - Sí ya está calculado no hacer nada
+  - Si no está calculado, calcularlo y guardar el cálculo en el fichero de balances de la cuenta
 
-- Accounts
-  - Meter apartado en el que se ven los meses disponibles (con opción a borrar)
-  - Meter apartado para ver el cálculo de balances de cada cuenta (fecha del último import de la cuenta y fecha del último balance calculado)
-    - Con botón para calcular balances
-    - Con barra de progreso en función de los ficheros a procesar
-  - ¿Qué pasa con las inversiones? ¿Cómo se guardan?
+- Import
+  - Al importar un fichero validar que solo contenga movimientos de un mismo mes
+    - Si tiene movimientos de más de 1 mes, dar un aviso y no importar el fichero
+  - Si finalmente se importa el fichero
+    - Reindexar los movimientos futuros (por si se reimportar un fichero del pasado) ESTO YA DEBERIA ESTAR HACIENDOSE
+      - Esto se podría hacer con un evento de spring boot
+    - Borrar los balances calculados futuros (por si se reimporta un fichero del pasado)
+      - Esto se podría hacer con un evento de spring boot
 
 - Position
-  - en el detalle añadir:
-    - ahorro/pérdida último mes
-    - comparación ahorro/pérdida mismo mes año anterior
-    - ahorro/pérdida año en curso
-    - comparación ahorro/pérdida mismo periodo año anterior
-  - leer las posiciones de los balances calculados
-  - añadir en el history un filtro por fechas
-    - con una fecha desde que como mínimo podría ser la fecha del balance inicial de la cuenta (valor por defecto)
-    - y con una fecha hasta que como máximo podría ser el último mes para el que haya movimientos (valor por defecto)
-    - habrá varios botones con las opciones más comunes (año en curso, año pasado, últimos 2 años, últimos 3 años, últimos 4 años, últimos 5 años)
+  - Se incluye un selector de año para acotar (por defecto el año en curso)
+  - Los cálculos de los balances se alimentarán del fichero de balances (si no estuvieran calculados, se calcularán en el momento y se guardarán para el futuro)
+  - Cambiar el ancho mínimo para que el detalle se muestre a pantalla completa (en pantallas pequeñas como la del portátil de 13" debería verse a pantalla completa)
+  - En el detalle de la cuenta
+    - mostrar un título con la cuenta seleccionada
+    - cambiar el botón de cerrar por un icono 'X' y ponerlo a la derecha junto al título de la cuenta seleccionada
+    - debajo de la gráfica mostrar una tabla con los ahorros/pérdidas por cada mes
 
 - PlannedBudgets
   - Incluir diálogo de confirmación al borrar un elemento
@@ -35,6 +40,17 @@
   - Esto solucionaría el problema de las columnas de tablas con las imágenes que se cortan en dispositivos móviles
   - https://vaadin.com/docs/v8/framework/articles/UsingFontIcons
   - https://vaadin.com/docs/v8/framework/themes/themes-fonticon
+
+- PACKAGE and DEPLOY 1.3.0
+
+# Backlog
+
+- Accounts
+  - Meter apartado en el que se ven los meses disponibles (con opción a borrar)
+  - Meter apartado para ver el cálculo de balances de cada cuenta (fecha del último import de la cuenta y fecha del último balance calculado)
+    - Con botón para calcular balances
+    - Con barra de progreso en función de los ficheros a procesar
+  - ¿Qué pasa con las inversiones? ¿Cómo se guardan?
 
 - Externalizar los importers
   - Como si fueran una especie de plugin de tal forma que la aplicación sea más reutilizable
@@ -52,10 +68,6 @@
       - Limpiando directorio temporal
     - Incluir el componente de carga en:
       - Carga de backup
-
-- Al hacer el backup incluir un fichero generado con metadatos del backup
-  - Que incluya: fecha de generación, número de ficheros incluidos, nombres de ficheros incluidos, hashes de ficheros incluidos
-  - Al cargar un backup se comprobará con el fichero de metadatos si los datos cargados con correctos
 
 - Gestionar errores en Eventos Spring
   - Hay un evento 'AccountDeletedEvent' que borra movements e investments después de borrar una cuenta
