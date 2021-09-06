@@ -1,5 +1,7 @@
 # TODO
 
+- PACKAGE and DEPLOY 1.3.0
+
 # Backlog
 
 - Accounts
