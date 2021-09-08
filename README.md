@@ -1,10 +1,10 @@
 # TODO
 
-- Al hacer el backup incluir un fichero generado con metadatos del backup
-  - Que incluya: version, fecha de generación, número de ficheros incluidos, nombres de ficheros incluidos, hashes de ficheros incluidos
-  - Antes de cargar el backup se comprobará si el backup que se ba a cargar es el mismo
-    - Si es el mismo mostrar un warn y no hacer nada (o preguntar si se quiere reimportar)
-  - Después de cargar el backup se comprobará con el fichero de metadatos si los datos cargados con correctos
+- Al cargar un backup
+  - Extraer temporalmente el fichero de metadatos y comprobar si el backup que se ba a cargar es el mismo que ya existe
+    - Si es el mismo mostrar una notificación y no hacer nada (o preguntar si se quiere reimportar)
+  - Después de cargar el backup validar, utilizando el fichero de metadatos, que los datos cargados con correctos
+    - Si falta algún fichero o los checksums no son válidos mostrar una notificación y volver a los datos anteriores
 
 - Antes de calcular el balance de una cuenta mirar si en el fichero de balances de la cuenta ya está calculado
   - Sí ya está calculado no hacer nada

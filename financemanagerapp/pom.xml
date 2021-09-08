@@ -163,7 +163,7 @@
         <dependency>
             <groupId>com.diegocastroviadero.financemanager</groupId>
             <artifactId>csvcryptoutils</artifactId>
-            <version>1.0.1</version>
+            <version>1.1.0</version>
         </dependency>
 
         <dependency>

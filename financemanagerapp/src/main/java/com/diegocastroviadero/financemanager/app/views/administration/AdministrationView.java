@@ -1,5 +1,6 @@
 package com.diegocastroviadero.financemanager.app.views.administration;
 
+import com.diegocastroviadero.financemanager.app.configuration.BuildProperties;
 import com.diegocastroviadero.financemanager.app.services.AuthCleanerService;
 import com.diegocastroviadero.financemanager.app.services.BackupService;
 import com.diegocastroviadero.financemanager.app.services.CacheCleanerService;
@@ -34,12 +35,14 @@ import org.springframework.security.access.annotation.Secured;
 @Secured("ROLE_ADMIN")
 public class AdministrationView extends VerticalLayout {
 
+    private final BuildProperties buildProperties;
     private final UserConfigService userConfigService;
     private final AuthCleanerService authCleanerService;
     private final CacheCleanerService cacheCleanerService;
     private final BackupService backupService;
 
-    public AdministrationView(final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final CacheCleanerService cacheCleanerService, final BackupService backupService) {
+    public AdministrationView(final BuildProperties buildProperties, final UserConfigService userConfigService, final AuthCleanerService authCleanerService, final CacheCleanerService cacheCleanerService, final BackupService backupService) {
+        this.buildProperties = buildProperties;
         this.userConfigService = userConfigService;
         this.authCleanerService = authCleanerService;
         this.cacheCleanerService = cacheCleanerService;
@@ -63,7 +66,7 @@ public class AdministrationView extends VerticalLayout {
         final TextField version = new TextField();
         version.setReadOnly(Boolean.TRUE);
         version.setWidthFull();
-        version.setValue(userConfigService.getVersionLabel());
+        version.setValue(buildProperties.getVersionFull());
 
         final VerticalLayout layout = new VerticalLayout(new H4("Version"), version);
         layout.setWidthFull();
@@ -136,7 +139,11 @@ public class AdministrationView extends VerticalLayout {
         downloadButton.setWidthFull();
         downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        final Anchor downloadLink = new Anchor(backupService.backupFiles(e -> Notification.show("Backup could not be done", 5000, Notification.Position.MIDDLE)), "Backup");
+        final Anchor downloadLink = new Anchor(backupService.backupFiles(e -> {
+            log.error(e.getMessage(), e);
+
+            Notification.show("Backup could not be done", 5000, Notification.Position.MIDDLE);
+        }), "Backup");
         downloadLink.getElement().setAttribute("download", true);
         downloadLink.removeAll();
         downloadLink.add(downloadButton);

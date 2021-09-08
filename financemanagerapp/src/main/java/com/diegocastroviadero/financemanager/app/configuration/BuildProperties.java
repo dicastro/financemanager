@@ -25,4 +25,8 @@ public class BuildProperties {
             this.timestamp = LocalDateTime.parse(timestamp, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")).withSecond(0).withNano(0);
         }
     }
+
+    public String getVersionFull() {
+        return String.format("%s (built %s)", version, timestamp.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+    }
 }
