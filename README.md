@@ -1,5 +1,22 @@
 # TODO
 
+### Bugs
+
+- Revisar descarga de backup
+  - no funciona en el NAS, ¿es porque está detrás de nginx?
+  - en los logs del NGINX aparece esto:
+  - `[01/Nov/2021:17:16:45 +0100] - 500 500 - GET https financemanager.popishome.com "/VAADIN/dynamic/resource/2/86c82e61-7f11-4eab-b2b9-00245847fb4e/financemanager_backup_20211101161602.tar.gz" [Client 192.168.86.7] [Length 0] [Gzip -] [Sent-to 192.168.86.9] "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0" "https://financemanager.popishome.com:9443/administration"`
+- Revisar las caches a la hora de subir ficheros
+  - habría que invalidar la caché del listado de ficheros
+  - ver si hacer con eventos
+- He tenido problemas subiendo el fichero de movimientos de ING en el NAS
+  - en la administración que haya una forma cambiar el nivel de los logs en caliente
+- Revisar los logs del contenedor del NAS
+  - hay algún error relacionado con injecciones de dependencias
+  - hay algún error relacionado con vaadin
+
+### Features
+
 - Al cargar un backup
   - Extraer temporalmente el fichero de metadatos y comprobar si el backup que se ba a cargar es el mismo que ya existe
     - Si es el mismo mostrar una notificación y no hacer nada (o preguntar si se quiere reimportar)
@@ -23,10 +40,11 @@
   - Se incluye un selector de año para acotar (por defecto el año en curso)
   - Los cálculos de los balances se alimentarán del fichero de balances (si no estuvieran calculados, se calcularán en el momento y se guardarán para el futuro)
   - Cambiar el ancho mínimo para que el detalle se muestre a pantalla completa (en pantallas pequeñas como la del portátil de 13" debería verse a pantalla completa)
-  - En el detalle de la cuenta
-    - mostrar un título con la cuenta seleccionada
-    - cambiar el botón de cerrar por un icono 'X' y ponerlo a la derecha junto al título de la cuenta seleccionada
-    - debajo de la gráfica mostrar una tabla con los ahorros/pérdidas por cada mes
+    - En el detalle de la cuenta
+      - mostrar un título con la cuenta seleccionada
+      - cambiar el botón de cerrar por un icono 'X' y ponerlo a la derecha junto al título de la cuenta seleccionada
+      - debajo de la gráfica mostrar una tabla con los ahorros/pérdidas por cada mes
+  - Ver ![Captura](README/images/financemanager_board_capture_01.jpg)
 
 - PlannedBudgets
   - Incluir diálogo de confirmación al borrar un elemento
